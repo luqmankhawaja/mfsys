@@ -1,0 +1,153 @@
+<div class="background">
+  <app-nav-bar></app-nav-bar>
+    <div class="container">
+    <div class="card">
+      <div class="container">
+        <h2><b>Select Option</b></h2>
+        <div >
+          <button class="btn" (click)="transTable()">Verify Trans_type</button>
+          <button class="btn" (click)="addTrans(myForm)">Add Trans_type</button>
+        </div>
+      </div>
+    </div>
+      <div class="input" *ngIf="showTable" >
+        <input type="varchar"  [(ngModel)]="searchNumber" (input)="filterData()"  placeholder="Enter a number to search">
+      </div>
+
+      <div *ngIf="showTable" class="table-container">
+        <table >
+          <thead>
+            <tr>
+              <th>Select</th>
+              <th>por_orgacode</th>
+              <th>ptr_trancode</th>
+              <th>pet_eventcode</th>
+              <th>ptr_trandesc</th>
+              <th>System Generated</th>
+              <th>Generate Script</th>
+              <th>Update Transaction</th>
+              <th>Delete Trans_type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of filteredData">
+              <td>
+                <input
+                  type="checkbox" [(ngModel)]="item.selected"
+                  name="selected{{ item }}"  />
+              </td>
+              <td>{{ item.por_orgacode }}
+                <ng-container *ngIf="item.editing">
+                  <input type="varchar" [(ngModel)]="item.por_orgacode" maxlength="10">
+                </ng-container>
+              </td>
+              <td>{{ item.ptr_trancode }}
+                <ng-container *ngIf="item.editing">
+                  <input type="varchar" [(ngModel)]="item.ptr_trancode" maxlength="3">
+                </ng-container>
+              </td>
+              <td>{{ item.pet_eventcode }}
+                <ng-container *ngIf="item.editing">
+                  <input type="int" [(ngModel)]="item.pet_eventcode" >
+                </ng-container>
+              </td>
+              <td>{{ item.ptr_trandesc }}
+                <ng-container *ngIf="item.editing;  ">
+                  <input type="varchar" [(ngModel)]="item.ptr_trandesc" maxlength="40">
+                </ng-container>
+              </td>
+              <td>{{ item.systemgen }}
+                <ng-container *ngIf="item.editing; ">
+                  <input type="tinyint" [(ngModel)]="item.systemgen" >
+                </ng-container>
+
+              </td>
+              <td><button [disabled]="!item.selected">Generate</button></td>
+              <td>
+                <button *ngIf="!item.editing" [disabled]="!item.selected" (click)="toggleEditing(item)">Edit</button>
+                <button *ngIf="item.editing" [disabled]="!item.selected" (click)="toggleEditing(item); updateTrans()">Update</button>
+              </td>
+              <td><button [disabled]="!item.selected"> Delete</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="form">
+        <form (ngSubmit)="submitForm(myForm)" #myForm="ngForm">
+          <div *ngIf="showTransaction" >
+            <table>
+              <thead>
+                <tr>
+                  <th>por_orgacode</th>
+                  <th>ptr_trancode</th>
+                  <th>pet_eventcode</th>
+                  <th>ptr_trandesc</th>
+                  <th>System Generated</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of transData; let i is: index">
+                  <td>
+                    <input
+
+                      type="varchar"
+                      name="por_orgacode{{i}}"
+                      maxlength="10"
+                      required
+                      [(ngModel)]="row.por_orgacode"
+
+
+                    />
+                  </td>
+                  <td>
+                    <input
+
+                      type="varchar"
+                      name="ptr_trancode{{i}}"
+                      maxlength="3"
+                      required
+                      [(ngModel)]="row.ptr_trancode"
+
+
+                    />
+                  </td>
+                  <td>
+                    <input
+
+                      type="int"
+                      name="pet_eventcode{{i}}"
+                      required
+                      [(ngModel)]="row.pet_eventcode"
+
+                    />
+                  </td>
+                  <td>
+                    <input
+
+                      type="varchar"
+                      name="ptr_trandesc{{i}}"
+                      required
+                      maxlength="40"
+                      [(ngModel)]="row.ptr_trandesc"
+                    />
+                  </td>
+                  <td>
+                    <input
+
+                      type="tinyint"
+                      name="systemgen{{i}}"
+                      required
+                      maxlength="1"
+                      [(ngModel)]="row.systemgen"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button type="submit" class="btn">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+

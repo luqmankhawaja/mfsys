@@ -1,0 +1,27 @@
+<body class="background">
+  <div class="container mt-5 mx-auto d-flex justify-content-center align-items-center">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card box" >
+          <div class="card-body">
+            <h2 class="card-title text-center">Database Monitoring</h2>
+           <form [formGroup]="loginn" (ngSubmit)="login()">
+              <div class="form-group">
+                <label for="userId">User Id</label>
+                <input type="text" class="form-control" id="userId" formControlName="userId" placeholder="Enter Id">
+                <span id="error" *ngIf="userId && userId.invalid && userId.touched">*Invalid user id<br /></span>
+              </div><br>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control " id="password" formControlName="Password" placeholder="Enter password" autocomplete="on">
+                <span id="error" *ngIf="Password && Password.invalid && Password.touched">*add password</span>
+              </div><br>
+              <button type="submit" [disabled]="!loginn.valid" >Login</button><br><br>
+              <a class=" d-grid gap-2 mt-4" routerLink="/sign-up">New User ? Sign-up</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

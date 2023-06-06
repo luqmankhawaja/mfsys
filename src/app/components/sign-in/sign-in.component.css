@@ -1,0 +1,82 @@
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/events_bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  opacity: 0.8;
+}
+
+.card {
+  align-items: center; /* aligns content vertically */
+  box-shadow: 5px 5px 5px #507998;
+  padding: 40px;
+  font-family: sans-serif;
+  background: rgb(188, 104, 104);
+  border: rgb(221, 221, 235);
+  width: 500px; /* updated width */
+  top: 100px;
+  margin: 0 auto; /* centers horizontally */
+  display: flex; /* enables flexbox */
+  flex-direction: column; /* aligns content vertically */
+  justify-content: center; /* aligns content vertically */
+}
+.card form {
+  padding: 20px;
+  width: 120%;
+}
+
+.card label{
+  color: white;
+  font-size: 24px;
+}
+
+.card input {
+  font-size: 16px;
+  padding: 10px;
+  width: 80%;
+}
+
+.box {
+  margin-top: 5%;
+  padding:20px;
+  font-family: 'Times New Roman';
+  font-size: 20px;
+  background: #020d3d;
+  border: none;
+  border-radius: none;
+}
+
+a {
+  margin-left: 20px;
+  margin-top: 40px;
+  color: white;
+}
+
+.box h2{
+  color: white;
+  font-size: 30px;
+  font-family: 'Times New Roman';
+  text-align: center;
+}
+
+button {
+  background-color: #3e5285;
+  border-radius: 0px;
+  margin-top: 20px;
+  height: 40px;
+  width: 60%;
+  font-size: 20px;
+  color: white;
+  border:1px solid rgb(255, 255, 255);
+  text-align: center;
+  cursor: pointer;
+  align-self: center;
+ }
+#error {
+  color: red;
+}
