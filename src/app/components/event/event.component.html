@@ -1,245 +1,181 @@
 <div class="background">
   <app-nav-bar></app-nav-bar>
-  <div class="container">
+
     <div class="card">
-      <div class="container">
-        <h2 ><b>Select Option</b></h2>
-        <div >
-            <button class="btn" (click)="populateTable()">Verify Events</button>
-            <button class="btn" (click)="addEvent(myForm)">Add Events</button>
-        </div>
-      </div>
+
+        <h2><b>Select Option</b></h2>
+        <input type="radio" id="option1" name="GL" value="GL" [(ngModel)]="selectedOption">
+        <label for="option1">GL</label>
+        <input type="radio" id="option2" name="Deposit" value="Deposit" [(ngModel)]="selectedOption">
+        <label for="option1">Deposit</label>
+        <input type="radio" id="option3" name="Loan" value="Loan" [(ngModel)]="selectedOption">
+        <label for="option1">Loan</label>
+        <input type="radio" id="option4" name="All" value="All" [(ngModel)]="selectedOption">
+        <label for="option1">All</label>
+
+         <button class="btn" (click)="populateTable()">Verify Events</button>
     </div>
 
+    <div class="table-wrapper" *ngIf="showEvent">
 
-      <div class="input"  *ngIf="showTable" >
-        <input
+      <input
         type="number"
         [(ngModel)]="searchNumber"
         (input)="filterData()"
         placeholder="Enter a Event Code to search"
       />
-      </div>
+      <table class="fl-table" id="table">
+        <thead>
+          <tr>
+            <th>Select</th>
+            <th>dmp_prodcode</th>
+            <th>pet_eventcode</th>
+            <th>por_orgacode</th>
+            <th>ptr_trancode</th>
+            <th>pet_eventseqnum</th>
+            <th>pca_glaccredit</th>
+            <th>pca_glacdebit</th>
+            <th>Generate Script</th>
+            <th>Update Events</th>
+            <th><button >Delete</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of filteredData; let i = index">
+            <td>
+              <input
+                type="checkbox"
+                name="selected{{ item }}"
+                [(ngModel)]="item.selected"
+              />
+            </td>
 
-      <div class="table-container"  *ngIf="showTable" >
-        <table  >
-          <thead>
-            <tr>
-              <th>Select</th>
-              <th>dmp_prodcode</th>
-              <th>pet_eventcode</th>
-              <th>por_orgacode</th>
-              <th>ptr_trancode</th>
-              <th>pet_eventseqnum</th>
-              <th>pca_glaccredit</th>
-              <th>pca_glacdebit</th>
-              <th>Generate Script</th>
-              <th>Update Events</th>
-              <th>Delete Event</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of filteredData; let i = index">
-              <td>
-                <input
-                  type="checkbox"
-                  name="selected{{ item }}"
-                  [(ngModel)]="item.selected"
-                />
-              </td>
 
-              <td>{{ item.dmp_prodcode }}
-                <ng-container *ngIf="item.editing ">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.dmp_prodcode"
-                    maxlength="5"
-                  />
-                </ng-container>
+            <td>
+              {{ item.dmp_prodcode }}
 
-              </td>
-              <td>{{ item.pet_eventcode }}
-                <ng-container *ngIf="item.editing">
-                  <input type="int" [(ngModel)]="item.pet_eventcode" />
-                </ng-container>
+            </td>
+            <td>
+              {{ item.pet_eventcode }}
 
-              </td>
-              <td>{{ item.por_orgacode }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.por_orgacode"
-                    maxlength="10"
-                  />
-                </ng-container>
+            </td>
+            <td>
+              {{ item.por_orgacode }}
 
-              </td>
-              <td>{{ item.ptr_trancode }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.ptr_trancode"
-                    maxlength="3"
-                  />
-                </ng-container>
-              </td>
-              <td> {{item.pet_eventseqnum}}
-                <ng-container *ngIf="item.editing">
-                  <input type="int" [(ngModel)]="item.pet_eventseqnum" />
-                </ng-container>
+            </td>
+            <td>
+              {{ item.ptr_trancode }}
 
-              </td>
-              <td>{{item.pca_glaccredit}}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.pca_glaccredit"
-                    maxlength="20"
-                  />
-                </ng-container>
-              </td>
+            </td>
+            <td>{{ item.pet_eventseqnum }}
 
-              <td>{{ item.pca_glacdebit }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.pca_glacdebit"
-                    maxlength="20"
-                  />
-                </ng-container>
-              </td>
-              <td>
-                <a href="{{ item.downloadLink }}">
-                  <button [disabled]="!item.selected">Generate</button></a
-                >
-              </td>
+            </td>
+            <td>{{ item.pca_glaccredit }}
 
-              <td>
-                <button
-                  *ngIf="!item.editing"
-                  [disabled]="!item.selected"
-                  (click)="toggleEditing(item)"
-                >
-                  Edit
-                </button>
-                <button
-                  *ngIf="item.editing"
-                  [disabled]="!item.selected"
-                  (click)="toggleEditing(item); updateEvent()"
-                >
-                  Update
-                </button>
-              </td>
+            </td>
 
-              <td>
-                <button [disabled]="!item.selected" (click)="delEvent(item.id)">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+            <td>
+              {{ item.pca_glacdebit }}
+             </td>
+            <td>
+              <a href="{{ item.downloadLink }}">
+                <button [disabled]="!item.selected">Generate</button></a
+              >
+            </td>
+
+            <td>
+              <button class="fa fa-pencil"
+                *ngIf="!item.editing"
+                [disabled]="!item.selected"
+
+                (click)="editEvent(item)"
+              >
+                            Edit
+              </button>
+            </td>
+
+            <td>
+              <button [disabled]="!item.selected" (click)="delEvent(item.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
 
 
-    <div class="form">
-      <form (ngSubmit)="submitForm(myForm)" #myForm="ngForm">
-        <div *ngIf="showEvent">
-          <table  >
-            <thead>
-              <tr>
-                <th>dmp_prodcode</th>
-                <th>pet_eventcode</th>
-                <th>por_orgacode</th>
-                <th>ptr_trancode</th>
-                <th>pet_eventseqnum</th>
-                <th>pca_glaccredit</th>
-                <th>pca_glacdebit</th>
-                <th>Gen. Script</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of eventData; let i is: index">
-                <td>
-                  <input
-                    type="varchar"
-                    name="dmp_prodcode{{ i }}"
-                    required
-                    maxLength="5"
-                    [(ngModel)]="row.dmp_prodcode"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="int"
-                    name="pet_eventcode{{ i }}"
-                    required
-                    maxLength="3"
-                    [(ngModel)]="row.pet_eventcode"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="varchar"
-                    name="por_orgacode{{ i }}"
-                    required
-                    maxLength="10"
-                    [(ngModel)]="row.por_orgacode"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="varchar"
-                    name="ptr_trancode{{ i }}"
-                    required
-                    maxLength="3"
-                    [(ngModel)]="row.ptr_trancode"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    name="pet_eventseqnum{{ i }}"
-                    required
-                    maxLength="3"
-                    [(ngModel)]="row.pet_eventseqnum"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="varchar"
-                    name="pca_glaccredit{{ i }}"
-                    required
-                    maxLength="20"
-                    [(ngModel)]="row.pca_glaccredit"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="varchar"
-                    name="pca_glacdebit{{ i }}"
-                    required
-                    maxLength="20"
-                    [(ngModel)]="row.pca_glacdebit"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="url"
-                    name="generate{{ i }}"
-                    required
-                    [(ngModel)]="row.generate"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <button type="submit" class="btn">Submit</button>
+
+  <div class="container" *ngIf=" showEvent ">
+      <div class="text">
+          Add Record
+      </div>
+      <form [formGroup]="eventForm" (ngSubmit)="submitForm(eventForm)">
+        <div class="form-row">
+          <div class="input-data">
+            <input type="varchar" id="dmp_prodcode" name="dmp_prodcode" formControlName="dmp_prodcode">
+            <div class="underline"></div>
+            <label for="dmp_prodcode">dmp_prodcode:</label>
+          </div>
+          <div class="input-data">
+            <input type="number" id="pet_eventcode" formControlName="pet_eventcode">
+            <div class="underline"></div>
+            <label for="pet_eventcode">pet_eventcode:</label>
+          </div>
         </div>
-      </form>
-    </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="varchar" name="por_orgacode" formControlName="por_orgacode">
+              <div class="underline"></div>
+              <label for="por_orgacode">por_orgacode:</label>
+            </div>
+            <div class="input-data">
+              <input type="varchar" name="ptr_trancode" formControlName="ptr_trancode">
+              <div class="underline"></div>
+              <label for="ptr_trancode">ptr_trancode:</label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="number" name="pet_eventseqnum" formControlName="pet_eventseqnum">
+              <div class="underline"></div>
+              <label for="pet_eventseqnum">pet_eventseqnum:</label>
+            </div>
+            <div class="input-data">
+              <input type="varchar"  name="pca_glaccredit" formControlName="pca_glaccredit">
+              <div class="underline"></div>
+              <label for="pca_glaccredit">pca_glaccredit:</label>
+            </div>
+        </div>
+        <div class="form-row">
+          <div class="input-data">
+            <input type="varchar"  name="pca_glacdebit" formControlName="pca_glacdebit">
+            <div class="underline"></div>
+            <label for="pca_glacdebit">pca_glacdebit:</label>
+          </div>
+          <div class="input-data">
+            <input type="url" name="generate" formControlName="generate">
+            <div class="underline"></div>
+            <label for="generate">generate:</label>
+          </div>
+      </div>
+      <div class="form-row submit-btn">
+        <button class="input-data" *ngIf="hideBtn">
+           <div class="inner"></div>
+           <input type="submit" value="submit" >
+        </button>
+        <button class="input-data" *ngIf="updateBtn">
+          <div class="inner"></div>
+          <input type="submit" value="Update" >
+       </button>
+
+      </div>
+    </form>
   </div>
+</div>
+
+
+
 
 

@@ -69,17 +69,6 @@
   ],
   "events": [
     {
-      "dmp_prodcode": "awq",
-      "pet_eventcode": 31,
-      "por_orgacode": "fds",
-      "ptr_trancode": "fse",
-      "pet_eventseqnum": 64,
-      "pca_glaccredit": "fdxg",
-      "pca_glacdebit": "gd",
-      "downloadLink": "gds.com",
-      "id": 7
-    },
-    {
       "dmp_prodcode": "yui",
       "pet_eventcode": 11,
       "por_orgacode": "vvb",
@@ -87,19 +76,8 @@
       "pet_eventseqnum": 99,
       "pca_glaccredit": "dcc",
       "pca_glacdebit": "gtyh",
-      "downloadLink": "xyz.com",
-      "id": 8
-    },
-    {
-      "dmp_prodcode": "er",
-      "pet_eventcode": 13,
-      "por_orgacode": "cds",
-      "ptr_trancode": "fdd",
-      "pet_eventseqnum": 77,
-      "pca_glaccredit": "fdf",
-      "pca_glacdebit": "fds",
-      "downloadLink": "vbm.com",
-      "id": 9
+      "downloadLink": "xyz.com"
+
     },
     {
       "dmp_prodcode": "ert",
@@ -109,64 +87,100 @@
       "pet_eventseqnum": 88,
       "pca_glaccredit": "jgf",
       "pca_glacdebit": "fde",
-      "downloadLink": "kjl.com",
-      "id": 10
+      "downloadLink": "kjl.com"
+
     },
     {
-      "dmp_prodcode": "vgh",
-      "pet_eventcode": 44,
-      "por_orgacode": "bvn",
-      "ptr_trancode": "hk",
-      "pet_eventseqnum": 88,
-      "pca_glaccredit": "xg",
-      "pca_glacdebit": "gn",
-      "downloadLink": "cvb.com",
-      "id": 17
+      "dmp_prodcode": "xsa",
+      "pet_eventcode": "33",
+      "por_orgacode": "wqe",
+      "ptr_trancode": "ase",
+      "pet_eventseqnum": 55,
+      "pca_glaccredit": "lkjh",
+      "pca_glacdebit": "gg",
+      "generate": "ddsf.com"
     },
     {
-      "dmp_prodcode": "asd",
-      "pet_eventcode": 43,
-      "por_orgacode": "dcd",
-      "ptr_trancode": "bv",
-      "pet_eventseqnum": 79,
-      "pca_glaccredit": "vfvb",
-      "pca_glacdebit": "bbn",
-      "downloadLink": "cvb.co",
-      "id": 19
+      "dmp_prodcode": "qq",
+      "pet_eventcode": "12",
+      "por_orgacode": "weq",
+      "ptr_trancode": "fs",
+      "pet_eventseqnum": 13,
+      "pca_glaccredit": "dsf",
+      "pca_glacdebit": "sdfds",
+      "generate": "fdsf.com"
     },
     {
-      "dmp_prodcode": "cvb",
-      "pet_eventcode": 34,
-      "por_orgacode": "dds",
-      "ptr_trancode": "ghfd",
-      "pet_eventseqnum": 99,
-      "pca_glaccredit": "`fdd",
-      "pca_glacdebit": "ds",
-      "downloadLink": "hgyj.vcg",
-      "id": 23
+      "dmp_prodcode": "dfg",
+      "pet_eventcode": 33,
+      "por_orgacode": "dfg",
+      "ptr_trancode": "gdf",
+      "pet_eventseqnum": 89,
+      "pca_glaccredit": "eq",
+      "pca_glacdebit": "gdg",
+      "generate": "fsdgsg"
     },
     {
-      "dmp_prodcode": "ds",
-      "pet_eventcode": 56,
-      "por_orgacode": "fdf",
-      "ptr_trancode": "xcds",
-      "pet_eventseqnum": 88,
+      "dmp_prodcode": "ewr",
+      "pet_eventcode": 12,
+      "por_orgacode": "fd",
+      "ptr_trancode": "gd",
+      "pet_eventseqnum": 4,
+      "pca_glaccredit": "fdg",
+      "pca_glacdebit": "gdf",
+      "generate": "gdf.com"
+    },
+    {
+      "dmp_prodcode": "cfgfg",
+      "pet_eventcode": 11,
+      "por_orgacode": "xc",
+      "ptr_trancode": "cc",
+      "pet_eventseqnum": 1,
       "pca_glaccredit": "cx",
-      "pca_glacdebit": "CZ",
-      "downloadLink": "HGHYG.VB",
-      "id": 24
+      "pca_glacdebit": "c",
+      "generate": "xc"
     },
     {
-      "dmp_prodcode": "",
-      "pet_eventcode": "",
-      "por_orgacode": "",
-      "ptr_trancode": "",
-      "pet_eventseqnum": "",
-      "pca_glaccredit": "",
-      "pca_glacdebit": "",
-      "generate": "",
-      "id": 25
+      "dmp_prodcode": "fds",
+      "pet_eventcode": 21,
+      "por_orgacode": "hg",
+      "ptr_trancode": "fgfg",
+      "pet_eventseqnum": 45,
+      "pca_glaccredit": "tre",
+      "pca_glacdebit": "ret",
+      "generate": "ret"
+    },
+    {
+      "dmp_prodcode": "ewwe",
+      "pet_eventcode": 33,
+      "por_orgacode": "ewqe",
+      "ptr_trancode": "ewqwe",
+      "pet_eventseqnum": 44,
+      "pca_glaccredit": "dsa",
+      "pca_glacdebit": "sa",
+      "generate": "dfsg.com"
+    },
+    {
+      "dmp_prodcode": "dfsa",
+      "pet_eventcode": 66,
+      "por_orgacode": "xcx",
+      "ptr_trancode": "vcxzv",
+      "pet_eventseqnum": 9,
+      "pca_glaccredit": "cxz",
+      "pca_glacdebit": "df",
+      "generate": "fds"
+    },
+    {
+      "dmp_prodcode": "rt",
+      "pet_eventcode": 66,
+      "por_orgacode": "dfsf",
+      "ptr_trancode": "fsdf",
+      "pet_eventseqnum": 1,
+      "pca_glaccredit": "dsf",
+      "pca_glacdebit": "fds",
+      "generate": "fds.com"
     }
+
   ],
   "transactions": [
     {
@@ -232,6 +246,14 @@
       "ptr_trandesc": "FD",
       "systemgen": "1",
       "id": 10
+    },
+    {
+      "por_orgacode": "sd",
+      "ptr_trancode": "asd",
+      "pet_eventcode": "dsad",
+      "ptr_trandesc": "ds",
+      "systemgen": "s",
+      "id": 11
     }
   ],
   "charges": [
@@ -244,7 +266,8 @@
       "ptr_trancode": "fgd",
       "pch_chrgprofit": 1,
       "soc_charges": 1,
-      "active": 1
+      "active": 1,
+      "id": 1
     },
     {
       "pch_chrgcode": "vxc",
@@ -255,7 +278,8 @@
       "ptr_trancode": "cxv",
       "pch_chrgprofit": 0,
       "soc_charges": 1,
-      "active": 1
+      "active": 1,
+      "id": 2
     },
     {
       "pch_chrgcode": "dsw",
@@ -266,55 +290,21 @@
       "ptr_trancode": "fdd",
       "pch_chrgprofit": 0,
       "soc_charges": 0,
-      "active": 1
+      "active": 1,
+      "id": 3
     },
     {
-      "pch_chrgcode": "dft",
-      "por_orgacode": "sda",
-      "pch_chrgdesc": "dsa",
-      "pch_chrgshort": "zc",
-      "pel_elmtcode": "fzs",
-      "ptr_trancode": "szE",
+      "pch_chrgcode": "df",
+      "por_orgacode": "fsd",
+      "pch_chrgdesc": "fsd",
+      "pch_chrgshort": "fsd",
+      "pel_elmtcode": "fsa",
+      "ptr_trancode": "f",
       "pch_chrgprofit": "1",
-      "soc_charges": "0",
-      "active": "1",
+      "soc_charges": "1",
+      "active": "",
+      "generate": "sbjkfn.com",
       "id": 4
-    },
-    {
-      "pch_chrgcode": "45",
-      "por_orgacode": "der",
-      "pch_chrgdesc": "tre",
-      "pch_chrgshort": "tre",
-      "pel_elmtcode": "tet",
-      "ptr_trancode": "ert",
-      "pch_chrgprofit": "1",
-      "soc_charges": "1",
-      "active": "0",
-      "id": 5
-    },
-    {
-      "pch_chrgcode": "45",
-      "por_orgacode": "fg",
-      "pch_chrgdesc": "tre",
-      "pch_chrgshort": "tre",
-      "pel_elmtcode": "tet",
-      "ptr_trancode": "ert",
-      "pch_chrgprofit": "1",
-      "soc_charges": "1",
-      "active": "0",
-      "id": 6
-    },
-    {
-      "pch_chrgcode": "89",
-      "por_orgacode": "fg",
-      "pch_chrgdesc": "cvb",
-      "pch_chrgshort": "xcv",
-      "pel_elmtcode": "xcv",
-      "ptr_trancode": "cv",
-      "pch_chrgprofit": "1",
-      "soc_charges": "0",
-      "active": "1",
-      "id": 7
     }
   ]
 }

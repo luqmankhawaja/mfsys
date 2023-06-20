@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { ProductService } from 'src/app/services/product-service.service';
-import { FormGroup, FormBuilder, NgForm, Form } from '@angular/forms';
+import { FormGroup, FormBuilder, NgForm, FormControl,Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
@@ -14,13 +14,29 @@ import { throwError } from 'rxjs';
 
 export class EventComponent implements OnInit {
 
-  showTable=false;
+  updateBtn=false;
+  hideBtn=true;
   showEvent=false;
+  // hideIdCol=true;
   searchNumber!:'number';
   filteredData: any[] = [];
   events: any[]=[];
   updatedEvent: any[]=[];
   editedValue: string | undefined;
+  storedArray: any;
+  selectedOption:string;
+  eventForm=new FormGroup({
+    dmp_prodcode:new FormControl('',[Validators.required]),
+    pet_eventcode:new FormControl('',[Validators.required]),
+    por_orgacode:new FormControl('',[Validators.required]),
+    ptr_trancode:new FormControl('',[Validators.required]),
+    pet_eventseqnum:new FormControl('',[Validators.required]),
+    pca_glaccredit:new FormControl('',[Validators.required]),
+    pca_glacdebit:new FormControl('',[Validators.required]),
+    generate:new FormControl('',[Validators.required]),
+  })
+  selectedEvent: any;
+
 
 
 
@@ -38,7 +54,7 @@ export class EventComponent implements OnInit {
 
 
   populateTable() {
-      this.showTable=!this.showTable
+      this.showEvent=!this.showEvent
       this.http.get<any>('http://localhost:3000/events')
   .subscribe((response) =>  {
     this.events=response;
@@ -46,89 +62,71 @@ export class EventComponent implements OnInit {
   });
 
    }
-    filterData() {
-      this.filteredData=[];
-      this.filteredData = this.events.filter((item: { pet_eventcode: string; }) => item.pet_eventcode=== this.searchNumber);
-    }
+  filterData() {
+      if(this.searchNumber!== null)
+       this.filteredData = this.events.filter((item: { pet_eventcode: string; }) => item.pet_eventcode=== this.searchNumber);
 
-    eventData:any[]=[
-      {dmp_prodcode:'',pet_eventcode:'',por_orgacode:'',ptr_trancode:'',pet_eventseqnum:'',pca_glaccredit:'',pca_glacdebit:'',generate:''}
-    ]
+      else
+        this.filteredData=this.events
+  }
+  submitForm(eventForm) {
 
-    addEvent(form:NgForm) {
-      this.showEvent=!this.showEvent;
-
-    }
-
-      // process the form data here
-
-    submitForm(myForm:NgForm) {
-        // Assuming you have a server endpoint at 'http://example.com/add-data' to handle data storage
         const url = 'http://localhost:3000/events';
-
-        this.http.post(url,this.eventData[0]).subscribe(
+        // if(this.eventData==)
+      if(eventForm.valid){
+        const id = this.eventForm.value.pet_eventcode;
+        this.http.get(url + '?id=' + id).subscribe(
+          (response: any[]) => {
+            if (response.length > 0) {
+              this.toastr.error('ID already exists');
+            }else{
+        this.http.post(url,this.eventForm.value).subscribe(
           response => {
             console.log('Form data added successfully');
-            this.toastr.success('Form data added successfully');
-
-            // Additional logic after successful data addition
-          },
-          error => {
-            this.toastr.warning('Please enter valid data');
-            // Additional error handling logic
-          }
-        );
-
+              this.toastr.success('Form data added successfully');
+            },
+            error => {
+              this.toastr.warning('Error adding form data');
+            }
+          );
+        }
+      },
+      error => {
+        this.toastr.warning('Error checking ID existence');
       }
-      delEvent(id:any) {
+    );
+    }
+      eventForm.reset();
+      }
+    delEvent(id:any) {
         return this.http.delete('http://localhost:3000/events/'+id).subscribe(
           response=>{
-            console.log('Event Deleted Successfully')
-            this.toastr.success('Event Deleted successfully')
+            console.log('Event Deleted Successfully');
+            this.toastr.success(' Event Deleted Successfully');
           },
         );
 
 
       }
-      toggleEditing(item: any): void {
-        item.editing = !item.editing;
+    editEvent(item: any){
+      this.updateBtn=!this.updateBtn;
+      this.hideBtn=!this.hideBtn;
+    this.selectedEvent = item;
+    this.eventForm.patchValue({
+    dmp_prodcode: item.dmp_prodcode,
+    pet_eventcode: item.pet_eventcode,
+    por_orgacode: item.por_orgacode,
+    ptr_trancode: item.ptr_trancode,
+    pet_eventseqnum: item.pet_eventseqnum,
+    pca_glaccredit: item.pca_glaccredit,
+    pca_glacdebit: item.pca_glacdebit,
+    generate: item.downloadLink // Assuming you have a property named `generateLink` in `item`
+  });
 
-        if (!item.editing) {
-          // Reset the input field or perform any necessary actions
-          this.updatedEvent[item.id] = undefined;
-        }
+    }
+    updateEvent(updatedData: any) {
+
       }
-      updateEvent() {
-          this.http.get<any[]>('http://localhost:3000/events').subscribe((data: any[]) => {
-          const storedArray = data;
-          let updated = false;
-          for (let i = 0; i < storedArray.length; i++) {
-            if (storedArray[i].yourValue === this.editedValue) {
-              // Value already exists, no update needed
-              console.log('No changes were made');
-              return;
-            }
-            if (storedArray[i].id === 'someId') {
-              // Assuming you have some condition to find the element you want to update
-              storedArray[i].yourValue = this.editedValue; // Update the value in the array
-              updated = true;
-              break; // Exit the loop after updating the value
-            }
-          }
-
-          if (updated) {
-            // Send the updated array back to the server
-            this.http.put('http://localhost:3000/events', storedArray).subscribe(() => {
-              console.log('Update successful');
-              this.toastr.success('Event updated successfully')
-
-            });
-          } else {
-            console.log('Element not found');
-          }
-        });
-      }
-
 
 
 }

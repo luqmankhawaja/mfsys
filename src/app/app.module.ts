@@ -12,6 +12,7 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { ChargesComponent } from './components/charges/charges.component';
 import { EventComponent } from './components/event/event.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -28,13 +29,13 @@ import { TransactionComponent } from './components/transaction/transaction.compo
 
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    BrowserModule,
     HttpClientModule,
     ToastrModule.forRoot(),
-    FormsModule
-
+    ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

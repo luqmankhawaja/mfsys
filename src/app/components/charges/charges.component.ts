@@ -7,6 +7,7 @@ import { ProductService } from 'src/app/services/product-service.service';
 import { BrowserModule } from '@angular/platform-browser';
 
 
+
 @Component({
   selector: 'app-charges',
   templateUrl: './charges.component.html',
@@ -20,6 +21,7 @@ export class ChargesComponent implements OnInit {
   filteredData: any[] = [];
   charges: any[]=[];
   updatedCharge:any[]=[];
+  selectedOption:string;
 
 
 
@@ -46,9 +48,13 @@ chargesTable(){
 }
 
 filterData() {
-  this.filteredData=[]
+if(this.searchNumber.length>0){
   this.filteredData = this.charges.filter((item: { pch_chrgcode: string; }) => item.pch_chrgcode === this.searchNumber);
 }
+else{
+  this.filteredData=this.charges
+}
+ }
 
 chargeData:any[]=[
   {pch_chrgcode:'',por_orgacode:'',pch_chrgdesc:'',pch_chrgshort:'',pel_elmtcode:'',ptr_trancode:'',pch_chrgprofit:'',soc_charges:'',active:''}
@@ -58,23 +64,36 @@ addCharges(form:NgForm){
 
 }
 submitForm(myForm: NgForm) {
-  // Assuming you have a server endpoint at 'http://example.com/add-data' to handle data storage
-  const url = 'http://localhost:3000/charges';
+  if (myForm.valid) {
+    const url = 'http://localhost:3000/charges';
 
-  this.http.post(url,this.chargeData[0]).subscribe(
-    response => {
-      console.log('Form data added successfully');
-      this.toastr.success('Charge Added Successfully');
+    this.http.post(url, this.chargeData[0]).subscribe(
+      response => {
+        console.log('Form data added successfully');
+        this.toastr.success('Form Submitted Successfully');
 
-      // Additional logic after successful data addition
-    },
-    error => {
-      this.toastr.warning('Please enter valid data');
-      // Additional error handling logic
-    }
-  );
-    myForm.reset();
+        // Additional logic after successful data addition
+      },
+      error => {
+        this.toastr.warning('Error occurred while submitting form');
+      }
+    );
+  } else {
+    this.toastr.warning('Please enter valid data');
+  }
+
+  myForm.reset();
 }
+delCharge(id:any) {
+  return this.http.delete('http://localhost:3000/charges/'+id).subscribe(
+    response=>{
+      console.log('Charge Deleted Successfully')
+      this.toastr.success('Charge Deleted Successfully')
+    },
+  );
+
+}
+
 toggleEditing(item: any): void {
   item.editing = !item.editing;
 
@@ -83,7 +102,41 @@ toggleEditing(item: any): void {
     this.updatedCharge[item.id] = undefined;
   }
 }
-updateCharge(){
+updateCharge( id: number, editedValue: number): void{
+  const index = this.charges.findIndex(data => data.id === id);
+
+    if (index !== -1) {
+      const existingValue = this.charges[index].value;
+
+      if (editedValue !== existingValue) {
+        // Update the existing value
+        this.charges[index].value = editedValue;
+
+        // Send the update request to the API
+        const updatedData = {
+          id: id,
+          value: editedValue
+        };
+
+        this.http.put('http://localhost:3000/charges/', updatedData)
+          .subscribe(
+            () => {
+              console.log('Update successful!');
+            },
+            error => {
+              console.error('Error occurred during update:', error);
+              // You can handle the error as needed
+              // For example, revert the value back to the existing value
+              this.charges[index].value = existingValue;
+            }
+          );
+      } else {
+        console.log('No changes detected.');
+      }
+    } else {
+      console.error('Charge data with specified ID not found.');
+    }
+  }
 
 }
-}
+

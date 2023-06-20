@@ -1,29 +1,31 @@
 <div class="background">
   <app-nav-bar></app-nav-bar>
-  <div class="container ">
     <div class="card">
-      <div class="container">
-        <h2 ><b>Select Option</b></h2>
-        <div>
-          <button class="btn" (click)="chargesTable()">Verify Charges</button>
-          <button class="btn" (click)="addCharges(myForm)">Add Charges</button>
-        </div>
-      </div>
-    </div>
 
-    <div class="input" *ngIf="showTable">
-      <input
-          type="varchar"
-          [(ngModel)]="searchNumber"
-          (input)="filterData()"
-          placeholder="Enter a chrgcode to search"
-        />
+        <h2><b>Select Option</b></h2>
+        <input type="radio" id="option1" name="GL" value="GL" [(ngModel)]="selectedOption">
+        <label for="option1">GL</label>
+        <input type="radio" id="option2" name="Deposit" value="Deposit" [(ngModel)]="selectedOption">
+        <label for="option1">Deposit</label>
+        <input type="radio" id="option3" name="Loan" value="Loan" [(ngModel)]="selectedOption">
+        <label for="option1">Loan</label>
+        <input type="radio" id="option4" name="All" value="All" [(ngModel)]="selectedOption">
+        <label for="option1">All</label>
+
+        <button class="btn" (click)="chargesTable()">View/Edit Charges</button>
     </div>
 
 
-      <div *ngIf="showTable" class="table-container">
 
-         <table class="table">
+
+  <div class="table-wrapper" *ngIf="showTable" >
+        <input
+        type="varchar"
+        [(ngModel)]="searchNumber"
+        (input)="filterData()"
+        placeholder="Enter a chrgcode to search"
+      />
+    <table class="fl-table">
           <thead>
             <tr>
               <th>Select</th>
@@ -41,7 +43,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of filteredData; i: is; index">
+            <tr *ngFor="let item of filteredData; let i = index">
               <td>
                 <input
                   type="checkbox"
@@ -49,77 +51,35 @@
                   [(ngModel)]="item.selected"
                 />
               </td>
-              <td>{{ item.pch_chrgcode }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.pch_chrgcode"
-                    maxlength="3"
-                  />
-                </ng-container>
 
-              </td>
-              <td>{{ item.por_orgacode }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.por_orgacode"
-                    maxlength="10"
-                  />
-                </ng-container>
+              <td>{{ item.pch_chrgcode }} </td>
 
-              </td>
-              <td>{{ item.pch_chrgdesc }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.pch_chrgdesc"
-                    maxlength="40"
-                  />
-                </ng-container>
 
-              </td>
-              <td>{{ item.pch_chrgshort }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.pch_chrgshort"
-                    maxlength="20"
-                  />
-                </ng-container>
+              <td>{{item.por_orgacode}} </td>
 
-              </td>
-              <td>{{ item.pel_elmtcode }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.pel_elmtcode"
-                    maxlength="10"
-                  />
-                </ng-container>
 
-              </td>
-              <td>{{ item.ptr_trancode }}
-                <ng-container *ngIf="item.editing">
-                  <input
-                    type="varchar"
-                    [(ngModel)]="item.ptr_trancode"
-                    maxlength="3"
-                  />
-                </ng-container>
-              </td>
-              <td>{{item.pch_chrgprofit }}
 
-                <ng-container *ngIf="item.editing">
-                  <input type="tinyint" [(ngModel)]="item.pch_chrgprofit" />
-                </ng-container>
-              </td>
-              <td>
-                <ng-container *ngIf="item.editing; else textDisplay">
-                  <input type="tinyint" [(ngModel)]="item.soc_charges" />
-                </ng-container>
-                <ng-template #textDisplay>{{ item.soc_charges }}</ng-template>
-              </td>
+              <td>{{ item.pch_chrgdesc }} </td>
+
+
+
+              <td>{{ item.pch_chrgshort }} </td>
+
+
+
+              <td>{{ item.pel_elmtcode }}  </td>
+
+
+
+              <td>{{ item.ptr_trancode }}  </td>
+
+
+              <td>{{item.pch_chrgprofit }} </td>
+
+
+
+              <td>{{ item.soc_charges }} </td>
+
 
               <td>
                 <a href="{{ item.downloadLink }}"
@@ -137,123 +97,89 @@
                 <button
                   *ngIf="item.editing"
                   [disabled]="!item.selected"
-                  (click)="toggleEditing(item); updateCharge()"
+                  (click)="toggleEditing(item); updateCharge(item.id,item.editedValue)"
                 >
                   Update
                 </button>
               </td>
 
-              <td><button [disabled]="!item.selected">Delete</button></td>
+              <td><button [disabled]="!item.selected" (click)="delCharge(item.id)">Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
 
-      <div class="form">
+
+      <div class="container" *ngIf="showTable">
+        <div class="text">
+          Add Record
+        </div>
         <form (ngSubmit)="submitForm(myForm)" #myForm="ngForm">
-          <div *ngIf="showCharges">
-            <table>
-              <thead>
-                <tr>
-                  <th>pch_chrgcode</th>
-                  <th>por_orgacode</th>
-                  <th>pch_chrgdesc</th>
-                  <th>pch_chrgshort</th>
-                  <th>pel_elmtcode</th>
-                  <th>ptr_trancode</th>
-                  <th>pch_chrgprofit</th>
-                  <th>soc_charges</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let row of chargeData; let i; is: index">
-                  <td>
-                    <input
-                      id="pch_chrgcode{{ i }}"
-                      type="varchar"
-                      name="pch_chrgcode{{ i }}"
-                      [(ngModel)]="row.pch_chrgcode"
-                      required
-                      maxlength="3"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="por_orgacode{{ i }}"
-                      type="varchar"
-                      name="por_orgacode{{ i }}"
-                      [(ngModel)]="row.por_orgacode"
-                      required
-                      maxlength="10"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="pch_chrgdesc{{ i }}"
-                      type="varchar"
-                      name="pch_chrgdesc{{ i }}"
-                      [(ngModel)]="row.pch_chrgdesc"
-                      required
-                      maxlength="40"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="pch_chrgshort{{ i }}"
-                      type="varchar"
-                      name="pch_chrgshort{{ i }}"
-                      [(ngModel)]="row.pch_chrgshort"
-                      required
-                      maxlength="20"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="pel_elmtcode{{ i }}"
-                      type="varchar"
-                      name="pel_elmtcode{{ i }}"
-                      [(ngModel)]="row.pel_elmtcode"
-                      required
-                      maxlength="10"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="ptr_trancode{{ i }}"
-                      type="varchar"
-                      name="ptr_trancode{{ i }}"
-                      [(ngModel)]="row.ptr_trancode"
-                      required
-                      maxlength="3"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="pch_chrgprofit{{ i }}"
-                      type="tinyint"
-                      name="pch_chrgprofit{{ i }}"
-                      [(ngModel)]="row.pch_chrgprofit"
-                      required
-                      maxlength="1"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      id="soc_charges{{ i }}"
-                      type="tinyint"
-                      name="soc_charges{{ i }}"
-                      [(ngModel)]="row.soc_charges"
-                      required
-                      maxlength="1"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <button type="submit" class="btn">Submit</button>
+          <div *ngFor="let row of chargeData; let i is: index">
+            <div class="form-row">
+              <div class="input-data">
+                <input type="varchar" name="pch_chrgcode{{ i }}" [(ngModel)]="row.pch_chrgcode" required
+                maxlength="3" />
+                <div class="underline"></div>
+                <label for="pch_chrgcode{{ i }}">pch_chrgcode:</label>
+              </div>
+              <div class="input-data">
+                <input type="varchar" name="por_orgacode{{ i }}" [(ngModel)]="row.por_orgacode" required maxlength="10" />
+                <div class="underline"></div>
+                <label for="por_orgacode{{ i }}">por_orgacode:</label>
+              </div>
+            </div>
+            <div class="form-row">
+                <div class="input-data">
+                  <input  type="varchar" name="pch_chrgdesc{{ i }}" [(ngModel)]="row.pch_chrgdesc" required maxlength="40" />
+                  <div class="underline"></div>
+                  <label for="pch_chrgdesc{{ i }}">pch_chrgdesc:</label>
+                </div>
+                <div class="input-data">
+                  <input type="varchar"  name="pch_chrgshort{{ i }}" [(ngModel)]="row.pch_chrgshort"  required maxlength="20"  />
+                  <div class="underline"></div>
+                  <label for="pch_chrgshort{{ i }}">pch_chrgshort:</label>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="input-data">
+                  <input  type="varchar" name="pel_elmtcode{{ i }}" [(ngModel)]="row.pel_elmtcode" required  maxlength="10" />
+                  <div class="underline"></div>
+                  <label for="pel_elmtcode{{ i }}">pel_elmtcode:</label>
+                </div>
+                <div class="input-data">
+                  <input type="varchar" name="ptr_trancode{{ i }}"  [(ngModel)]="row.ptr_trancode"  required  maxlength="3"/>
+                  <div class="underline"></div>
+                  <label for="ptr_trancode{{ i }}">ptr_trancode:</label>
+                </div>
+            </div>
+            <div class="form-row">
+              <div class="input-data">
+                <input type="tinyint" name="pch_chrgprofit{{ i }}" [(ngModel)]="row.pch_chrgprofit" required maxlength="1" />
+                <div class="underline"></div>
+                <label for="pch_chrgprofit{{ i }}">pch_chrgprofit:</label>
+              </div>
+              <div class="input-data">
+                <input type="tinyint" name="soc_charges{{ i }}"  [(ngModel)]="row.soc_charges" required maxlength="1" />
+                <div class="underline"></div>
+                <label for="soc_charges{{ i }}">soc_charges:</label>
+              </div>
           </div>
-        </form>
+          <div class="form-row">
+              <div  class="input-data">
+                <input type="url" name="generate{{i}}" [(ngModel)]="row.generate" required >
+                <div class="underline"></div>
+                <label for="generate{{ i }}">generate:</label>
+              </div>
+          </div>
+          <div class="form-row submit-btn">
+            <div class="input-data">
+               <div class="inner"></div>
+               <input type="submit" value="submit" [disabled]="myForm.invalid">
+            </div>
+          </div>
       </div>
-    </div>
+    </form>
+</div>
+
 

@@ -19,6 +19,7 @@ export class TransactionComponent implements OnInit {
   filteredData: any[] = [];
   transactions: any[]=[];
   updatedTrans:any[]=[];
+  selectedOption:string;
 
   constructor(private productService:ProductService,
     private toastr:ToastrService,
@@ -39,10 +40,14 @@ export class TransactionComponent implements OnInit {
   });
    //this.filteredData = this.data;
   }
-  filterData() {
+filterData() {
 
-    this.filteredData=[];
-    this.filteredData = this.transactions.filter(item => item.ptr_trancode === this.searchNumber);
+    if(this.searchNumber!== null){
+      this.filteredData = this.transactions.filter(item => item.ptr_trancode === this.searchNumber);
+  }
+    else{
+     this.filteredData=this.transactions
+    }
   }
 
 
@@ -75,6 +80,16 @@ submitForm(myForm:NgForm) {
   );
 
   myForm.reset();
+}
+delTrans(id:any) {
+  return this.http.delete('http://localhost:3000/transactions/'+id).subscribe(
+    response=>{
+      console.log('Transaction Deleted Successfully');
+      this.toastr.success(' Transaction Deleted Successfully');
+    },
+  );
+
+
 }
 toggleEditing(item: any): void {
   item.editing = !item.editing;
