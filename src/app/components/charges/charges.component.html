@@ -2,17 +2,14 @@
   <app-nav-bar></app-nav-bar>
     <div class="card">
 
-        <h2><b>Select Option</b></h2>
-        <input type="radio" id="option1" name="GL" value="GL" [(ngModel)]="selectedOption">
-        <label for="option1">GL</label>
-        <input type="radio" id="option2" name="Deposit" value="Deposit" [(ngModel)]="selectedOption">
+        <h2><b>Select Option</b></h2><br>
+        <input type="radio" id="option2" name="Deposit" value="deposit" [(ngModel)]="selectedOption">
         <label for="option1">Deposit</label>
-        <input type="radio" id="option3" name="Loan" value="Loan" [(ngModel)]="selectedOption">
-        <label for="option1">Loan</label>
-        <input type="radio" id="option4" name="All" value="All" [(ngModel)]="selectedOption">
-        <label for="option1">All</label>
+        <input type="radio" id="option3" name="Loan" value="loan" [(ngModel)]="selectedOption">
+        <label for="option1">Loan</label><br><br>
+        <button class="btn" [disabled]="!selectedOption" (click)="chargesTable()">View/Edit Charges</button>
+        <button class="btn" (click)="populateTable()">View All Charges</button>
 
-        <button class="btn" (click)="chargesTable()">View/Edit Charges</button>
     </div>
 
 
@@ -51,55 +48,20 @@
                   [(ngModel)]="item.selected"
                 />
               </td>
-
-              <td>{{ item.pch_chrgcode }} </td>
-
-
-              <td>{{item.por_orgacode}} </td>
-
-
-
-              <td>{{ item.pch_chrgdesc }} </td>
-
-
-
-              <td>{{ item.pch_chrgshort }} </td>
-
-
-
-              <td>{{ item.pel_elmtcode }}  </td>
-
-
-
-              <td>{{ item.ptr_trancode }}  </td>
-
-
-              <td>{{item.pch_chrgprofit }} </td>
-
-
-
-              <td>{{ item.soc_charges }} </td>
-
-
+              <td> {{ item.pch_chrgcode }} </td>
+              <td> {{item.por_orgacode}} </td>
+              <td> {{ item.pch_chrgdesc }} </td>
+              <td> {{ item.pch_chrgshort }} </td>
+              <td> {{ item.pel_elmtcode }}  </td>
+              <td> {{ item.ptr_trancode }}  </td>
+              <td> {{item.pch_chrgprofit }} </td>
+              <td> {{ item.soc_charges }} </td>
               <td>
-                <a href="{{ item.downloadLink }}"
-                  ><button [disabled]="!item.selected">Generate</button></a
-                >
+                  <button [disabled]="!item.selected">Generate</button>
               </td>
               <td>
-                <button
-                  *ngIf="!item.editing"
-                  [disabled]="!item.selected"
-                  (click)="toggleEditing(item)"
-                >
+                <button [disabled]="!item.selected" (click)="editCharge(item)" >
                   Edit
-                </button>
-                <button
-                  *ngIf="item.editing"
-                  [disabled]="!item.selected"
-                  (click)="toggleEditing(item); updateCharge(item.id,item.editedValue)"
-                >
-                  Update
                 </button>
               </td>
 
@@ -110,76 +72,197 @@
       </div>
 
 
-      <div class="container" *ngIf="showTable">
+
+
+
+                        <!--Form for Deposit charges-->
+
+
+
+      <div class="container" *ngIf="showTable && selectedOption === 'deposit'">
         <div class="text">
           Add Record
         </div>
-        <form (ngSubmit)="submitForm(myForm)" #myForm="ngForm">
-          <div *ngFor="let row of chargeData; let i is: index">
+        <form [formGroup]="depositForm" (ngSubmit)="submitForm(depositForm)" >
             <div class="form-row">
               <div class="input-data">
-                <input type="varchar" name="pch_chrgcode{{ i }}" [(ngModel)]="row.pch_chrgcode" required
-                maxlength="3" />
+                <input type="varchar" name="pch_chrgcode" formControlName="pch_chrgcode"  maxlength="3" />
                 <div class="underline"></div>
-                <label for="pch_chrgcode{{ i }}">pch_chrgcode:</label>
+                <label for="pch_chrgcode">pch_chrgcode:</label>
               </div>
               <div class="input-data">
-                <input type="varchar" name="por_orgacode{{ i }}" [(ngModel)]="row.por_orgacode" required maxlength="10" />
+                <input type="varchar" name="por_orgacode" formControlName="por_orgacode"  maxlength="10" />
                 <div class="underline"></div>
-                <label for="por_orgacode{{ i }}">por_orgacode:</label>
+                <label for="por_orgacode">por_orgacode:</label>
               </div>
             </div>
             <div class="form-row">
                 <div class="input-data">
-                  <input  type="varchar" name="pch_chrgdesc{{ i }}" [(ngModel)]="row.pch_chrgdesc" required maxlength="40" />
+                  <input  type="varchar" name="pch_chrgdesc" formControlName="pch_chrgdesc"  maxlength="40" />
                   <div class="underline"></div>
-                  <label for="pch_chrgdesc{{ i }}">pch_chrgdesc:</label>
+                  <label for="pch_chrgdesc">pch_chrgdesc:</label>
                 </div>
                 <div class="input-data">
-                  <input type="varchar"  name="pch_chrgshort{{ i }}" [(ngModel)]="row.pch_chrgshort"  required maxlength="20"  />
+                  <input type="varchar"  name="pch_chrgshort" formControlName="pch_chrgshort"   maxlength="20"  />
                   <div class="underline"></div>
-                  <label for="pch_chrgshort{{ i }}">pch_chrgshort:</label>
+                  <label for="pch_chrgshort">pch_chrgshort:</label>
                 </div>
             </div>
             <div class="form-row">
                 <div class="input-data">
-                  <input  type="varchar" name="pel_elmtcode{{ i }}" [(ngModel)]="row.pel_elmtcode" required  maxlength="10" />
+                  <input  type="varchar" name="pel_elmtcode" formControlName="pel_elmtcode"   maxlength="10" />
                   <div class="underline"></div>
-                  <label for="pel_elmtcode{{ i }}">pel_elmtcode:</label>
+                  <label for="pel_elmtcode">pel_elmtcode:</label>
                 </div>
                 <div class="input-data">
-                  <input type="varchar" name="ptr_trancode{{ i }}"  [(ngModel)]="row.ptr_trancode"  required  maxlength="3"/>
+                  <input type="varchar" name="ptr_trancode"  formControlName="ptr_trancode"    maxlength="3"/>
                   <div class="underline"></div>
-                  <label for="ptr_trancode{{ i }}">ptr_trancode:</label>
+                  <label for="ptr_trancode">ptr_trancode:</label>
                 </div>
             </div>
             <div class="form-row">
               <div class="input-data">
-                <input type="tinyint" name="pch_chrgprofit{{ i }}" [(ngModel)]="row.pch_chrgprofit" required maxlength="1" />
+                <input type="tinyint" name="pch_chrgprofit" formControlName="pch_chrgprofit"  maxlength="1" />
                 <div class="underline"></div>
-                <label for="pch_chrgprofit{{ i }}">pch_chrgprofit:</label>
+                <label for="pch_chrgprofit">pch_chrgprofit:</label>
               </div>
               <div class="input-data">
-                <input type="tinyint" name="soc_charges{{ i }}"  [(ngModel)]="row.soc_charges" required maxlength="1" />
+                <input type="tinyint" name="soc_charges"  formControlName="soc_charges"  maxlength="1" />
                 <div class="underline"></div>
-                <label for="soc_charges{{ i }}">soc_charges:</label>
+                <label for="soc_charges">soc_charges:</label>
               </div>
           </div>
-          <div class="form-row">
+          <!-- <div class="form-row">
               <div  class="input-data">
-                <input type="url" name="generate{{i}}" [(ngModel)]="row.generate" required >
+                <input type="url" name="generate{{i}}" [(ngModel)]=".generate" required >
                 <div class="underline"></div>
-                <label for="generate{{ i }}">generate:</label>
+                <label for="generate">generate:</label>
               </div>
-          </div>
+          </div> -->
           <div class="form-row submit-btn">
             <div class="input-data">
                <div class="inner"></div>
                <input type="submit" value="submit" [disabled]="myForm.invalid">
             </div>
           </div>
-      </div>
+
     </form>
 </div>
 
 
+
+
+                                <!--Form  For Loan Charges-->
+
+
+
+
+
+
+    <div class="container" *ngIf="showTable && selectedOption==='loan'">
+      <div class="text">
+          Add Record
+      </div>
+      <form [formGroup]="laonForm" (ngSubmit)="submitForm(loanForm)">
+        <div class="form-row">
+          <div class="input-data">
+            <input type="varchar" id="pch_chrgcode" [readonly]="updateBtn" name="pch_chrgcode" formControlName="pch_chrgcode" maxlength="3">
+            <div class="underline"></div>
+            <label for="pch_chrgcode">pch_chrgcode:</label>
+          </div>
+          <div class="input-data">
+            <input type="varchar" id="por_orgacode"  formControlName="por_orgacode" maxlength="10">
+            <div class="underline"></div>
+            <label for="por_orgacode">por_orgacode:</label>
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="varchar" id="pch_chrgdesc" name="pch_chrgdesc" formControlName="pch_chrgdesc" maxlength="40">
+              <div class="underline"></div>
+              <label for="pch_chrgdesc">pch_chrgdesc:</label>
+            </div>
+            <div class="input-data">
+              <input type="varchar" name="pch_chrgshort" formControlName="pch_chrgshort" maxlength="20">
+              <div class="underline"></div>
+              <label for="ptr_trandesc">ptr_trandesc:</label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="varchar" name="pel_elmtcode" formControlName="pel_elmtcode" maxlength="10">
+              <div class="underline"></div>
+              <label for="pel_elmtcode">pel_elmtcode:</label>
+            </div>
+            <div class="input-data">
+              <input type="varchar" name="ptr_trancode" formControlName="ptr_trancode" maxlength="3">
+              <div class="underline"></div>
+              <label for="ptr_trancode">ptr_trancode:</label>
+            </div>
+        </div>
+        <div class="form-row">
+          <div class="input-data">
+            <input type="varchar" name="pch_chrginterest" formControlName="pch_chrginterest" maxlength="3">
+            <div class="underline"></div>
+            <label for="pch_chrginterest">pch_chrginterest:</label>
+          </div>
+          <div class="input-data">
+            <input type="varchar" name="pch_chrgpenalty" formControlName="pch_chrgpenalty" maxlength="3">
+            <div class="underline"></div>
+            <label for="pch_chrgpenalty">pch_chrgpenality:</label>
+          </div>
+      </div>
+
+      <div class="form-row submit-btn">
+        <button class="input-data" *ngIf="hideBtn">
+          <div class="inner"></div>
+          <input type="submit" value="submit" >
+        </button>
+        <button class="input-data" *ngIf="updateBtn">
+          <div class="inner"></div>
+          <input type="submit" value="Update" (click)="updateTrans($event,transForm)">
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+
+                        <!--Table to show all charges-->
+  <div class="table-container" *ngIf="chrgTable" >
+       <input type="varchar" [(ngModel)]="filterationNumber" (input)="filteration()" placeholder="Enter a chrgcode to search" />
+      <table class="table">
+        <thead>
+          <tr>
+            <th>pch_chrgcode</th>
+            <th>por_orgacode</th>
+            <th>pch_chrgdesc</th>
+            <th>pch_chrgshort</th>
+            <th>pel_elmtcode</th>
+            <th>ptr_trancode</th>
+            <th>pch_chrgprofit</th>
+            <th>soc_charges</th>
+            <th>pch_chrginterest</th>
+            <th>pch_chrgpenalty</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dataFilteration; let i = index">
+            <td> {{ item.pch_chrgcode }} </td>
+            <td> {{item.por_orgacode}} </td>
+            <td> {{ item.pch_chrgdesc }} </td>
+            <td> {{ item.pch_chrgshort }} </td>
+            <td> {{ item.pel_elmtcode }}  </td>
+            <td> {{ item.ptr_trancode }}  </td>
+            <td> {{item.pch_chrgprofit }} </td>
+            <td> {{ item.soc_charges }} </td>
+            <td> {{item.pch_chrginterest}} </td>
+            <td> {{item.pch_chrgpenalty}} </td>
+
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+  </div>
+</div>

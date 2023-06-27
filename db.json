@@ -77,7 +77,6 @@
       "pca_glaccredit": "dcc",
       "pca_glacdebit": "gtyh",
       "downloadLink": "xyz.com"
-
     },
     {
       "dmp_prodcode": "ert",
@@ -88,7 +87,6 @@
       "pca_glaccredit": "jgf",
       "pca_glacdebit": "fde",
       "downloadLink": "kjl.com"
-
     },
     {
       "dmp_prodcode": "xsa",
@@ -180,17 +178,8 @@
       "pca_glacdebit": "fds",
       "generate": "fds.com"
     }
-
   ],
   "transactions": [
-    {
-      "id": 1,
-      "por_orgacode": 3344,
-      "ptr_trancode": "cgh",
-      "pet_eventcode": 77,
-      "ptr_trandesc": "tgrf",
-      "systemgen": 1
-    },
     {
       "id": 2,
       "por_orgacode": 5646,
@@ -254,6 +243,14 @@
       "ptr_trandesc": "ds",
       "systemgen": "s",
       "id": 11
+    },
+    {
+      "por_orgacode": "",
+      "ptr_trancode": "",
+      "pet_eventcode": "",
+      "ptr_trandesc": "",
+      "systemgen": "",
+      "id": 12
     }
   ],
   "charges": [

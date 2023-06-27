@@ -1,3 +1,4 @@
+import { ValidationErrors } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { ProductService } from 'src/app/services/product-service.service';
@@ -17,25 +18,31 @@ export class EventComponent implements OnInit {
   updateBtn=false;
   hideBtn=true;
   showEvent=false;
-  // hideIdCol=true;
+  allEvents:any[]=[];
+  allEventsTable=false;
   searchNumber!:'number';
+  filterationNumber!:'number'
   filteredData: any[] = [];
+  dataFilteration:any[]=[];
   events: any[]=[];
   updatedEvent: any[]=[];
   editedValue: string | undefined;
   storedArray: any;
   selectedOption:string;
-  eventForm=new FormGroup({
-    dmp_prodcode:new FormControl('',[Validators.required]),
-    pet_eventcode:new FormControl('',[Validators.required]),
-    por_orgacode:new FormControl('',[Validators.required]),
-    ptr_trancode:new FormControl('',[Validators.required]),
-    pet_eventseqnum:new FormControl('',[Validators.required]),
-    pca_glaccredit:new FormControl('',[Validators.required]),
-    pca_glacdebit:new FormControl('',[Validators.required]),
-    generate:new FormControl('',[Validators.required]),
-  })
   selectedEvent: any;
+  row: any;
+  selectedRowData:{}
+  selectedRowIndex = -1;
+  data=[];
+
+  eventForm=new FormGroup({
+    pet_eventcode:new FormControl('',[Validators.required]),
+    pet_eventdesc:new FormControl('',[Validators.required]),
+    system_generated:new FormControl('',[Validators.required]),
+
+
+  })
+
 
 
 
@@ -53,14 +60,16 @@ export class EventComponent implements OnInit {
 
 
 
-  populateTable() {
+  eventTable() {
       this.showEvent=!this.showEvent
-      this.http.get<any>('http://localhost:3000/events')
-  .subscribe((response) =>  {
-    this.events=response;
-    this.filteredData=response;
-  });
+      if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
+      this.http.get<any>(`http://192.168.1.80:8080/getData/event/${this.selectedOption}`)
 
+      .subscribe((response) =>  {
+        this.events=response;
+        this.filteredData=response;
+      });
+    }
    }
   filterData() {
       if(this.searchNumber!== null)
@@ -69,65 +78,121 @@ export class EventComponent implements OnInit {
       else
         this.filteredData=this.events
   }
+  // Table For All events
+  populateTable(){
+    this.allEventsTable=!this.allEventsTable;
+    this.http.get<any>(`http://192.168.1.80:8080/getData/event/all`).subscribe((response)=>{
+      this.allEvents=response;
+      this.dataFilteration=response;
+    })
+
+  }
+  filteration(){
+    if(this.filterationNumber.length>0)
+      this.dataFilteration=this.allEvents.filter((item:{pet_eventcode:string;})=>item.pet_eventcode===this.filterationNumber)
+    else
+      this.dataFilteration=this.allEvents;
+  }
+
   submitForm(eventForm) {
-
-        const url = 'http://localhost:3000/events';
-        // if(this.eventData==)
-      if(eventForm.valid){
-        const id = this.eventForm.value.pet_eventcode;
-        this.http.get(url + '?id=' + id).subscribe(
-          (response: any[]) => {
-            if (response.length > 0) {
-              this.toastr.error('ID already exists');
-            }else{
-        this.http.post(url,this.eventForm.value).subscribe(
-          response => {
-            console.log('Form data added successfully');
-              this.toastr.success('Form data added successfully');
-            },
-            error => {
-              this.toastr.warning('Error adding form data');
-            }
-          );
+    const url = `http://192.168.1.80:8080/addcolumns/${this.selectedOption}/event/body`;
+    const body = JSON.stringify(this.eventForm.value);
+    console.log(body);
+    console.log(this.selectedOption)
+  if(eventForm.valid){
+    this.http.post(url , body,{responseType:"text"}).subscribe(
+      response => {
+        if(response.includes("effected")){
+        this.toastr.success("Data added succesfully");
+        eventForm.reset();
         }
-      },
-      error => {
-        this.toastr.warning('Error checking ID existence');
-      }
-    );
+  },(error: any) => {
+    if(error){
+      this.toastr.error("error");
+      console.log(error)
     }
-      eventForm.reset();
-      }
-    delEvent(id:any) {
-        return this.http.delete('http://localhost:3000/events/'+id).subscribe(
-          response=>{
-            console.log('Event Deleted Successfully');
-            this.toastr.success(' Event Deleted Successfully');
-          },
-        );
+  }
+    );
+  }
 
+}
+   delEvent(selected: any ) {
+        console.log(selected);
+        const requestBody: String = JSON.stringify(selected);
+          return this.http.delete(`http://192.168.1.80:8080/delete/${this.selectedOption}/event/requestBody`, {body:requestBody}).subscribe(
+            response=>{
+              console.log('Event Deleted Successfully');
+              this.toastr.success(' Event Deleted Successfully');
+            },
+          );
 
-      }
+    }
     editEvent(item: any){
       this.updateBtn=!this.updateBtn;
       this.hideBtn=!this.hideBtn;
     this.selectedEvent = item;
     this.eventForm.patchValue({
-    dmp_prodcode: item.dmp_prodcode,
     pet_eventcode: item.pet_eventcode,
-    por_orgacode: item.por_orgacode,
-    ptr_trancode: item.ptr_trancode,
-    pet_eventseqnum: item.pet_eventseqnum,
-    pca_glaccredit: item.pca_glaccredit,
-    pca_glacdebit: item.pca_glacdebit,
-    generate: item.downloadLink // Assuming you have a property named `generateLink` in `item`
+    pet_eventdesc: item.pet_eventdesc,
+    system_generated: item.system_generated
+
   });
 
     }
-    updateEvent(updatedData: any) {
-
+  updateEvent(event:Event,eventForm ) {
+    event.preventDefault();
+    const url = `http://192.168.1.80:8080/update/event/${this.selectedOption}/body`;
+    const body = JSON.stringify(this.eventForm.value);
+    console.log(body);
+    console.log(this.selectedOption)
+    if(eventForm.valid){
+        this.http.put(url,body,{responseType:"text"}).subscribe(
+          response => {
+            console.log(response);
+            console.log('Event data Updated successfully');
+              this.toastr.success('Event data Updated successfully');
+            },
+            error => {
+              this.toastr.warning('Error updating form data');
+            }
+          );
       }
+  }
+
+genScript(event:MouseEvent, selected:any){
+  // event.preventDefault;
+  const requestBody: String =JSON.stringify(selected);
+
+  this.http.post(`http://192.168.1.80:8080/generateScript/event/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
+    alert(response)
+    console.log("Script Generated");
+    this.toastr.success('Script Generated Successfully');
+
+  });
+  }
+  deleteEvents(selected: any[]) {
+    console.log(selected);
+    const requestBody: string = JSON.stringify(selected);
+
+    return this.http.delete(`http://192.168.1.80:8080/delete/${this.selectedOption}/event/requestBody`, { body: requestBody })
+      .subscribe(
+        () => {
+          console.log('Events Deleted Successfully');
+          this.toastr.success('Events Deleted Successfully');
+        },
+        (error) => {
+          console.error('Error deleting events:');
+          this.toastr.error('Error deleting events');
+        }
+      );
+  }
+
+
+
+
+
 
 
 }
+
 

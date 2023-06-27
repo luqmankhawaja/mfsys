@@ -12,18 +12,18 @@
 }
 
 .card {
-  align-items: center; /* aligns content vertically */
+  align-items: center;
   box-shadow: 5px 5px 5px #507998;
   padding: 40px;
   font-family: sans-serif;
   background: rgb(188, 104, 104);
   border: rgb(221, 221, 235);
-  width: 500px; /* updated width */
+  width: 500px;
   top: 100px;
-  margin: 0 auto; /* centers horizontally */
-  display: flex; /* enables flexbox */
-  flex-direction: column; /* aligns content vertically */
-  justify-content: center; /* aligns content vertically */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .card form {
   padding: 20px;
@@ -52,7 +52,7 @@
 }
 
 a {
-  margin-left: 20px;
+  margin-left: 15%;
   margin-top: 40px;
   color: white;
 }
@@ -66,17 +66,26 @@ a {
 
 button {
   background-color: #3e5285;
-  border-radius: 0px;
+  border-radius: 3px;
   margin-top: 20px;
   height: 40px;
-  width: 60%;
+  width: 40%;
   font-size: 20px;
   color: white;
   border:1px solid rgb(255, 255, 255);
   text-align: center;
   cursor: pointer;
-  align-self: center;
+  margin-left: 15%;
  }
 #error {
   color: red;
 }
+
+
+
+
+
+
+                              /* Log In Form New */
+
+

@@ -4,18 +4,22 @@
     <div class="card">
 
         <h2><b>Select Option</b></h2>
-        <input type="radio" id="option1" name="GL" value="GL" [(ngModel)]="selectedOption">
-        <label for="option1">GL</label>
-        <input type="radio" id="option2" name="Deposit" value="Deposit" [(ngModel)]="selectedOption">
-        <label for="option1">Deposit</label>
-        <input type="radio" id="option3" name="Loan" value="Loan" [(ngModel)]="selectedOption">
-        <label for="option1">Loan</label>
-        <input type="radio" id="option4" name="All" value="All" [(ngModel)]="selectedOption">
-        <label for="option1">All</label>
-
-         <button class="btn" (click)="populateTable()">Verify Events</button>
+      <div class="radio-buttons">
+        <label>
+          <input type="radio"  name="Deposit" value="deposit" [(ngModel)]="selectedOption"> Deposit
+        </label>
+        <label>
+          <input type="radio"  name="Loan" value="loan" [(ngModel)]="selectedOption"> Loan
+        </label>
+        <label>
+          <input type="radio" id="option1" name="GL" value="generalledger" [(ngModel)]="selectedOption"> GL
+        </label>
+      </div>
+      <div class="btn-container">
+        <button class="btn" [disabled]="!selectedOption" (click)="eventTable()">Verify Events</button>
+        <button class="btn" (click)="populateTable()" >View All Events</button>
+      </div>
     </div>
-
     <div class="table-wrapper" *ngIf="showEvent">
 
       <input
@@ -24,20 +28,16 @@
         (input)="filterData()"
         placeholder="Enter a Event Code to search"
       />
-      <table class="fl-table" id="table">
+      <table class="fl-table" id="EventTable">
         <thead>
           <tr>
             <th>Select</th>
             <th>dmp_prodcode</th>
             <th>pet_eventcode</th>
-            <th>por_orgacode</th>
-            <th>ptr_trancode</th>
-            <th>pet_eventseqnum</th>
-            <th>pca_glaccredit</th>
-            <th>pca_glacdebit</th>
+            <th>system_generated</th>
             <th>Generate Script</th>
             <th>Update Events</th>
-            <th><button >Delete</button></th>
+            <th><button (click)="deleteEvents(item)">Delete</button></th>
           </tr>
         </thead>
         <tbody>
@@ -47,58 +47,25 @@
                 type="checkbox"
                 name="selected{{ item }}"
                 [(ngModel)]="item.selected"
+                (change)="onCheckBox(this)"
               />
             </td>
-
-
-            <td>
-              {{ item.dmp_prodcode }}
-
-            </td>
-            <td>
-              {{ item.pet_eventcode }}
-
-            </td>
-            <td>
-              {{ item.por_orgacode }}
-
-            </td>
-            <td>
-              {{ item.ptr_trancode }}
-
-            </td>
-            <td>{{ item.pet_eventseqnum }}
-
-            </td>
-            <td>{{ item.pca_glaccredit }}
-
-            </td>
-
-            <td>
-              {{ item.pca_glacdebit }}
-             </td>
-            <td>
-              <a href="{{ item.downloadLink }}">
-                <button [disabled]="!item.selected">Generate</button></a
-              >
-            </td>
-
-            <td>
-              <button class="fa fa-pencil"
-                *ngIf="!item.editing"
-                [disabled]="!item.selected"
-
-                (click)="editEvent(item)"
-              >
-                            Edit
+           <td> {{item.pet_eventcode }}  </td>
+           <td> {{ item.pet_eventdesc }} </td>
+           <td> {{ item.system_generated }} </td>
+           <td>
+                <button [disabled]="!item.selected" (click)="genScript(item)">Generate</button>
+           </td>
+           <td>
+              <button class="fa fa-pencil" [disabled]="!item.selected" (click)="editEvent(item)" >
+                Edit
               </button>
-            </td>
-
-            <td>
-              <button [disabled]="!item.selected" (click)="delEvent(item.id)">
+           </td>
+           <td>
+              <button [disabled]="!item.selected" (click)="delEvent(item)">
                 Delete
               </button>
-            </td>
+           </td>
           </tr>
         </tbody>
       </table>
@@ -114,64 +81,64 @@
       <form [formGroup]="eventForm" (ngSubmit)="submitForm(eventForm)">
         <div class="form-row">
           <div class="input-data">
-            <input type="varchar" id="dmp_prodcode" name="dmp_prodcode" formControlName="dmp_prodcode">
-            <div class="underline"></div>
-            <label for="dmp_prodcode">dmp_prodcode:</label>
-          </div>
-          <div class="input-data">
-            <input type="number" id="pet_eventcode" formControlName="pet_eventcode">
+            <input type="number" id="pet_eventcode" name="pet_eventcode" formControlName="pet_eventcode">
             <div class="underline"></div>
             <label for="pet_eventcode">pet_eventcode:</label>
           </div>
-        </div>
-        <div class="form-row">
-            <div class="input-data">
-              <input type="varchar" name="por_orgacode" formControlName="por_orgacode">
-              <div class="underline"></div>
-              <label for="por_orgacode">por_orgacode:</label>
-            </div>
-            <div class="input-data">
-              <input type="varchar" name="ptr_trancode" formControlName="ptr_trancode">
-              <div class="underline"></div>
-              <label for="ptr_trancode">ptr_trancode:</label>
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="input-data">
-              <input type="number" name="pet_eventseqnum" formControlName="pet_eventseqnum">
-              <div class="underline"></div>
-              <label for="pet_eventseqnum">pet_eventseqnum:</label>
-            </div>
-            <div class="input-data">
-              <input type="varchar"  name="pca_glaccredit" formControlName="pca_glaccredit">
-              <div class="underline"></div>
-              <label for="pca_glaccredit">pca_glaccredit:</label>
-            </div>
-        </div>
-        <div class="form-row">
           <div class="input-data">
-            <input type="varchar"  name="pca_glacdebit" formControlName="pca_glacdebit">
+            <input type="varchar" id="pet_eventdesc" name="item.pet_eventdesc" [readonly]="updateBtn" formControlName="pet_eventdesc">
             <div class="underline"></div>
-            <label for="pca_glacdebit">pca_glacdebit:</label>
+            <label for="pet_eventdesc">pet_eventdesc:</label>
           </div>
-          <div class="input-data">
-            <input type="url" name="generate" formControlName="generate">
-            <div class="underline"></div>
-            <label for="generate">generate:</label>
-          </div>
+        </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="number" name="system_generated" formControlName="system_generated">
+              <div class="underline"></div>
+              <label for="system_generated">system_generated:</label>
+            </div>
+            <div></div>
       </div>
       <div class="form-row submit-btn">
         <button class="input-data" *ngIf="hideBtn">
            <div class="inner"></div>
            <input type="submit" value="submit" >
         </button>
+
         <button class="input-data" *ngIf="updateBtn">
           <div class="inner"></div>
-          <input type="submit" value="Update" >
-       </button>
-
+          <input type="button" value="Update" (click)="updateEvent($event,eventForm)">
+        </button>
       </div>
     </form>
+  </div>
+
+
+  <!-- Table For All Events  -->
+
+  <div class="table-container" *ngIf="allEventsTable">
+          <input
+              type="number"
+              [(ngModel)]="filterationNumber"
+                (input)="dataFilteration()"
+                placeholder="Enter a Event Code to search"
+          />
+    <table class="table" id="EventTable">
+        <thead>
+           <tr>
+              <th>dmp_prodcode</th>
+              <th>pet_eventcode</th>
+              <th>system_generated</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of dataFilteration; let i = index">
+               <td> {{item.pet_eventcode }}  </td>
+               <td> {{ item.pet_eventdesc }} </td>
+               <td> {{ item.system_generated }} </td>
+            </tr>
+        </tbody>
+    </table>
   </div>
 </div>
 

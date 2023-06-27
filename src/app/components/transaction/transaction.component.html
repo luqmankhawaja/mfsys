@@ -2,16 +2,16 @@
   <app-nav-bar></app-nav-bar>
     <div class="card">
 
-        <h2><b>Select Option</b></h2>
+        <h2><b>Select Option</b></h2><br>
         <input type="radio" id="option1" name="GL" value="GL" [(ngModel)]="selectedOption">
         <label for="option1">GL</label>
         <input type="radio" id="option2" name="Deposit" value="Deposit" [(ngModel)]="selectedOption">
         <label for="option1">Deposit</label>
         <input type="radio" id="option3" name="Loan" value="Loan" [(ngModel)]="selectedOption">
-        <label for="option1">Loan</label>
-        <input type="radio" id="option4" name="All" value="All" [(ngModel)]="selectedOption">
-        <label for="option1">All</label>
-        <button class="btn" (click)="transTable()">View/Edit Transaction</button>
+        <label for="option1">Loan</label><br><br>
+
+        <button class="btn"[disabled]="!selectedOption" (click)="transTable()">View/Edit Transaction</button>
+        <button class="btn" (click)="populateTable()"> View All Transactions</button>
 
     </div>
 
@@ -67,59 +67,104 @@
                 </ng-container>
 
               </td>
-              <td><button [disabled]="!item.selected">Generate</button></td>
+              <td><button [disabled]="!item.selected" (click)="genScript(item)">Generate</button></td>
               <td>
-                <button *ngIf="!item.editing" [disabled]="!item.selected" (click)="toggleEditing(item)">Edit</button>
+                <button class="fa fa-pencil"
+
+                [disabled]="!item.selected"
+
+                (click)="editTrans(item)"
+              >
+                            Edit
+              </button>
                 <button *ngIf="item.editing" [disabled]="!item.selected" (click)="toggleEditing(item); updateTrans()">Update</button>
               </td>
-              <td><button [disabled]="!item.selected" (click)="delTrans(item.id)"> Delete</button></td>
+              <td><button [disabled]="!item.selected" (click)="delTrans(item)"> Delete</button></td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="container" *ngIf="showTable" >
-        <form (ngSubmit)="submitForm(myForm)" #myForm="ngForm">
-          <div *ngFor="let row of transData; let i is: index" >
-            <div class="form-row">
-              <div class="input-data">
-                <input type="varchar" name="por_orgacode{{i}}" [(ngModel)]="row.por_orgacode" required maxlength="10" />
-                <div class="underline"></div>
-                <label for="por_orgacode{{ i }}">por_orgacode:</label>
-              </div>
-              <div class="input-data">
-                <input type="varchar" name="ptr_trancode{{i}}" [(ngModel)]="row.ptr_trancode" required maxlength="3" />
-                <div class="underline"></div>
-                <label for="ptr_trancode{{ i }}">ptr_trancode:</label>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="input-data">
-                <input type="int"  name="pet_eventcode{{i}}" [(ngModel)]="row.pet_eventcode" required />
-                <div class="underline"></div>
-                <label for="pet_eventcode{{i}}">pet_eventcode</label>
-              </div>
-              <div class="input-data">
-                <input  type="varchar" name="ptr_trandesc{{i}}" [(ngModel)]="row.ptr_trandesc"  required  maxlength="40"/>
-                <div class="underline"></div>
-                <label for="ptr_trandesc{{i}}">ptr_trandesc</label>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="input-data">
-                <input type="tinyint" name="systemgen{{i}}" [(ngModel)]="row.systemgen" required maxlength="1" />
-                <div class="underline"></div>
-                <label for="systemgen{{i}}">systemgen</label>
-              </div>
-            </div>
-            <div class="form-row submit-btn">
-              <div class="input-data">
-                 <div class="inner"></div>
-                 <input type="submit" value="submit" [disabled]="myForm.invalid">
-              </div>
-            </div>
-          </div>
-        </form>
+
+
+
+
+
+  <div class="container" *ngIf="showTable">
+      <div class="text">
+          Add Record
       </div>
+      <form [formGroup]="transForm" (ngSubmit)="submitForm(transForm)">
+        <div class="form-row">
+          <div class="input-data">
+            <input type="varchar" id="por_orgacode" name="por_orgacode" formControlName="por_orgacode">
+            <div class="underline"></div>
+            <label for="por_orgacode">por_orgacode:</label>
+          </div>
+          <div class="input-data">
+            <input type="varchar" id="ptr_trancode" [readonly]="updateBtn" formControlName="ptr_trancode">
+            <div class="underline"></div>
+            <label for="ptr_trancode">ptr_trancode:</label>
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="number" id="pet_eventcode" name="por_orgacode" formControlName="pet_eventcode">
+              <div class="underline"></div>
+              <label for="pet_eventcode">pet_eventcode:</label>
+            </div>
+            <div class="input-data">
+              <input type="varchar" name="ptr_trandesc" formControlName="ptr_trandesc">
+              <div class="underline"></div>
+              <label for="ptr_trandesc">ptr_trandesc:</label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="input-data">
+              <input type="tinyint" name="systemgen" formControlName="systemgen">
+              <div class="underline"></div>
+              <label for="systemgen">systemgen:</label>
+            </div>
+        </div>
+
+      <div class="form-row submit-btn">
+        <button class="input-data" *ngIf="hideBtn">
+          <div class="inner"></div>
+          <input type="submit" value="submit" >
+        </button>
+        <button class="input-data" *ngIf="updateBtn">
+          <div class="inner"></div>
+          <input type="submit" value="Update" (click)="updateTrans($event,transForm)">
+      </button>
+
+      </div>
+    </form>
+  </div>
+
+                                          <!-- Table For All Data -->
+
+  <div class="table-container"  *ngIf="allTransTable">
+      <input type="varchar"  [(ngModel)]="filterationNumber" (input)="filteration()"  placeholder="Enter a number to search">
+    <table class="table" >
+      <thead>
+        <tr>
+          <th>por_orgacode</th>
+          <th>ptr_trancode</th>
+          <th>pet_eventcode</th>
+          <th>ptr_trandesc</th>
+          <th>System Generated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of dataFilteration">
+          <td> {{ item.por_orgacode }}  </td>
+          <td>{{ item.ptr_trancode }} </td>
+          <td>{{ item.pet_eventcode }} </td>
+          <td>{{ item.ptr_trandesc }} </td>
+          <td>{{ item.systemgen }} </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
 </div>
 
