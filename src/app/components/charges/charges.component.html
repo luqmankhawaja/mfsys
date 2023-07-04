@@ -211,7 +211,19 @@
             <div class="underline"></div>
             <label for="pch_chrgpenalty">pch_chrgpenality:</label>
           </div>
-      </div>
+        </div>
+        <div class="form-row">
+          <div class="input-data">
+            <input type="tinyint" name="pch_chrgprincipal" formControlName="pch_chrgprincipal" maxlength="1">
+            <div class="underline"></div>
+            <label for="pch_chrgprincipal">pch_chrgprincipal:</label>
+          </div>
+          <div class="input-data">
+            <input type="tinyint" name="soc_charges" formControlName="soc_charges" maxlength="1">
+            <div class="underline"></div>
+            <label for="soc_charges">soc_charges:</label>
+          </div>
+        </div>
 
       <div class="form-row submit-btn">
         <button class="input-data" *ngIf="hideBtn">

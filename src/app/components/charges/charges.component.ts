@@ -46,7 +46,9 @@ export class ChargesComponent implements OnInit {
     pel_elmtcode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
     ptr_trancode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
     pch_chrginterest:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    pch_chrgpenalty:new FormControl('',[Validators.required,Validators.maxLength(3)])
+    pch_chrgpenalty:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    pch_chrgprincipal:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    soc_charges:new FormControl('',[Validators.maxLength(1)])
 
   })
 
@@ -64,7 +66,7 @@ export class ChargesComponent implements OnInit {
 
 populateTable(){
   this.chrgTable=!this.chrgTable;
-  this.http.get<any>(`http://192.168.1.80:8080/getData/charges/all`)
+  this.http.get<any>(`http://localhost:8080/getData/charges/all`)
 
   .subscribe((response) =>  {
     this.allCharges=response;

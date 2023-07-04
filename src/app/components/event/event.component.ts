@@ -38,7 +38,7 @@ export class EventComponent implements OnInit {
   eventForm=new FormGroup({
     pet_eventcode:new FormControl('',[Validators.required]),
     pet_eventdesc:new FormControl('',[Validators.required]),
-    system_generated:new FormControl('',[Validators.required]),
+    system_generated:new FormControl('',[Validators.required,Validators.maxLength(1)]),
 
 
   })
@@ -63,7 +63,7 @@ export class EventComponent implements OnInit {
   eventTable() {
       this.showEvent=!this.showEvent
       if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
-      this.http.get<any>(`http://192.168.1.80:8080/getData/event/${this.selectedOption}`)
+      this.http.get<any>(`http://localhost:8080/getData/event/${this.selectedOption}`)
 
       .subscribe((response) =>  {
         this.events=response;
@@ -81,7 +81,7 @@ export class EventComponent implements OnInit {
   // Table For All events
   populateTable(){
     this.allEventsTable=!this.allEventsTable;
-    this.http.get<any>(`http://192.168.1.80:8080/getData/event/all`).subscribe((response)=>{
+    this.http.get<any>(`http://localhost:8080/getData/event/all`).subscribe((response)=>{
       this.allEvents=response;
       this.dataFilteration=response;
     })
@@ -95,7 +95,7 @@ export class EventComponent implements OnInit {
   }
 
   submitForm(eventForm) {
-    const url = `http://192.168.1.80:8080/addcolumns/${this.selectedOption}/event/body`;
+    const url = `http://localhost:8080/addcolumns/${this.selectedOption}/event/body`;
     const body = JSON.stringify(this.eventForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -119,7 +119,7 @@ export class EventComponent implements OnInit {
    delEvent(selected: any ) {
         console.log(selected);
         const requestBody: String = JSON.stringify(selected);
-          return this.http.delete(`http://192.168.1.80:8080/delete/${this.selectedOption}/event/requestBody`, {body:requestBody}).subscribe(
+          return this.http.delete(`http://localhost:8080/delete/${this.selectedOption}/event/requestBody`, {body:requestBody}).subscribe(
             response=>{
               console.log('Event Deleted Successfully');
               this.toastr.success(' Event Deleted Successfully');
@@ -141,7 +141,7 @@ export class EventComponent implements OnInit {
     }
   updateEvent(event:Event,eventForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.80:8080/update/event/${this.selectedOption}/body`;
+    const url = `http://localhost:8080/update/event/${this.selectedOption}/body`;
     const body = JSON.stringify(this.eventForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -163,7 +163,7 @@ genScript(event:MouseEvent, selected:any){
   // event.preventDefault;
   const requestBody: String =JSON.stringify(selected);
 
-  this.http.post(`http://192.168.1.80:8080/generateScript/event/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
+  this.http.post(`http://localhost:8080/generateScript/event/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
     alert(response)
     console.log("Script Generated");
     this.toastr.success('Script Generated Successfully');
@@ -174,7 +174,7 @@ genScript(event:MouseEvent, selected:any){
     console.log(selected);
     const requestBody: string = JSON.stringify(selected);
 
-    return this.http.delete(`http://192.168.1.80:8080/delete/${this.selectedOption}/event/requestBody`, { body: requestBody })
+    return this.http.delete(`http://localhost:8080/deleteAll/${this.selectedOption}/event/requestBody`, { body: requestBody })
       .subscribe(
         () => {
           console.log('Events Deleted Successfully');

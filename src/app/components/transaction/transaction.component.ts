@@ -37,11 +37,11 @@ export class TransactionComponent implements OnInit {
   }
 
   transForm=new FormGroup({
-    por_orgacode:new FormControl('',[Validators.required]),
-    ptr_trancode:new FormControl('',[Validators.required]),
+    por_orgacode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    ptr_trancode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
     pet_eventcode:new FormControl('',[Validators.required]),
-    ptr_trandesc:new FormControl('',[Validators.required]),
-    systemgen:new FormControl('',[Validators.required]),
+    ptr_trandesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
+    systemgen:new FormControl('',[Validators.required,Validators.maxLength(1)]),
   })
 
 //          Table For Selected Data
@@ -51,7 +51,7 @@ transTable(){
   this.showTable=!this.showTable;
   if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
 
-  this.http.get<any>(`http://192.168.1.80:8080/getData/transaction_type/${this.selectedOption}`)
+  this.http.get<any>(`http://localhost:8080/getData/transaction_type/${this.selectedOption}`)
   .subscribe((response) =>  {
     this.transactions=response;
     this.filteredData=response;
@@ -73,7 +73,7 @@ filterData() {
 
 populateTable(){
   this.allTransTable=!this.allTransTable;
-  this.http.get<any>(`http://192.168.1.80:8080/getData/transaction_type/all`).subscribe((response)=>{
+  this.http.get<any>(`http://localhost:8080/getData/transaction_type/all`).subscribe((response)=>{
     this.allTransactions=response;
     this.dataFilteration=response;
 
@@ -88,7 +88,7 @@ filteration(){
 }
 
 submitForm(transForm) {
-  const url = `http://192.168.1.80:8080/addcolumns/${this.selectedOption}/transaction_type/body`;
+  const url = `http://localhost:8080/addcolumns/${this.selectedOption}/transaction_type/body`;
     const body = JSON.stringify(this.transForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -126,7 +126,7 @@ editTrans(item: any){
 delTrans(selected:any) {
   console.log(selected);
         const requestBody: String = JSON.stringify(selected);
-          return this.http.delete(`http://192.168.1.80:8080/delete/${this.selectedOption}/transaction_type/requestBody`, {body:requestBody}).subscribe(
+          return this.http.delete(`http://localhost:8080/delete/${this.selectedOption}/transaction_type/requestBody`, {body:requestBody}).subscribe(
             response=>{
               console.log('Transaction_Type Deleted Successfully');
               this.toastr.success(' Transaction_Type Deleted Successfully');
@@ -137,7 +137,7 @@ delTrans(selected:any) {
 }
   updateTrans(event:Event,transForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.80:8080/update/transactions/${this.selectedOption}/body`;
+    const url = `http://localhost:8080/update/transactions/${this.selectedOption}/body`;
     const body = JSON.stringify(this.transForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -158,7 +158,7 @@ delTrans(selected:any) {
     // event.preventDefault;
     const requestBody: String =JSON.stringify(selected);
 
-    this.http.post(`http://192.168.1.80:8080/generateScript/transactions/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
+    this.http.post(`http://localhost:8080/generateScript/transactions/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
       alert(response)
       console.log("Script Generated");
       this.toastr.success('Script Generated Successfully');
