@@ -14,14 +14,18 @@ import { BrowserModule } from '@angular/platform-browser';
   styleUrls: ['./charges.component.css']
 })
 export class ChargesComponent implements OnInit {
+  updateBtn=false;
   showTable=false;
   showCharges=false;
   chrgTable=false;
+  hideBtn=true;
   formData: any[] = [];
   searchNumber!: 'varchar';
   filteredData: any[] = [];
   dataFilteration:any[]=[];
+  selectedRows:any[]=[];
   charges: any[]=[];
+  selectedCharge:any;
   allCharges:any[]=[];
   updatedCharge:any[]=[];
   selectedOption:string;
@@ -66,7 +70,7 @@ export class ChargesComponent implements OnInit {
 
 populateTable(){
   this.chrgTable=!this.chrgTable;
-  this.http.get<any>(`http://localhost:8080/getData/charges/all`)
+  this.http.get<any>(`http://192.168.1.51:8080/getData/charges/all`)
 
   .subscribe((response) =>  {
     this.allCharges=response;
@@ -90,7 +94,7 @@ filteration(){
 chargesTable(){
   this.showTable=!this.showTable;
   if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
-  this.http.get<any>(`http://192.168.1.80:8080/getData/charges/${this.selectedOption}`)
+  this.http.get<any>(`http://192.168.1.51:8080/getData/charges/${this.selectedOption}`)
   .subscribe((response) =>  {
     this.charges=response;
     this.filteredData=response;
@@ -109,87 +113,181 @@ else{
 }
  }
 
-chargeData:any[]=[
-  {pch_chrgcode:'',por_orgacode:'',pch_chrgdesc:'',pch_chrgshort:'',pel_elmtcode:'',ptr_trancode:'',pch_chrgprofit:'',soc_charges:'',active:''}
-]
+
 addCharges(form:NgForm){
   this.showCharges=!this.showCharges;
 
 }
-submitForm(myForm: NgForm) {
-  if (myForm.valid) {
-    const url = 'http://localhost:3000/charges';
 
-    this.http.post(url, this.chargeData[0]).subscribe(
+
+
+
+  onLoanSubmit(loanForm) {
+    const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/charges/body`;
+    const body = JSON.stringify(this.loanForm.value);
+    console.log(body);
+    console.log(this.selectedOption)
+  if(loanForm.valid){
+    this.http.post(url , body,{responseType:"text"}).subscribe(
       response => {
-        console.log('Form data added successfully');
-        this.toastr.success('Form Submitted Successfully');
-
-        // Additional logic after successful data addition
-      },
-      error => {
-        this.toastr.warning('Error occurred while submitting form');
-      }
-    );
-  } else {
-    this.toastr.warning('Please enter valid data');
-  }
-
-  myForm.reset();
-}
-delCharge(id:any) {
-  return this.http.delete('http://localhost:3000/charges/'+id).subscribe(
-    response=>{
-      console.log('Charge Deleted Successfully')
-      this.toastr.success('Charge Deleted Successfully')
-    },
-  );
-
-}
-
-toggleEditing(item: any): void {
-  item.editing = !item.editing;
-
-  if (!item.editing) {
-    // Reset the input field or perform any necessary actions
-    this.updatedCharge[item.id] = undefined;
-  }
-}
-updateCharge( id: number, editedValue: number): void{
-  const index = this.charges.findIndex(data => data.id === id);
-
-    if (index !== -1) {
-      const existingValue = this.charges[index].value;
-
-      if (editedValue !== existingValue) {
-        // Update the existing value
-        this.charges[index].value = editedValue;
-
-        // Send the update request to the API
-        const updatedData = {
-          id: id,
-          value: editedValue
-        };
-
-        this.http.put('http://localhost:3000/charges/', updatedData)
-          .subscribe(
-            () => {
-              console.log('Update successful!');
-            },
-            error => {
-              console.error('Error occurred during update:', error);
-              // You can handle the error as needed
-              // For example, revert the value back to the existing value
-              this.charges[index].value = existingValue;
-            }
-          );
-      } else {
-        console.log('No changes detected.');
-      }
-    } else {
-      console.error('Charge data with specified ID not found.');
+        if(response.includes("effected")){
+        this.toastr.success("Data added succesfully");
+        loanForm.reset();
+        }
+  },(error: any) => {
+    if(error){
+      this.toastr.error("error");
+      console.log(error)
     }
   }
+    );
+  }
+ }
+
+ onDepositSubmit(depositForm){
+  const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/charges/body`;
+    const body = JSON.stringify(this.depositForm.value);
+    console.log(body);
+    console.log(this.selectedOption)
+  if(depositForm.valid){
+    this.http.post(url , body,{responseType:"text"}).subscribe(
+      response => {
+        if(response.includes("effected")){
+        this.toastr.success("Data added succesfully");
+        depositForm.reset();
+        }
+  },(error: any) => {
+    if(error){
+      this.toastr.error("error");
+      console.log(error)
+    }
+  }
+    );
+  }
+ }
+
+
+
+editCharge(item: any){
+  this.updateBtn=!this.updateBtn;
+  this.hideBtn=!this.hideBtn;
+this.selectedCharge = item;
+if(this.selectedOption==='loan'){
+    this.loanForm.patchValue({
+     pch_chrgcode: item.pch_chrgcode,
+     por_orgacode: item.por_orgacode,
+     pch_chrgdesc: item.pch_chrgdesc,
+     pch_chrgshort: item.pch_chrgshort,
+     pel_elmtcode: item.pel_elmtcode,
+     ptr_trancode: item.ptr_trancode,
+     pch_chrginterest: item.pch_chrginterest,
+     pch_chrgpenalty: item.pch_chrgpenalty,
+     pch_chrgprincipal: item.pch_chrgprincipal,
+     soc_charges: item.soc_charges
+ });
+}
+else this.depositForm.patchValue({
+    pch_chrgcode: item.pch_chrgcode,
+     por_orgacode: item.por_orgacode,
+     pch_chrgdesc: item.pch_chrgdesc,
+     pch_chrgshort: item.pch_chrgshort,
+     pel_elmtcode: item.pel_elmtcode,
+     ptr_trancode: item.ptr_trancode,
+     pch_chrgprofit: item.pch_chrgprofit,
+     soc_charges:item.soc_charges
+});
+}
+delCharge(selected: any ) {
+  console.log(selected);
+  const requestBody: String = JSON.stringify(selected);
+    return this.http.delete(`http://192.168.1.51:8080/delete/${this.selectedOption}/charges/requestBody`, {body:requestBody}).subscribe(
+      response=>{
+        console.log('Charge Deleted Successfully');
+        this.toastr.success(' Charge Deleted Successfully');
+      },
+    );
 
 }
+updateSelectedRows(item: any) {
+  if (item.selected) {
+    this.selectedRows.push(item);
+  } else {
+    const index = this.selectedRows.findIndex((selectedItem) => selectedItem.pch_chrgcode === item.pch_chrgcode && selectedItem.por_orgacode === item.por_orgacode);
+    if (index !== -1) {
+      this.selectedRows.splice(index, 1);
+    }
+  }
+}
+
+
+delMultipleCharges() {
+  console.log(this.selectedRows);
+
+  const payload = this.selectedRows.map((selectedItem) => {
+    return {
+      pch_chrgcode: selectedItem.pch_chrgcode,
+      por_orgacode: selectedItem.por_orgacode
+    };
+  });
+
+  const requestBody: string = JSON.stringify(payload);
+
+  return this.http
+    .delete(`http://http://192.168.1.51:8080/deleteAll/charges/${this.selectedOption}/requestBody`, { body: requestBody })
+    .subscribe(
+      () => {
+        console.log('Selected rows deleted successfully');
+        this.toastr.success('Selected rows deleted successfully');
+      },
+      (error) => {
+        console.error('Failed to delete selected rows:', error);
+      }
+    );
+}
+
+
+
+updateLoan( event:Event,loanForm){
+    event.preventDefault();
+    const url = `http://192.168.1.51:8080/update/charges/${this.selectedOption}/body`;
+    const body = JSON.stringify(this.loanForm.value);
+    console.log(body);
+    console.log(this.selectedOption)
+      if(loanForm.valid){
+        this.http.put(url,body,{responseType:"text"}).subscribe(
+          response => {
+            console.log(response);
+            console.log('Charge data Updated successfully');
+              this.toastr.success('Charge data Updated successfully');
+            },
+            error => {
+              this.toastr.warning('Error updating form data');
+            }
+          );
+      }
+  }
+
+updateDeposit( event:Event,depositForm){
+    event.preventDefault();
+    const url = `http://192.168.1.51:8080/update/charges/${this.selectedOption}/body`;
+    const body = JSON.stringify(this.depositForm.value);
+    console.log(body);
+    console.log(this.selectedOption)
+      if(depositForm.valid){
+        this.http.put(url,body,{responseType:"text"}).subscribe(
+          response => {
+            console.log(response);
+            console.log('Charge data Updated successfully');
+              this.toastr.success('Charge data Updated successfully');
+            },
+            error => {
+              this.toastr.warning('Error updating form data');
+            }
+          );
+      }
+  }
+
+
+}
+
 

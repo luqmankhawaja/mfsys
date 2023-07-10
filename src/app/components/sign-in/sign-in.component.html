@@ -16,7 +16,7 @@
                 <input type="password" class="form-control " id="password" formControlName="Password" placeholder="Enter password" autocomplete="on">
                 <span id="error" *ngIf="Password && Password.invalid && Password.touched">*add password</span>
               </div><br>
-              <button type="submit" [disabled]="!loginn.valid" >Login</button><br><br>
+              <button class="login-button" type="submit" [disabled]="!loginn.valid" >Login</button><br><br>
               <a class=" d-grid gap-2 mt-4" routerLink="/sign-up">New User ? Sign-up</a>
             </form>
           </div>

@@ -1,15 +1,24 @@
 <div class="background">
   <app-nav-bar></app-nav-bar>
     <div class="card">
-
-        <h2><b>Select Option</b></h2><br>
-        <input type="radio" id="option2" name="Deposit" value="deposit" [(ngModel)]="selectedOption">
-        <label for="option1">Deposit</label>
-        <input type="radio" id="option3" name="Loan" value="loan" [(ngModel)]="selectedOption">
-        <label for="option1">Loan</label><br><br>
-        <button class="btn" [disabled]="!selectedOption" (click)="chargesTable()">View/Edit Charges</button>
-        <button class="btn" (click)="populateTable()">View All Charges</button>
-
+      <div class="radio-inputs">
+        <label class="radio">
+          <input type="radio"  name="Deposit" value="deposit" [(ngModel)]="selectedOption">
+          <span class="name">Deposit</span>
+        </label>
+        <label class="radio">
+          <input type="radio"  name="Loan" value="loan" [(ngModel)]="selectedOption">
+          <span class="name">Loan</span>
+        </label>
+      </div>
+      <div class="btn-container">
+        <button class="btn" [disabled]="!selectedOption" (click)="chargesTable()">
+          <span> View CHarges </span>
+        </button>
+        <button class="btn" (click)="populateTable()">
+          <span>Verify Charges</span>
+        </button>
+      </div>
     </div>
 
 
@@ -22,7 +31,7 @@
         (input)="filterData()"
         placeholder="Enter a chrgcode to search"
       />
-    <table class="fl-table">
+    <table class="tableFixHead">
           <thead>
             <tr>
               <th>Select</th>
@@ -33,10 +42,12 @@
               <th>pel_elmtcode</th>
               <th>ptr_trancode</th>
               <th>pch_chrgprofit</th>
+              <th>pch_chrgprincipal</th>
+              <th>pch_chrgpenality</th>
               <th>soc_charges</th>
               <th>Generate Script</th>
               <th>Update Charge</th>
-              <th>Action</th>
+              <th><button (click)="delMultipleCharges(selectedRows)">Delete</button></th>
             </tr>
           </thead>
           <tbody>
@@ -46,6 +57,7 @@
                   type="checkbox"
                   name="selected{{ item }}"
                   [(ngModel)]="item.selected"
+                  (change)="updateSelectedRows(item)"
                 />
               </td>
               <td> {{ item.pch_chrgcode }} </td>
@@ -55,6 +67,8 @@
               <td> {{ item.pel_elmtcode }}  </td>
               <td> {{ item.ptr_trancode }}  </td>
               <td> {{item.pch_chrgprofit }} </td>
+              <td>{{item.pch_chrgprincipal}}</td>
+              <td>{{item.pch_chrgpenality}}</td>
               <td> {{ item.soc_charges }} </td>
               <td>
                   <button [disabled]="!item.selected">Generate</button>
@@ -65,7 +79,7 @@
                 </button>
               </td>
 
-              <td><button [disabled]="!item.selected" (click)="delCharge(item.id)">Delete</button></td>
+              <td><button [disabled]="!item.selected" (click)="delCharge(item)">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -83,10 +97,10 @@
         <div class="text">
           Add Record
         </div>
-        <form [formGroup]="depositForm" (ngSubmit)="submitForm(depositForm)" >
+        <form [formGroup]="depositForm" (ngSubmit)="onDepositSubmit(depositForm)" >
             <div class="form-row">
               <div class="input-data">
-                <input type="varchar" name="pch_chrgcode" formControlName="pch_chrgcode"  maxlength="3" />
+                <input type="varchar" name="pch_chrgcode" [readonly]="updateBtn" formControlName="pch_chrgcode"  maxlength="3" />
                 <div class="underline"></div>
                 <label for="pch_chrgcode">pch_chrgcode:</label>
               </div>
@@ -140,10 +154,15 @@
               </div>
           </div> -->
           <div class="form-row submit-btn">
-            <div class="input-data">
+            <button class="input-data" *ngIf="hideBtn">
                <div class="inner"></div>
-               <input type="submit" value="submit" [disabled]="myForm.invalid">
-            </div>
+               <input type="submit" value="submit" >
+            </button>
+
+            <button class="input-data" *ngIf="updateBtn">
+              <div class="inner"></div>
+              <input type="button" value="Update" (click)="updateDeposit($event,depositForm)">
+            </button>
           </div>
 
     </form>
@@ -163,7 +182,7 @@
       <div class="text">
           Add Record
       </div>
-      <form [formGroup]="laonForm" (ngSubmit)="submitForm(loanForm)">
+      <form [formGroup]="loanForm" (ngSubmit)="onLoanSubmit(loanForm)">
         <div class="form-row">
           <div class="input-data">
             <input type="varchar" id="pch_chrgcode" [readonly]="updateBtn" name="pch_chrgcode" formControlName="pch_chrgcode" maxlength="3">
@@ -225,23 +244,23 @@
           </div>
         </div>
 
-      <div class="form-row submit-btn">
-        <button class="input-data" *ngIf="hideBtn">
-          <div class="inner"></div>
-          <input type="submit" value="submit" >
-        </button>
-        <button class="input-data" *ngIf="updateBtn">
-          <div class="inner"></div>
-          <input type="submit" value="Update" (click)="updateTrans($event,transForm)">
-        </button>
+        <div class="form-row submit-btn">
+          <button class="input-data" *ngIf="hideBtn">
+             <div class="inner"></div>
+             <input type="submit" value="submit" >
+          </button>
 
-      </div>
+          <button class="input-data" *ngIf="updateBtn">
+            <div class="inner"></div>
+            <input type="button" value="Update" (click)="updateLoan($event,loanForm)">
+          </button>
+        </div>
     </form>
   </div>
 
 
                         <!--Table to show all charges-->
-  <div class="table-container" *ngIf="chrgTable" >
+  <div class="alltable" *ngIf="chrgTable" >
        <input type="varchar" [(ngModel)]="filterationNumber" (input)="filteration()" placeholder="Enter a chrgcode to search" />
       <table class="table">
         <thead>

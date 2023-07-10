@@ -29,6 +29,7 @@ export class EventComponent implements OnInit {
   editedValue: string | undefined;
   storedArray: any;
   selectedOption:string;
+  selectedItems: any[] = [];
   selectedEvent: any;
   row: any;
   selectedRowData:{}
@@ -60,10 +61,10 @@ export class EventComponent implements OnInit {
 
 
 
-  eventTable() {
+   eventTable() {
       this.showEvent=!this.showEvent
       if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
-      this.http.get<any>(`http://localhost:8080/getData/event/${this.selectedOption}`)
+      this.http.get<any>(`http://192.168.1.51:8080/getData/event/${this.selectedOption}`)
 
       .subscribe((response) =>  {
         this.events=response;
@@ -141,7 +142,7 @@ export class EventComponent implements OnInit {
     }
   updateEvent(event:Event,eventForm ) {
     event.preventDefault();
-    const url = `http://localhost:8080/update/event/${this.selectedOption}/body`;
+    const url = `http://192.168.1.57:8080/update/event/${this.selectedOption}/body`;
     const body = JSON.stringify(this.eventForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -170,29 +171,14 @@ genScript(event:MouseEvent, selected:any){
 
   });
   }
-  deleteEvents(selected: any[]) {
-    console.log(selected);
-    const requestBody: string = JSON.stringify(selected);
-
-    return this.http.delete(`http://localhost:8080/deleteAll/${this.selectedOption}/event/requestBody`, { body: requestBody })
-      .subscribe(
-        () => {
-          console.log('Events Deleted Successfully');
-          this.toastr.success('Events Deleted Successfully');
-        },
-        (error) => {
-          console.error('Error deleting events:');
-          this.toastr.error('Error deleting events');
-        }
-      );
-  }
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
 
 

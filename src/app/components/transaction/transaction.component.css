@@ -7,60 +7,154 @@
   background: linear-gradient(115deg, #56d8e4 10%, #9f01ea 90%);
   opacity: 1;
 }
-
+/* CSS for Card */
 .card {
+  display: flex;
+  margin:1% auto;
+  height:60px;
+  flex-direction: row;
+  width: 550px;
+  background: linear-gradient(to right,#757F9A, #D7DDE8 );
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  align-items: center;
+  backdrop-filter: saturate(10px) ;
+  transition: 0.3s ease-in-out;
+}
+.card:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
+.img {
+  width: 50px;
+  height: 50px;
+  margin-left: 10px;
+  border-radius: 10px;
+  background: linear-gradient(#d7cfcf, #9198e5);
+}
+
+.card:hover > .img {
+  transition: 0.5s ease-in-out;
+  background: linear-gradient(#9198e5, #712020);
+}
+
+
+
+                         /* CSS for Buttons in Card */
+.btn {
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
   position: relative;
-    margin:3% auto;
-    border: 2px solid #ccc;
-    padding: 30px;
-    outline:invert;
-    box-sizing: border-box;
-    max-width: 500px;
-    background:linear-gradient(to right,#83a4d4, #b6fbbf );
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-    font-family: 'Poppins', sans-serif;
-    overflow: hidden;
-  }
-  input[type="radio"] {
-    margin-left:15%;
-  }
-  .card h2{
-    margin-left: 30%;
+  overflow: hidden;
+  transition: all 0.5s ease-in;
+  z-index: 1;
+ }
 
+ .btn::before,
+ .btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 100%;
+  transform: skew(15deg);
+  transition: all 0.5s;
+  overflow: hidden;
+  z-index: -1;
+ }
+
+ .btn::before {
+  left: -10px;
+  background: #5a189a;
+ }
+
+ .btn::after {
+  right: -10px;
+  background: #5a189a;
+ }
+
+ .btn:hover::before,
+ .btn:hover::after {
+  width: 58%;
+ }
+
+ .btn:hover span {
+  color: #f1f1f7;
+  transition: 0.3s;
+ }
+
+ .btn span {
+  color: #f1f1f7;
+  font-size: 18px;
+  transition: all 0.3s ease-in;
+ }
+
+
+
+
+
+                       /* CSS for Radios */
+
+.radio-inputs {
+  margin: 2% auto;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 0.5rem;
+  background-color: #334d50;
+  box-sizing:content-box;
+  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+  padding: 0.25rem;
+  width: 200px;
+  height: 30px;
+  font-size: 14px;
+}
+.radio-inputs .radio {
+  flex: 1 1 auto;
+  text-align: center;
+
+}
+
+.radio-inputs .radio input {
+  display: none;
+}
+
+.radio-inputs .radio .name {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: none;
+  padding: .5rem 0;
+  color: rgb(245, 247, 250);
+  transition: all .15s ease-in-out;
+}
+
+.radio-inputs .radio input:checked + .name {
+  background-color: #0c0c0c;
+  font-weight: 600;
+}
+.btn-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-container {
+  margin-top: 10px;
+}
+
+.btn {
+  margin: 0 5px;
+  background-image: linear-gradient(144deg,#485563, #29333c  );
+}
+
+ .btn:hover {
+    background-color: #e9eee175;
   }
-
-  .btn {
-    margin:2% auto;
-    background-image: linear-gradient(144deg,#485563, #29333c  );
-    border: 0;
-    border-radius: 8px;
-    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    display: flex;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    justify-content: center;
-    line-height: 1em;
-    max-width: 100%;
-    min-width: 140px;
-    padding: 19px 24px;
-    cursor: pointer;
-  }
-
-
-  .btn:hover {
-    background-color: #263a0575;
-  }
-
-  @media (min-width: 768px) {
-    .btn {
-      font-size: 24px;
-      min-width: 196px;
-    }
-  }
-
 .table-wrapper{
   float:right;
   border-collapse: collapse;

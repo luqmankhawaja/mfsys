@@ -1,18 +1,29 @@
 <div class="background">
   <app-nav-bar></app-nav-bar>
     <div class="card">
+      <div class="radio-inputs">
+        <label class="radio">
+          <input type="radio"  name="Deposit" value="deposit" [(ngModel)]="selectedOption">
+          <span class="name">Deposit</span>
+        </label>
+        <label class="radio">
+          <input type="radio"  name="Loan" value="loan" [(ngModel)]="selectedOption">
+          <span class="name">Loan</span>
+        </label>
 
-        <h2><b>Select Option</b></h2><br>
-        <input type="radio" id="option1" name="GL" value="GL" [(ngModel)]="selectedOption">
-        <label for="option1">GL</label>
-        <input type="radio" id="option2" name="Deposit" value="Deposit" [(ngModel)]="selectedOption">
-        <label for="option1">Deposit</label>
-        <input type="radio" id="option3" name="Loan" value="Loan" [(ngModel)]="selectedOption">
-        <label for="option1">Loan</label><br><br>
-
-        <button class="btn" [disabled]="!selectedOption" (click)="transTable()">View/Edit Transaction</button>
-        <button class="btn" (click)="populateTable()"> View All Transactions</button>
-
+        <label class="radio">
+              <input type="radio"  name="GL" value="generalledger" [(ngModel)]="selectedOption">
+          <span class="name">GL</span>
+        </label>
+      </div>
+      <div class="btn-container">
+        <button class="btn" [disabled]="!selectedOption" (click)="transTable()">
+          <span> View Transactions</span>
+        </button>
+        <button class="btn"  (click)="populateTable()">
+          <span>Verify Transactions</span>
+        </button>
+      </div>
     </div>
 
 
@@ -113,6 +124,8 @@
               <input type="tinyint" name="systemgen" formControlName="systemgen">
               <div class="underline"></div>
               <label for="systemgen">systemgen:</label>
+            </div>
+            <div class="input-data">
             </div>
         </div>
 

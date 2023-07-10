@@ -8,95 +8,105 @@
   background: linear-gradient(to right, #ad5389, #3c1053);
   opacity: 1;
 }
-
+                          /*  CSS for  Card */
   .card {
     display: flex;
-    margin:2% auto;
-    height:50px;
+    margin:1% auto;
+    height:60px;
     flex-direction: row;
-    width: 500px;
-    background: linear-gradient(to right,#1D2B64, #ad5389 );
+    width: 550px;
+    background: linear-gradient(to right,#757F9A, #D7DDE8 );
 
     border-radius: 8px;
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-    box-sizing: border-box;
-  }
-  /* CSS for Buttons in Card */
-  .btn_td{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 15px 30px;
-    border: 0;
-    position: relative;
-    overflow: hidden;
-    border-radius: 10rem;
-    transition: all 0.02s;
-    font-weight: bold;
-    color: rgb(37, 37, 37);
-    z-index: 0;
-    box-shadow: 0 0px 7px -5px rgba(0, 0, 0, 0.5);
-  }
-
-  .btn_td:hover {
-    background: rgb(193, 228, 248);
-    color: rgb(33, 0, 85);
-  }
-
-  .btn_td:active {
-    transform: scale(0.97);
-  }
-
-  .hoverEffect {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 1;
-  }
 
-  .hoverEffect div {
-    background: rgb(222,0,75);
-    background: linear-gradient(90deg, rgba(222,0,75,1) 0%, rgba(191,70,255,1) 49%, rgba(0,212,255,1) 100%);
-    border-radius: 40rem;
-    width: 10rem;
-    height: 10rem;
-    transition: 0.4s;
-    filter: blur(20px);
-    animation: effect infinite 3s linear;
-    opacity: 0.5;
-  }
+    backdrop-filter: saturate(10px) ;
+    transition: 0.3s ease-in-out;
+}
 
-  .btn_td:hover .hoverEffect div {
-    width: 8rem;
-    height: 8rem;
-  }
+.card:hover {
+  cursor: pointer;
+  transform: scale(1.05);
+}
 
-  @keyframes effect {
+.img {
+  width: 50px;
+  height: 50px;
+  margin-left: 10px;
+  border-radius: 10px;
+  background: linear-gradient(#d7cfcf, #9198e5);
+}
 
-    0% {
-      transform: rotate(0deg);
-    }
+.card:hover > .img {
+  transition: 0.5s ease-in-out;
+  background: linear-gradient(#9198e5, #712020);
+}
 
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+
+                                    /* CSS for Buttons in Card */
+
+.btn {
+  display: inline-block;
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease-in;
+  z-index: 1;
+ }
+
+ .btn::before,
+ .btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 100%;
+  transform: skew(15deg);
+  transition: all 0.5s;
+  overflow: hidden;
+  z-index: -1;
+ }
+
+ .btn::before {
+  left: -10px;
+  background: #5a189a;
+ }
+
+ .btn::after {
+  right: -10px;
+  background: #5a189a;
+ }
+
+ .btn:hover::before,
+ .btn:hover::after {
+  width: 58%;
+ }
+
+ .btn:hover span {
+  color: #f1f1f7;
+  transition: 0.3s;
+ }
+
+ .btn span {
+  color: #f1f1f7;
+  font-size: 18px;
+  transition: all 0.3s ease-in;
+ }
 
 
 
                                       /* CSS for Radios */
   .radio-inputs {
-    margin: 0 auto;
+    margin: 2% auto;
     position: relative;
     display: flex;
     flex-wrap: wrap;
     border-radius: 0.5rem;
-    background-color: #1abc9c;
+    background-color: #334d50;
     box-sizing:content-box;
     box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
     padding: 0.25rem;
@@ -108,6 +118,7 @@
   .radio-inputs .radio {
     flex: 1 1 auto;
     text-align: center;
+
   }
 
   .radio-inputs .radio input {
@@ -122,12 +133,12 @@
     border-radius: 0.5rem;
     border: none;
     padding: .5rem 0;
-    color: rgba(51, 65, 85, 1);
+    color: rgb(245, 247, 250);
     transition: all .15s ease-in-out;
   }
 
   .radio-inputs .radio input:checked + .name {
-    background-color: #fff;
+    background-color: #0c0c0c;
     font-weight: 600;
   }
   .btn-container {
@@ -155,58 +166,34 @@
   border-collapse: collapse;
   border:outset;
   box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-  background: linear-gradient(to right,#83a4d4, #b6fbbf );
+  background: linear-gradient(to right,#83a4d4, #56d8e4 );
   margin: 40px 20px;
   max-height:500px;
   max-width: 700px;
   overflow-x: auto;
   overflow-y: auto;
 }
-.table-wrapper input{
-  float: left;
-  border:1px solid #aaa;
-  border-radius:3px;
-  padding:5px;
-  background-color:white;
-
+.tableFixHead {
+  overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+  height: 200px; /* gives an initial height of 200px to the table */
 }
-
-.fl-table {
-  border-radius: 5px;
-  margin: 0 auto ;
-  font-size: 14px;
-  font-weight: normal;
-  border: none;
-  border-collapse: collapse;
-  white-space: nowrap;
-  background-color: white;
-  max-height:500px;
-  max-width: 700px;
-
+.tableFixHead thead th {
+  position: sticky; /* make the table heads sticky */
+  top: 0px; /* table head will be placed from the top of the table and sticks to it */
 }
-
-
- .fl-table th {
-
-  text-align: center;
-  padding: 12px;
-  color: #ffffff;
-  background: #3f4c6b;
+table {
+  border-collapse: collapse; /* make the table borders collapse to each other */
+  width: 100%;
 }
-
-.fl-table td {
-  border-right: 1px solid #f8f8f8;
-  font-size: 12px;
-  text-align: center;
-  padding: 12px;
-  overflow-x: auto;
-  overflow-y: auto;
+th,
+td {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background: #eee;
 }
-
-
-
-
-
+th {
+  background: #9f01ea;
+}
 
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
@@ -470,3 +457,5 @@ form .form-row .textarea{
                                 text-align: center;
                             }
                           }
+
+
