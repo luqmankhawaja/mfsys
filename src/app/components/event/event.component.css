@@ -5,19 +5,18 @@
   min-height: 100vh;
   padding: 10px;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to right, #ad5389, #3c1053);
+  background: linear-gradient(to right, #232526, #414345);
   opacity: 1;
 }
                           /*  CSS for  Card */
   .card {
     display: flex;
     margin:1% auto;
-    height:60px;
+    height:70px;
     flex-direction: row;
     width: 550px;
-    background: linear-gradient(to right,#757F9A, #D7DDE8 );
-
-    border-radius: 8px;
+    background: #757F9A;
+    border-radius: 6px;
     box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
     display: flex;
     align-items: center;
@@ -33,7 +32,7 @@
 
 .img {
   width: 50px;
-  height: 50px;
+  height: 40px;
   margin-left: 10px;
   border-radius: 10px;
   background: linear-gradient(#d7cfcf, #9198e5);
@@ -73,12 +72,12 @@
 
  .btn::before {
   left: -10px;
-  background: #5a189a;
+  background: #414345;
  }
 
  .btn::after {
   right: -10px;
-  background: #5a189a;
+  background: #134E5E;
  }
 
  .btn:hover::before,
@@ -166,7 +165,7 @@
   border-collapse: collapse;
   border:outset;
   box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-  background: linear-gradient(to right,#83a4d4, #56d8e4 );
+  background: #1F1C2C;
   margin: 40px 20px;
   max-height:500px;
   max-width: 700px;
@@ -174,15 +173,15 @@
   overflow-y: auto;
 }
 .tableFixHead {
-  overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-  height: 200px; /* gives an initial height of 200px to the table */
+  overflow-y: auto;
+  height: 200px;
 }
 .tableFixHead thead th {
-  position: sticky; /* make the table heads sticky */
-  top: 0px; /* table head will be placed from the top of the table and sticks to it */
+  position: sticky;
+  top: 0px;
 }
-table {
-  border-collapse: collapse; /* make the table borders collapse to each other */
+.tableFixHead {
+  border-collapse: collapse;
   width: 100%;
 }
 th,
@@ -192,7 +191,8 @@ td {
   background: #eee;
 }
 th {
-  background: #9f01ea;
+  background: #314755;
+  color:white;
 }
 
 
@@ -296,6 +296,7 @@ form .form-row .textarea{
   overflow: hidden;
   height: 45px!important;
   width: 25%!important;
+
 }
 .submit-btn .input-data .inner{
   height: 100%;
@@ -340,122 +341,37 @@ form .form-row .textarea{
 
 
                           /* Table For All Data */
-                          .table-container{
-                            margin:3% auto;
-                            border-collapse: collapse;
-                            border:outset;
-                            box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-                            max-height:500px;
-                            max-width: fit-content;
-                            overflow-x: auto;
-                            overflow-y: auto;
-                          }
-
-                          .table {
-                            border-radius: 5px;
-                            margin: 0 auto ;
-                            font-size: 14px;
-                            font-weight: normal;
-                            border: none;
-                            border-collapse: collapse;
-                            white-space: nowrap;
-                            background-color: white;
-
-                          }
-
-
-                          .table td, .table th {
-                            text-align: center;
-                            padding: 12px;
-                          }
-
-                          .table td {
-                            border-right: 1px solid #f8f8f8;
-                            font-size: 12px;
-
-                          }
-
-                          .table thead th {
-                            color: #ffffff;
-                            background: #4FC3A1;
-                          }
-
-
-                          .table thead th:nth-child(odd) {
-                            color: #ffffff;
-                            background: #324960;
-                          }
-
-                          .table tr:nth-child(even) {
-                            background: #F8F8F8;
-                          }
-
-                          @media (max-width: 767px) {
-                           .table {
-                                display: block;
-                                width: 100%;
-                            }
-                            .table-container:before{
-                                content: "Scroll horizontally >";
-                                display: block;
-                                text-align: center;
-                                font-size: 11px;
-                                color: white;
-                                padding: 0 0 10px;
-                            }
-                            .table thead, .table tbody, .table thead th {
-                                display: block;
-                            }
-                            .table thead th:last-child{
-                                border-bottom: none;
-                            }
-                            .table thead {
-                                float: center;
-                            }
-                            .table tbody {
-                                width: auto;
-                                position: relative;
-                                overflow-x: auto;
-
-                            }
-                            .table td, .table th {
-                                padding: 20px .625em .625em .625em;
-                                height: 60px;
-                                vertical-align: middle;
-                                box-sizing: border-box;
-                                overflow-x: hidden;
-                                overflow-y: auto;
-                                width: 120px;
-                                font-size: 16px;
-                                text-overflow: ellipsis;
-
-                            }
-                            .table thead th {
-
-                                text-align: center;
-                                border-bottom: 1px solid #f7f7f9;
-                            }
-                            .table tbody tr {
-                                display: table-cell;
-
-                            }
-                            .table tbody tr:nth-child(odd) {
-                                background: none;
-                            }
-                            .table tr:nth-child(even) {
-                                background: transparent;
-                            }
-                            .table tr td:nth-child(odd) {
-                                background: #F8F8F8;
-                                border-right: 1px solid #E6E4E4;
-                            }
-                            .table tr td:nth-child(even) {
-                                border-right: 1px solid #E6E4E4;
-                            }
-                            .table tbody td {
-                                display: block;
-                                text-align: center;
-                            }
-                          }
+.table-container{
+  margin:3% auto;
+  border-collapse: collapse;
+  border:outset;
+  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  max-height:500px;
+  max-width: fit-content;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+.table {
+  overflow-y: auto;
+  height: 200px;
+}
+.table thead th {
+  position: sticky;
+  top: 0px;
+}
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th,
+td {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  background: #eee;
+}
+th {
+  background: #314755;
+  color:white;
+}
 
 

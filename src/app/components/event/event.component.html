@@ -67,8 +67,8 @@
                 <button [disabled]="!item.selected" (click)="genScript(item)">Generate</button>
            </td>
            <td>
-              <button class="fa fa-pencil" [disabled]="!item.selected" (click)="editEvent(item)" >
-                Edit
+              <button type="edit-btn" class="btn btn-danger" [disabled]="!item.selected" (click)="editEvent(item)" >
+                <i class="far fa-trash-alt"></i>
               </button>
            </td>
            <td>

@@ -82,7 +82,7 @@ export class EventComponent implements OnInit {
   // Table For All events
   populateTable(){
     this.allEventsTable=!this.allEventsTable;
-    this.http.get<any>(`http://localhost:8080/getData/event/all`).subscribe((response)=>{
+    this.http.get<any>(`http://192.168.1.51:8080/getData/event/all`).subscribe((response)=>{
       this.allEvents=response;
       this.dataFilteration=response;
     })
@@ -96,7 +96,7 @@ export class EventComponent implements OnInit {
   }
 
   submitForm(eventForm) {
-    const url = `http://localhost:8080/addcolumns/${this.selectedOption}/event/body`;
+    const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/event/body`;
     const body = JSON.stringify(this.eventForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -120,7 +120,7 @@ export class EventComponent implements OnInit {
    delEvent(selected: any ) {
         console.log(selected);
         const requestBody: String = JSON.stringify(selected);
-          return this.http.delete(`http://localhost:8080/delete/${this.selectedOption}/event/requestBody`, {body:requestBody}).subscribe(
+          return this.http.delete(`http://192.168.1.51:8080/delete/${this.selectedOption}/event/requestBody`, {body:requestBody}).subscribe(
             response=>{
               console.log('Event Deleted Successfully');
               this.toastr.success(' Event Deleted Successfully');
@@ -164,7 +164,7 @@ genScript(event:MouseEvent, selected:any){
   // event.preventDefault;
   const requestBody: String =JSON.stringify(selected);
 
-  this.http.post(`http://localhost:8080/generateScript/event/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
+  this.http.post(`http://192.168.1.51:8080/generateScript/event/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
     alert(response)
     console.log("Script Generated");
     this.toastr.success('Script Generated Successfully');

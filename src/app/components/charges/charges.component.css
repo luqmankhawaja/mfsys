@@ -11,7 +11,7 @@
 .card {
   display: flex;
   margin:1% auto;
-  height:60px;
+  height:70px;
   flex-direction: row;
   width: 550px;
   background: linear-gradient(to right,#757F9A, #D7DDE8 );
@@ -169,15 +169,15 @@
 }
 
 .tableFixHead {
-  overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-  height: 200px; /* gives an initial height of 200px to the table */
+  overflow-y: auto;
+  height: 200px;
 }
 .tableFixHead thead th {
-  position: sticky; /* make the table heads sticky */
-  top: 0px; /* table head will be placed from the top of the table and sticks to it */
+  position: sticky;
+  top: 0px;
 }
 table {
-  border-collapse: collapse; /* make the table borders collapse to each other */
+  border-collapse: collapse;
   width: 100%;
 }
 th,
@@ -187,7 +187,8 @@ td {
   background: #eee;
 }
 th {
-  background: #eee;
+  background: #0f0f0f;
+  color:white;
 }
 
 
@@ -336,7 +337,7 @@ form .form-row .textarea{
 }
 
 .alltable{
-  float:center;
+
   border-collapse: collapse;
   border:outset;
   box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
@@ -347,15 +348,15 @@ form .form-row .textarea{
   overflow-y: auto;
 }
 .table {
-  overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
-  height: 200px; /* gives an initial height of 200px to the table */
+  overflow-y: auto;
+  height: 200px;
 }
 .table thead th {
-  position: sticky; /* make the table heads sticky */
-  top: 0px; /* table head will be placed from the top of the table and sticks to it */
+  position: sticky;
+  top: 0px;
 }
 table {
-  border-collapse: collapse; /* make the table borders collapse to each other */
+  border-collapse: collapse;
   width: 100%;
 }
 th,
@@ -365,6 +366,7 @@ td {
   background: #eee;
 }
 th {
-  background: #eee;
+  background: #070707;
+  color:white;
 }
 
