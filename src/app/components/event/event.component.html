@@ -45,9 +45,9 @@
             <th>pet_eventcode</th>
             <th>pet_eventdesc</th>
             <th>system_generated</th>
-            <th>Generate Script</th>
             <th>Update Events</th>
-            <th><button class="delButton"  (click)="deleteEvents(selectedItems)">Delete</button></th>
+            <th>Generate Script</th>
+            <th><button class="btn-del" (click)="delMultipleEvents(selectedItems)">Delete</button></th>
           </tr>
         </thead>
         <tbody>
@@ -57,23 +57,25 @@
                 type="checkbox"
                 name="selected{{ item }}"
                 [(ngModel)]="item.selected"
-                (change)="onCheckBox(this)"
+                (change)="updateSelectedRows(item)"
               />
             </td>
            <td> {{item.pet_eventcode }}  </td>
            <td> {{ item.pet_eventdesc }} </td>
            <td> {{ item.system_generated }} </td>
            <td>
-                <button [disabled]="!item.selected" (click)="genScript(item)">Generate</button>
+            <button  [disabled]="!item.selected" (click)="editEvent(item)" >
+              <span class="edit-icon">&#9998;</span>
+            </button>
+         </td>
+           <td>
+                <button class="gen-btn"[disabled]="!item.selected" (click)="genScript(item)">
+                  <span class="button-content">Generate</span>
+                </button>
            </td>
            <td>
-              <button type="edit-btn" class="btn btn-danger" [disabled]="!item.selected" (click)="editEvent(item)" >
-                <i class="far fa-trash-alt"></i>
-              </button>
-           </td>
-           <td>
-              <button [disabled]="!item.selected" (click)="delEvent(item)">
-                Delete
+              <button  class="btn-del" [disabled]="!item.selected" (click)="delEvent(item)">
+                <span class="lable">Delete</span>
               </button>
            </td>
           </tr>

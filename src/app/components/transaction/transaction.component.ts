@@ -25,6 +25,7 @@ export class TransactionComponent implements OnInit {
   transactions: any[]=[];
   dataFilteration:any[]=[];
   allTransactions:any[]=[];
+  selectedRows:any[]=[];
   selectedOption:string;
 
   constructor(private productService:ProductService,
@@ -135,9 +136,47 @@ delTrans(selected:any) {
 
 
 }
+updateSelectedRows(item: any) {
+
+  if (item.selected) {
+  this.selectedRows.push(item);
+  } else {
+  const index = this.selectedRows.findIndex((selectedItem) => selectedItem.por_orgacode === item.por_orgacode && selectedItem.ptr_trancode === item.ptr_trancode);
+    if (index !== -1) {
+      this.selectedRows.splice(index, 1);
+  }
+}
+}
+delMultipleTrans() {
+  console.log(this.selectedRows);
+
+  const payload = this.selectedRows.map((selectedItem) => {
+    return {
+      por_orgacode: selectedItem.por_orgacode,
+      ptr_trancode: selectedItem.ptr_trancode,
+      pet_eventcode: selectedItem.pet_eventcode,
+      ptr_trandesc: selectedItem.ptr_trandesc,
+      systemgen: selectedItem.systemgen,
+
+    };
+  });
+  return this.http
+    .delete(`http://http://192.168.1.51:8080/deleteAll/transactions_type/${this.selectedOption}/requestBody`, { body: payload })
+    .subscribe(
+      () => {
+        console.log('Selected rows deleted successfully');
+        this.toastr.success('Selected rows deleted successfully');
+      },
+      (error) => {
+        console.error('Failed to delete selected rows:', error);
+      }
+    );
+  }
+
+
   updateTrans(event:Event,transForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.51:8080/update/transactions/${this.selectedOption}/body`;
+    const url = `http://192.168.1.51:8080/update/transactions_type/${this.selectedOption}/body`;
     const body = JSON.stringify(this.transForm.value);
     console.log(body);
     console.log(this.selectedOption)
@@ -154,11 +193,23 @@ delTrans(selected:any) {
           );
     }
   }
-  genScript(event:MouseEvent, selected:any){
-    // event.preventDefault;
-    const requestBody: String =JSON.stringify(selected);
+  genScript(selected:any){
 
-    this.http.post(`http://192.168.1.51:8080/generateScript/transactions/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
+    const requestBody = {
+
+          por_orgacode: selected.por_orgacode,
+          ptr_trancode: selected.ptr_trancode,
+          pet_eventcode: selected.pet_eventcode,
+          ptr_trandesc: selected.ptr_trandesc,
+          systemgen: selected.systemgen,
+
+
+      };
+      console.log(requestBody);
+      this.http
+        .post<string>(`http://192.168.1.51:8080/generateScript/transactions_type/${this.selectedOption}/requestBody`,
+        requestBody,
+        { responseType: 'text' as 'json' }).subscribe((response)=>{
       alert(response)
       console.log("Script Generated");
       this.toastr.success('Script Generated Successfully');

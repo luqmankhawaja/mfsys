@@ -41,13 +41,14 @@
               <th>pch_chrgshort</th>
               <th>pel_elmtcode</th>
               <th>ptr_trancode</th>
-              <th>pch_chrgprofit</th>
-              <th>pch_chrgprincipal</th>
-              <th>pch_chrgpenality</th>
+              <th *ngIf="selectedOption !== 'loan'">pch_chrgprofit</th>
+              <th *ngIf="selectedOption !== 'deposit'">pch_chrginterest</th>
+              <th *ngIf="selectedOption !== 'deposit'">pch_chrgprincipal</th>
+              <th *ngIf="selectedOption !== 'deposit'">pch_chrgpenality</th>
               <th>soc_charges</th>
               <th>Generate Script</th>
               <th>Update Charge</th>
-              <th><button (click)="delMultipleCharges(selectedRows)">Delete</button></th>
+              <th><button class="btn-del" (click)="delMultipleCharges(selectedRows)">Delete</button></th>
             </tr>
           </thead>
           <tbody>
@@ -66,20 +67,24 @@
               <td> {{ item.pch_chrgshort }} </td>
               <td> {{ item.pel_elmtcode }}  </td>
               <td> {{ item.ptr_trancode }}  </td>
-              <td> {{item.pch_chrgprofit }} </td>
-              <td>{{item.pch_chrgprincipal}}</td>
-              <td>{{item.pch_chrgpenality}}</td>
+              <td *ngIf="selectedOption !== 'loan'"> {{item.pch_chrgprofit }} </td>
+              <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrginterest}}</td>
+              <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrgprincipal}}</td>
+              <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrgpenalty}}</td>
               <td> {{ item.soc_charges }} </td>
               <td>
-                  <button [disabled]="!item.selected">Generate</button>
+                  <button [disabled]="!item.selected" (click)="genScript(item)">Generate</button>
               </td>
               <td>
                 <button [disabled]="!item.selected" (click)="editCharge(item)" >
-                  Edit
+                  <span class="edit-icon">&#9998;</span>
                 </button>
               </td>
 
-              <td><button [disabled]="!item.selected" (click)="delCharge(item)">Delete</button></td>
+              <td><button class="btn-del"[disabled]="!item.selected" (click)="delCharge(item)">
+                <span class="lable">Delete</span>
+                  </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -221,12 +226,12 @@
         </div>
         <div class="form-row">
           <div class="input-data">
-            <input type="varchar" name="pch_chrginterest" formControlName="pch_chrginterest" maxlength="3">
+            <input type="tinyint" name="pch_chrginterest" formControlName="pch_chrginterest" maxlength="1">
             <div class="underline"></div>
             <label for="pch_chrginterest">pch_chrginterest:</label>
           </div>
           <div class="input-data">
-            <input type="varchar" name="pch_chrgpenalty" formControlName="pch_chrgpenalty" maxlength="3">
+            <input type="tinyint" name="pch_chrgpenalty" formControlName="pch_chrgpenalty" maxlength="1">
             <div class="underline"></div>
             <label for="pch_chrgpenalty">pch_chrgpenality:</label>
           </div>
@@ -271,10 +276,11 @@
             <th>pch_chrgshort</th>
             <th>pel_elmtcode</th>
             <th>ptr_trancode</th>
-            <th>pch_chrgprofit</th>
+            <th >pch_chrgprofit</th>
+            <th >pch_chrginterest</th>
+            <th >pch_chrgprincipal</th>
+            <th >pch_chrgpenality</th>
             <th>soc_charges</th>
-            <th>pch_chrginterest</th>
-            <th>pch_chrgpenalty</th>
 
           </tr>
         </thead>
@@ -287,11 +293,12 @@
             <td> {{ item.pel_elmtcode }}  </td>
             <td> {{ item.ptr_trancode }}  </td>
             <td> {{item.pch_chrgprofit }} </td>
+            <td> {{item.pch_chrgprofit }} </td>
+            <td >{{item.pch_chrginterest}}</td>
+            <td>{{item.pch_chrgprincipal}}</td>
+            <td>{{item.pch_chrgpenalty}}</td>
             <td> {{ item.soc_charges }} </td>
-            <td> {{item.pch_chrginterest}} </td>
-            <td> {{item.pch_chrgpenalty}} </td>
 
-            <td></td>
           </tr>
         </tbody>
       </table>

@@ -159,6 +159,74 @@
       background-color: #e9eee175;
     }
 
+    .edit-icon {
+      font-size: 14px;
+     
+    }
+    .btn-del {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 12px;
+      gap: 8px;
+      height: 34px;
+      width: 112px;
+      border: none;
+      background: #ff362b34;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .lable {
+      line-height: 20px;
+      font-size: 17px;
+      color: #f0e8e7;
+      font-family: sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .btn-del:hover:not([disabled]) {
+      background: #ff0d00fd;
+      color:white;
+    }
+
+    .gen-btn{
+      position: relative;
+
+      height: 2rem;
+      padding: 0 2rem;
+      border-radius: 1.5rem;
+      background: #3d3a4e;
+      color: #fff;
+      border: none;
+    }
+
+    .gen-btn:hover:not([disabled])::before {
+      transform: scaleX(1);
+    }
+
+    .button-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .gen-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: scaleX(0);
+      transform-origin: 0 50%;
+      width: 100%;
+      height: inherit;
+      border-radius: inherit;
+      background: linear-gradient(
+        82.3deg,
+        rgba(150, 93, 233, 1) 10.8%,
+        rgba(99, 88, 238, 1) 94.3%
+      );
+      transition: all 0.475s;
+    }
 
 .table-wrapper{
   float:right;
@@ -191,7 +259,7 @@ td {
   background: #eee;
 }
 th {
-  background: #314755;
+  background: #375364;
   color:white;
 }
 

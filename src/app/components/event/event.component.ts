@@ -26,6 +26,7 @@ export class EventComponent implements OnInit {
   dataFilteration:any[]=[];
   events: any[]=[];
   updatedEvent: any[]=[];
+  selectedRows:any[]=[];
   editedValue: string | undefined;
   storedArray: any;
   selectedOption:string;
@@ -128,9 +129,45 @@ export class EventComponent implements OnInit {
           );
 
     }
-    editEvent(item: any){
-      this.updateBtn=!this.updateBtn;
-      this.hideBtn=!this.hideBtn;
+    updateSelectedRows(item: any) {
+
+      if (item.selected) {
+      this.selectedRows.push(item);
+      } else {
+      const index = this.selectedRows.findIndex((selectedItem) => selectedItem.pet_eventcode === item.pet_eventcode && selectedItem.pet_eventdesc === item.pet_eventdesc);
+        if (index !== -1) {
+          this.selectedRows.splice(index, 1);
+      }
+    }
+  }
+
+  delMultipleEvents(){
+    console.log(this.selectedRows);
+    const payload = this.selectedRows.map((selectedItem) => {
+      return {
+        pet_eventcode: selectedItem.pet_eventcode,
+        pet_eventdesc: selectedItem.pet_eventdesc,
+        system_generated: selectedItem.system_generated,
+
+      };
+    });
+    return this.http
+      .delete(`http://http://192.168.1.51:8080/deleteAll/event/${this.selectedOption}/requestBody`, { body: payload })
+      .subscribe(
+        () => {
+          console.log('Selected rows deleted successfully');
+          this.toastr.success('Selected rows deleted successfully');
+        },
+        (error) => {
+          console.error('Failed to delete selected rows:', error);
+        }
+      );
+  }
+
+
+  editEvent(item: any){
+    this.updateBtn=!this.updateBtn;
+    this.hideBtn=!this.hideBtn;
     this.selectedEvent = item;
     this.eventForm.patchValue({
     pet_eventcode: item.pet_eventcode,
@@ -160,17 +197,26 @@ export class EventComponent implements OnInit {
       }
   }
 
-genScript(event:MouseEvent, selected:any){
-  // event.preventDefault;
-  const requestBody: String =JSON.stringify(selected);
-
-  this.http.post(`http://192.168.1.51:8080/generateScript/event/${this.selectedOption}/requestBody`,{body:requestBody},{responseType:'text'}).subscribe((response)=>{
-    alert(response)
-    console.log("Script Generated");
-    this.toastr.success('Script Generated Successfully');
-
-  });
+  genScript(selected:any) {
+    const requestBody = {
+      pet_eventcode: selected.pet_eventcode,
+        pet_eventdesc: selected.pet_eventdesc,
+        system_generated: selected.system_generated,
+    };
+    console.log(requestBody);
+    this.http
+      .post<string>(
+        `http://192.168.1.51:8080/generateScript/event/${this.selectedOption}/requestBody`,
+        requestBody,
+        { responseType: 'text' as 'json' }
+      )
+      .subscribe((response) => {
+        alert(response);
+        console.log('Script Generated');
+        this.toastr.success('Script Generated Successfully');
+      });
   }
+
 }
 
 

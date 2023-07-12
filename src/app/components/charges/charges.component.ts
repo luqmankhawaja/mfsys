@@ -6,8 +6,6 @@ import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { ProductService } from 'src/app/services/product-service.service';
 import { BrowserModule } from '@angular/platform-browser';
 
-
-
 @Component({
   selector: 'app-charges',
   templateUrl: './charges.component.html',
@@ -49,8 +47,8 @@ export class ChargesComponent implements OnInit {
     pch_chrgshort:new FormControl('',[Validators.required,Validators.maxLength(20)]),
     pel_elmtcode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
     ptr_trancode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    pch_chrginterest:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    pch_chrgpenalty:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    pch_chrginterest:new FormControl('',[Validators.maxLength(1)]),
+    pch_chrgpenalty:new FormControl('',[Validators.required,Validators.maxLength(1)]),
     pch_chrgprincipal:new FormControl('',[Validators.required,Validators.maxLength(1)]),
     soc_charges:new FormControl('',[Validators.maxLength(1)])
 
@@ -209,12 +207,13 @@ delCharge(selected: any ) {
 
 }
 updateSelectedRows(item: any) {
-  if (item.selected) {
+
+    if (item.selected) {
     this.selectedRows.push(item);
-  } else {
+    } else {
     const index = this.selectedRows.findIndex((selectedItem) => selectedItem.pch_chrgcode === item.pch_chrgcode && selectedItem.por_orgacode === item.por_orgacode);
-    if (index !== -1) {
-      this.selectedRows.splice(index, 1);
+      if (index !== -1) {
+        this.selectedRows.splice(index, 1);
     }
   }
 }
@@ -222,18 +221,23 @@ updateSelectedRows(item: any) {
 
 delMultipleCharges() {
   console.log(this.selectedRows);
-
+  if(this.selectedOption==='loan'){
   const payload = this.selectedRows.map((selectedItem) => {
     return {
       pch_chrgcode: selectedItem.pch_chrgcode,
-      por_orgacode: selectedItem.por_orgacode
+      por_orgacode: selectedItem.por_orgacode,
+      pch_chrgdesc: selectedItem.pch_chrgdesc,
+      pch_chrgshort: selectedItem.pch_chrgshort,
+      pel_elmtcode: selectedItem.pel_elmtcode,
+      ptr_trancode: selectedItem.ptr_trancode,
+      pch_chrginterest: selectedItem.pch_chrginterest,
+      pch_chrgpenalty: selectedItem.pch_chrgpenalty,
+      pch_chrgprincipal: selectedItem.pch_chrgprincipal,
+      soc_charges: selectedItem.soc_charges
     };
   });
-
-  const requestBody: string = JSON.stringify(payload);
-
   return this.http
-    .delete(`http://http://192.168.1.51:8080/deleteAll/charges/${this.selectedOption}/requestBody`, { body: requestBody })
+    .delete(`http://http://192.168.1.51:8080/deleteAll/charges/${this.selectedOption}/requestBody`, { body: payload })
     .subscribe(
       () => {
         console.log('Selected rows deleted successfully');
@@ -243,6 +247,35 @@ delMultipleCharges() {
         console.error('Failed to delete selected rows:', error);
       }
     );
+  }
+  else{
+
+      const payload = this.selectedRows.map((selectedItem) => {
+    return {
+      pch_chrgcode: selectedItem.pch_chrgcode,
+      por_orgacode: selectedItem.por_orgacode,
+      pch_chrgdesc: selectedItem.pch_chrgdesc,
+      pch_chrgshort: selectedItem.pch_chrgshort,
+      pel_elmtcode: selectedItem.pel_elmtcode,
+      ptr_trancode: selectedItem.ptr_trancode,
+      pch_chrgprofit: selectedItem.pch_chrgprofit,
+      soc_charges:selectedItem.soc_charges
+    };
+  });
+
+  return this.http
+    .delete(`http://http://192.168.1.51:8080/deleteAll/charges/${this.selectedOption}/requestBody`, { body: payload })
+    .subscribe(
+      () => {
+        console.log('Selected rows deleted successfully');
+        this.toastr.success('Selected rows deleted successfully');
+      },
+      (error) => {
+        console.error('Failed to delete selected rows:', error);
+      }
+    );
+
+  }
 }
 
 
@@ -286,8 +319,58 @@ updateDeposit( event:Event,depositForm){
           );
       }
   }
-
+  genScript(selected: any) {
+    if(this.selectedOption==='loan'){
+    const requestBody = {
+      pch_chrgcode: selected.pch_chrgcode,
+      por_orgacode: selected.por_orgacode,
+      pch_chrgdesc: selected.pch_chrgdesc,
+      pch_chrgshort: selected.pch_chrgshort,
+      pel_elmtcode: selected.pel_elmtcode,
+      ptr_trancode: selected.ptr_trancode,
+      pch_chrginterest: selected.pch_chrginterest,
+      pch_chrgpenalty: selected.pch_chrgpenalty,
+      pch_chrgprincipal: selected.pch_chrgprincipal,
+      soc_charges: selected.soc_charges,
+    };
+    console.log(requestBody);
+    this.http
+      .post<string>(
+        `http://192.168.1.51:8080/generateScript/charges/${this.selectedOption}/requestBody`,
+        requestBody,
+        { responseType: 'text' as 'json' }
+      )
+      .subscribe((response) => {
+        alert(response);
+        console.log('Script Generated');
+        this.toastr.success('Script Generated Successfully');
+      });
+  }
+else{
+  const requestBody = {
+    pch_chrgcode: selected.pch_chrgcode,
+    por_orgacode: selected.por_orgacode,
+    pch_chrgdesc: selected.pch_chrgdesc,
+    pch_chrgshort: selected.pch_chrgshort,
+    pel_elmtcode: selected.pel_elmtcode,
+    ptr_trancode: selected.ptr_trancode,
+    pch_chrgprofit: selected.pch_chrgprofit,
+    soc_charges: selected.soc_charges,
+  };
+  console.log(requestBody);
+  this.http
+  .post<string>(
+    `http://192.168.1.51:8080/generateScript/charges/${this.selectedOption}/requestBody`,
+    requestBody,
+    { responseType: 'text' as 'json' }
+  )
+  .subscribe((response) => {
+    alert(response);
+    console.log('Script Generated');
+    this.toastr.success('Script Generated Successfully');
+  });
+}
 
 }
 
-
+}

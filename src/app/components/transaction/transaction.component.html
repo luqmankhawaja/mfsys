@@ -40,9 +40,11 @@
               <th>pet_eventcode</th>
               <th>ptr_trandesc</th>
               <th>System Generated</th>
-              <th>Generate Script</th>
               <th>Update Transaction</th>
-              <th>Delete Trans_type</th>
+              <th>Generate Script</th>
+              <th><button class="btn-del" (click)="delMultipleTrans(selectedRows)">
+                <span class="lable" > Delete</span>
+              </button></th>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +52,8 @@
               <td>
                 <input
                   type="checkbox" [(ngModel)]="item.selected"
-                  name="selected{{ item }}"  />
+                  name="selected{{ item }}"
+                  (change)="updateSelectedRows(item)"  />
               </td>
               <td>{{ item.por_orgacode }} </td>
 
@@ -68,19 +71,17 @@
 
 
               </td>
-              <td><button [disabled]="!item.selected" (click)="genScript(item)">Generate</button></td>
               <td>
-                <button class="fa fa-pencil"
-
-                [disabled]="!item.selected"
-
-                (click)="editTrans(item)"
-              >
-                            Edit
-              </button>
-                <button *ngIf="item.editing" [disabled]="!item.selected" (click)="toggleEditing(item); updateTrans()">Update</button>
+                <button   [disabled]="!item.selected" (click)="editTrans(item)">
+                  <span class="edit-icon">&#9998;</span>
+                </button>
               </td>
-              <td><button [disabled]="!item.selected" (click)="delTrans(item)"> Delete</button></td>
+              <td><button [disabled]="!item.selected" (click)="genScript(item)">Generate</button></td>
+
+              <td><button class="btn-del" [disabled]="!item.selected" (click)="delTrans(item)">
+                 <span class="lable">Delete</span>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>

@@ -187,11 +187,39 @@ td {
   background: #eee;
 }
 th {
-  background: #0f0f0f;
+  background: #375364;
   color:white;
 }
 
+.edit-icon {
+  font-size: 14px;
+}
+.btn-del {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 8px;
+  height: 34px;
+  width: 112px;
+  border: none;
+  background: #ff362b34;
+  border-radius: 20px;
+  cursor: pointer;
+}
 
+.lable {
+  line-height: 20px;
+  font-size: 17px;
+  color: #f0e8e7;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+}
+
+.btn-del:hover:not([disabled]) {
+  background: #ff0d00fd;
+  color:white;
+}
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 *{
