@@ -42,8 +42,10 @@ this.loginn= this.formbuilder.group(
           );
         });
         if (user) {
+          this.authService.setIsAuthenticated(true);
           this.router.navigate(['/home']);
           this.toastr.success('login successfully')
+
         } else {
           this.toastr.error('Invalid username or password');
         }

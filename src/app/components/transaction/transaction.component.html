@@ -17,11 +17,11 @@
         </label>
       </div>
       <div class="btn-container">
-        <button class="btn" [disabled]="!selectedOption" (click)="transTable()">
-          <span> View Transactions</span>
+        <button class="card-btn" *ngIf="selectedOption" (click)="transTable()">
+          <span> View </span>
         </button>
-        <button class="btn"  (click)="populateTable()">
-          <span>Verify Transactions</span>
+        <button class="card-btn"  (click)="populateTable()">
+          <span>All Data</span>
         </button>
       </div>
     </div>
@@ -42,9 +42,9 @@
               <th>System Generated</th>
               <th>Update Transaction</th>
               <th>Generate Script</th>
-              <th><button class="btn-del" (click)="delMultipleTrans(selectedRows)">
-                <span class="lable" > Delete</span>
-              </button></th>
+              <th><i class="fas fa-trash" (click)="delMultipleTrans(selectedRows)">
+
+              </i></th>
             </tr>
           </thead>
           <tbody>
@@ -71,17 +71,16 @@
 
 
               </td>
-              <td>
-                <button   [disabled]="!item.selected" (click)="editTrans(item)">
-                  <span class="edit-icon">&#9998;</span>
-                </button>
-              </td>
-              <td><button [disabled]="!item.selected" (click)="genScript(item)">Generate</button></td>
+                 <td>
+                <i class="far fa-edit"  [disabled]="!item.selected" (click)="editTrans(item)">
 
-              <td><button class="btn-del" [disabled]="!item.selected" (click)="delTrans(item)">
-                 <span class="lable">Delete</span>
-                </button>
+                </i>
               </td>
+              <td><i class="fas fa-redo"  [disabled]="!item.selected" (click)="genScript(item)">
+                </i></td>
+
+              <td><i class="far fa-trash-alt" [disabled]="!item.selected" (click)="delTrans(item)">
+                  </i></td>
             </tr>
           </tbody>
         </table>

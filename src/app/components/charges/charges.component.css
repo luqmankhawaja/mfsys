@@ -10,7 +10,7 @@
  /*  CSS for  Card */
 .card {
   display: flex;
-  margin:1% auto;
+  margin:5% auto;
   height:70px;
   flex-direction: row;
   width: 550px;
@@ -37,63 +37,6 @@
   transition: 0.5s ease-in-out;
   background: linear-gradient(#9198e5, #712020);
 }
-
-
-
-                         /* CSS for Buttons in Card */
-.btn {
-  display: inline-block;
-  width: 150px;
-  height: 50px;
-  border-radius: 10px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.5s ease-in;
-  z-index: 1;
- }
-
- .btn::before,
- .btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 0;
-  height: 100%;
-  transform: skew(15deg);
-  transition: all 0.5s;
-  overflow: hidden;
-  z-index: -1;
- }
-
- .btn::before {
-  left: -10px;
-  background: #5a189a;
- }
-
- .btn::after {
-  right: -10px;
-  background: #5a189a;
- }
-
- .btn:hover::before,
- .btn:hover::after {
-  width: 58%;
- }
-
- .btn:hover span {
-  color: #f1f1f7;
-  transition: 0.3s;
- }
-
- .btn span {
-  color: #f1f1f7;
-  font-size: 18px;
-  transition: all 0.3s ease-in;
- }
-
-
-
-
 
                        /* CSS for Radios */
 
@@ -137,89 +80,80 @@
   background-color: #0c0c0c;
   font-weight: 600;
 }
-.btn-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.card-btn {
+  width: 6.5em;
+  height: 2.3em;
+  margin: 0.5em;
+  background: #203A43;
+  color: white;
+  border: none;
+  border-radius: 0.625em;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+ }
+ button:hover {
+  color: #9198e5;
+ }
 
-.btn-container {
-  margin-top: 10px;
-}
+ button:after {
+  content: "";
+  background: white;
+  position: absolute;
+  z-index: -1;
+  left: -20%;
+  right: -20%;
+  top: 0;
+  bottom: 0;
+  transform: skewX(-45deg) scale(0, 1);
+  transition: all 0.5s;
+ }
 
-.btn {
-  margin: 0 5px;
-  background-image: linear-gradient(144deg,#485563, #29333c  );
-}
-
- .btn:hover {
-    background-color: #e9eee175;
+ button:hover:after {
+  transform: skewX(-45deg) scale(1, 1);
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
   }
 
-.table-wrapper{
-  float:right;
-  border-collapse: collapse;
-  border:outset;
-  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-  margin: 40px 20px;
-  max-height:500px;
-  max-width: 700px;
-  overflow-x: auto;
-  overflow-y: auto;
-}
+  .table-wrapper{
+    float:right;
+    border-collapse: collapse;
+    border:outset;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+    margin: 30px 20px;
+    max-height:500px;
+    max-width: 700px;
+    overflow-x: auto;
+    overflow-y: auto;
+  }
 
-.tableFixHead {
-  overflow-y: auto;
-  height: 200px;
-}
-.tableFixHead thead th {
-  position: sticky;
-  top: 0px;
-}
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-th,
-td {
-  padding: 8px 16px;
-  border: 1px solid #ccc;
-  background: #eee;
-}
-th {
-  background: #375364;
-  color:white;
-}
+  .tableFixHead {
+    overflow-y: auto;
+    height: 200px;
+  }
+  .tableFixHead thead th {
+    position: sticky;
+    top: 0px;
+  }
+  .tableFixHead {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th,
+  td {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background: #eee;
+  }
+  th {
+    background: #375364;
+    color:white;
+  }
 
-.edit-icon {
-  font-size: 14px;
-}
-.btn-del {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 6px 12px;
-  gap: 8px;
-  height: 34px;
-  width: 112px;
-  border: none;
-  background: #ff362b34;
-  border-radius: 20px;
-  cursor: pointer;
-}
 
-.lable {
-  line-height: 20px;
-  font-size: 17px;
-  color: #f0e8e7;
-  font-family: sans-serif;
-  letter-spacing: 1px;
-}
-
-.btn-del:hover:not([disabled]) {
-  background: #ff0d00fd;
-  color:white;
-}
 
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 *{
@@ -227,7 +161,7 @@ th {
   padding: 0;
   outline: none;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  
 }
 
 .container{

@@ -7,15 +7,27 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { EventComponent } from './components/event/event.component';
 import { ChargesComponent } from './components/charges/charges.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
+import { AuthGuard } from './services/auth.guard';
+
 const routes: Routes = [
-  {path:'sign-in', component: SignInComponent},
-  {path:'sign-up', component: SignUpComponent},
-  {path:'home', component: HomeComponent},
-  {path:'nav-bar', component: NavBarComponent},
-  {path:'event', component: EventComponent},
-  {path:'transaction', component: TransactionComponent},
-  {path:'charges', component: ChargesComponent},
-  { path: '', redirectTo: '/sign-in', pathMatch: 'full' }
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+
+      { path: 'home', component: HomeComponent },
+      { path: 'nav-bar', component: NavBarComponent },
+      { path: 'event', component: EventComponent },
+      { path: 'transaction', component: TransactionComponent },
+      { path: 'charges', component: ChargesComponent },
+    ]
+  },
+  { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent },
+  { path: '**', redirectTo:'/home', pathMatch: 'full' },
+
+
+
 ];
 
 @NgModule({
@@ -23,3 +35,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+

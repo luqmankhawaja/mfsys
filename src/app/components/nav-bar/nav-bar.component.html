@@ -1,28 +1,14 @@
-<!-- <nav >
-  <ul >
- <li class="nav-button"> <a href="/home">Database Monitoring</a></li>
-</ul>
-  <div class="container">
-  <ul>
+<nav>
+  <div class="logo-container">
+    <a href="/home" class="fa fa-home logo"></a>
+  </div>
+  <ul class="nav-links">
     <li><a href="/event">Events</a></li>
-    <li><a href="/transaction">Transaction Type</a></li>
+    <li><a href="/transaction">Transactions</a></li>
     <li><a href="/charges">Charges</a></li>
+
   </ul>
-</div>
-  <ul>
-  <li class="nav-button"><a (click)="authService.logout()">Logout</a></li>
-  </ul>
-</nav>
-
- -->
-
-
- <nav>
-  
-	<a href="/home">Home</a>
-	<a href="/event">Events</a>
-	<a a href="/transaction">Transactions</a>
-	<a href="/charges">Charges</a>
-	<a (click)="authService.logout()">Logout</a>
-	<div class="animation start-home"></div>
+  <div class="btn">
+    <a class="fa fa-sign-out btn" (click)="authService.logout()"></a>
+  </div>
 </nav>

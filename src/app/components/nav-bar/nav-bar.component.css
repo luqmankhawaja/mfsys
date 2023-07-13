@@ -1,129 +1,59 @@
-/* nav {
-  background-color: #333;
-  color: #fff;
-  height: 50px;
+nav {
+  background-color: #2b5876;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   padding: 0 20px;
+
+}
+
+nav .logo {
+  color: white;
+  font-size: 30px;
+  text-decoration: none;
+  
+}
+nav .btn{
+  color:white;
+  font-size: 30px;
 }
 
 nav ul {
-  font-family: Monospace;
-  list-style: none;
-  margin: 0;
-  padding: 20px;
+  list-style-type: none;
   display: flex;
   align-items: center;
+  margin: 30%;
+  justify-content: center; /* Added */
+  flex-grow: 1;
+
 }
 
 nav li {
   margin: 0 10px;
+
 }
+
+
 
 nav li a {
-  color: #fff;
+  color: grey;
+  font-size: 20px;
   text-decoration: none;
-  font-size: 16px;
+
 }
 
-
-li a:hover:not(.active) {
-  background-color: white;
-  color: black;
+nav li a:hover {
+  color: #f1f5f8;
+  font-size: 22px;
+  font-weight: 500;
 }
 
-li a.active {
-  color: white;
-  background-color: #04AA6D;
+nav .btn:hover{
+  color:red;
+  font-size:34px;
 }
-
-.nav-button {
-  font-family: Monospace;
-  margin-left: auto;
-  margin-right: auto;
-  cursor: pointer;
-} */
-
-
-nav {
-	margin:0 auto 0;
-	position: relative;
-	width: 900px;
-	height: 55px;
-	background-color: #2b3b4b;
-	border-radius: 8px;
-	font-size: 0;
-  font-family: cursive;
-}
-nav a {
-	line-height: 50px;
-	height: 100%;
-	font-size: 24px;
-	display: inline-block;
-	position: relative;
-	z-index: 1;
-	text-decoration: none;
-	text-transform: uppercase;
-	text-align: center;
-	color: white;
-	cursor: pointer;
-}
-nav .animation {
-	position: absolute;
-	height: 100%;
-	top: 0;
-	z-index: 0;
-	transition: all .5s ease 0s;
-	border-radius: 8px;
-}
-
-a:nth-child(1) {
-	width: 100px;
-  left:0;
-}
-a:nth-child(2) {
-	width: 120px;
-  left: 50px;
-}
-a:nth-child(3) {
-	width: 110px;
-  left:100px;
-}
-a:nth-child(4) {
-	width: 170px;
-  left: 220px;
-}
-a:nth-child(5) {
-	width: 130px;
-  float: right;
-}
-
-nav .start-home, a:nth-child(1):hover~.animation {
-	width: 100px;
-	left:0;
-	background-color: #1abc9c;
-}
-nav .start-events, a:nth-child(2):hover~.animation {
-	width: 115px;
-	left: 150px;
-	background-color: #9b59b6;
-}
-nav .start-transaction, a:nth-child(3):hover~.animation {
-	width: 215px;
-	left: 310px;
-	background-color: #3498db;
-}
-nav .start-charges, a:nth-child(4):hover~.animation {
-	width: 130px;
-	left: 570px;
-	background-color: #e67e22;
-}
-nav .start-logout, a:nth-child(5):hover~.animation {
-	width: 130px;
-	left:770px;
-	background-color: #eb2812
-}
-
-
-

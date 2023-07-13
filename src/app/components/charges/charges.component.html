@@ -12,11 +12,11 @@
         </label>
       </div>
       <div class="btn-container">
-        <button class="btn" [disabled]="!selectedOption" (click)="chargesTable()">
-          <span> View CHarges </span>
+        <button class="card-btn" *ngIf="selectedOption" (click)="chargesTable()">
+          <span> View  </span>
         </button>
-        <button class="btn" (click)="populateTable()">
-          <span>Verify Charges</span>
+        <button class="card-btn" (click)="populateTable()">
+          <span>All Charges</span>
         </button>
       </div>
     </div>
@@ -48,7 +48,7 @@
               <th>soc_charges</th>
               <th>Generate Script</th>
               <th>Update Charge</th>
-              <th><button class="btn-del" (click)="delMultipleCharges(selectedRows)">Delete</button></th>
+              <th><i class="fas fa-trash" (click)="delMultipleCharges(selectedRows)"></i></th>
             </tr>
           </thead>
           <tbody>
@@ -73,17 +73,17 @@
               <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrgpenalty}}</td>
               <td> {{ item.soc_charges }} </td>
               <td>
-                  <button [disabled]="!item.selected" (click)="genScript(item)">Generate</button>
+                  <i class="fas fa-redo" [disabled]="!item.selected" (click)="genScript(item)"></i>
               </td>
               <td>
-                <button [disabled]="!item.selected" (click)="editCharge(item)" >
-                  <span class="edit-icon">&#9998;</span>
-                </button>
+                <i class="far fa-edit" [disabled]="!item.selected" (click)="editCharge(item)" >
+
+                </i>
               </td>
 
-              <td><button class="btn-del"[disabled]="!item.selected" (click)="delCharge(item)">
-                <span class="lable">Delete</span>
-                  </button>
+              <td><i class="far fa-trash-alt"[disabled]="!item.selected" (click)="delCharge(item)">
+
+              </i>
               </td>
             </tr>
           </tbody>

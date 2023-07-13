@@ -13,6 +13,7 @@ import { ChargesComponent } from './components/charges/charges.component';
 import { EventComponent } from './components/event/event.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AuthServiceService } from './services/auth-service.service';
 
 
 

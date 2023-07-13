@@ -18,12 +18,12 @@
         </label>
       </div>
       <div class="btn-container">
-        <button class="btn" [disabled]="!selectedOption" (click)="eventTable()">
-          <span> View Events
+        <button *ngIf="selectedOption" class="card-btn" (click)="eventTable()">
+          <span> View
           </span>
         </button>
-        <button class="btn"  (click)="populateTable()">
-          <span> Verify Events
+        <button class="card-btn"  (click)="populateTable()">
+          <span> All Events
           </span>
         </button>
 
@@ -47,7 +47,7 @@
             <th>system_generated</th>
             <th>Update Events</th>
             <th>Generate Script</th>
-            <th><button class="btn-del" (click)="delMultipleEvents(selectedItems)">Delete</button></th>
+            <th><i class="fas fa-trash" (click)="delMultipleEvents(selectedItems)"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -64,19 +64,19 @@
            <td> {{ item.pet_eventdesc }} </td>
            <td> {{ item.system_generated }} </td>
            <td>
-            <button  [disabled]="!item.selected" (click)="editEvent(item)" >
-              <span class="edit-icon">&#9998;</span>
-            </button>
+            <i  class="far fa-edit"  [disabled]="!item.selected"  (click)="editEvent(item)" >
+
+            </i>
          </td>
            <td>
-                <button class="gen-btn"[disabled]="!item.selected" (click)="genScript(item)">
-                  <span class="button-content">Generate</span>
-                </button>
+                <i class="fas fa-redo"[disabled]="!item.selected" (click)="genScript(item)">
+
+                </i>
            </td>
            <td>
-              <button  class="btn-del" [disabled]="!item.selected" (click)="delEvent(item)">
-                <span class="lable">Delete</span>
-              </button>
+              <i  class="far fa-trash-alt" [disabled]="!item.selected" (click)="delEvent(item)">
+
+              </i>
            </td>
           </tr>
         </tbody>
@@ -137,7 +137,7 @@
                 (input)="dataFilteration()"
                 placeholder="Enter a Event Code to search"
           />
-    <table class="table" id="EventTable">
+    <table class="table" >
         <thead>
            <tr>
               <th>pet_eventcode</th>
