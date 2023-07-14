@@ -8,13 +8,14 @@ import { EventComponent } from './components/event/event.component';
 import { ChargesComponent } from './components/charges/charges.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthGuard } from './services/auth.guard';
+import { AuthServiceService } from './services/auth-service.service';
 
 const routes: Routes = [
   {
     path: '',
     canActivate: [AuthGuard],
     children: [
-
+//
       { path: 'home', component: HomeComponent },
       { path: 'nav-bar', component: NavBarComponent },
       { path: 'event', component: EventComponent },

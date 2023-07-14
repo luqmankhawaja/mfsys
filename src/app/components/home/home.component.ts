@@ -11,6 +11,8 @@ export class HomeComponent implements OnInit {
   constructor(public authService: AuthServiceService) { }
 
   ngOnInit(): void {
+  this.authService.isAuthenticated = false;
+
   }
 
 

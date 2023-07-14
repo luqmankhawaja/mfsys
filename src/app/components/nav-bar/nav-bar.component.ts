@@ -8,14 +8,16 @@ import { AuthServiceService } from 'src/app/services/auth-service.service';
 })
 export class NavBarComponent implements OnInit {
   navOpen=false;
-
   constructor(public authService:AuthServiceService) {
   }
 
   ngOnInit(): void {
+
+
   }
   navbar(){
     this.navOpen=!this.navOpen;
+    // this.authService.isAuthenticated = true;
   }
 
 }

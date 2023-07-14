@@ -32,38 +32,42 @@ this.loginn= this.formbuilder.group(
 }
 
   login() {
-    console.log(this.loginn.value);
     this.http.get<any>('http://localhost:3000/signup').subscribe(
-      (response) => {
-        const user = response.find((a: any) => {
-          return (
-            a.userId === this.loginn.value.userId &&
-            a.confirmPassword === this.loginn.value.Password
-          );
-        });
-        if (user) {
-          this.authService.setIsAuthenticated(true);
-          this.router.navigate(['/home']);
-          this.toastr.success('login successfully')
+  (response) => {
+    const user = response.find((a: any) => {
+      return (
+        a.userId === this.loginn.value.userId &&
+        a.confirmPassword === this.loginn.value.Password
+      );
+    });
+    if (user) {
+      this.authService.setIsAuthenticated(true);
+      this.router.navigate(['/home']);
+      this.toastr.success('login successfully');
 
-        } else {
-          this.toastr.error('Invalid username or password');
-        }
-    },
-    (error: any) => {
-      alert('something went wrong');
+      console.log(this.authService.getIsAuthenticated()); // Log the updated value inside the callback function
+    } else {
+      this.toastr.error('Invalid username or password');
+
     }
-
-  );
+  },
+  (error: any) => {
+    alert('something went wrong');
   }
+);
 
+  }
   get userId() {
     return this.loginn.get('userId');
   }
 
   get Password() {
     return this.loginn.get('Password');
+
   }
+
+
+
 
 }
 

@@ -16,7 +16,9 @@ nav .logo {
   color: white;
   font-size: 30px;
   text-decoration: none;
-  
+  cursor: pointer;
+
+
 }
 nav .btn{
   color:white;
@@ -44,6 +46,7 @@ nav li a {
   color: grey;
   font-size: 20px;
   text-decoration: none;
+  cursor: pointer;
 
 }
 

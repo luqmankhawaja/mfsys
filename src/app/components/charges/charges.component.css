@@ -13,7 +13,7 @@
   margin:5% auto;
   height:70px;
   flex-direction: row;
-  width: 550px;
+  width: 500px;
   background: linear-gradient(to right,#757F9A, #D7DDE8 );
   border-radius: 8px;
   box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
@@ -81,14 +81,14 @@
   font-weight: 600;
 }
 .card-btn {
-  width: 6.5em;
-  height: 2.3em;
+  width: 5.5em;
+  height: 2.0em;
   margin: 0.5em;
   background: #203A43;
   color: white;
   border: none;
   border-radius: 0.625em;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   position: relative;
@@ -116,8 +116,7 @@
   transform: skewX(-45deg) scale(1, 1);
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
-  }
-
+ }
   .table-wrapper{
     float:right;
     border-collapse: collapse;
@@ -161,7 +160,7 @@
   padding: 0;
   outline: none;
   box-sizing: border-box;
-  
+
 }
 
 .container{

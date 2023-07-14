@@ -8,19 +8,38 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class AuthServiceService {
-  private isAuthenticated = false;
+  public isAuthenticated :boolean
 
   constructor(private router:Router, private http: HttpClient) {}
-
   logout() {
     this.isAuthenticated = false;
     this.router.navigate(['/sign-in']);
   }
 
-  showRadios: boolean = false;
 
-  toggleRadios() {
-    this.showRadios = !this.showRadios;
+
+
+
+
+  home(){
+
+    this.isAuthenticated = true;
+    this.router.navigate(['/home'])
+  }
+  event(){
+
+    this.isAuthenticated = true;
+    this.router.navigate(['/event'])
+  }
+
+  transaction(){
+    this.isAuthenticated = true;
+    this.router.navigate(['/transaction'])
+  }
+
+  charges(){
+    this.isAuthenticated = true;
+    this.router.navigate(['/charges'])
   }
   getData() {
     // Replace the URL with the actual endpoint to fetch the data

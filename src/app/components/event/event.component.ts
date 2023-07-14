@@ -56,7 +56,7 @@ export class EventComponent implements OnInit {
     private formBuilder: FormBuilder
     ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
 
   }
 
