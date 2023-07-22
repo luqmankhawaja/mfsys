@@ -97,7 +97,8 @@ export class EventComponent implements OnInit {
   }
 
   submitForm(eventForm) {
-    const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/event/body`;
+    // if(this.selectedOption==='deposit')
+    const url = `http://192.168.1.51:8080/add/body`;
     const body = JSON.stringify(this.eventForm.value);
     console.log(body);
     console.log(this.selectedOption)

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
-import { NgForm, FormBuilder, NgModel,FormGroup,FormControl,Validators } from '@angular/forms';
+import { FormBuilder,FormGroup,FormControl,Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { AuthServiceService } from 'src/app/services/auth-service.service';
 import { ProductService } from 'src/app/services/product-service.service';
@@ -89,12 +89,26 @@ filteration(){
 }
 
 submitForm(transForm) {
-  const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/transaction_type/body`;
-    const body = JSON.stringify(this.transForm.value);
-    console.log(body);
+
+  const url = `http://192.168.1.57:8080/${this.selectedOption}/transaction/add/body`;
+
+let  trans={
+
+    "transId": {
+      "porOrgaCode": transForm.get('por_orgacode').value || '',
+      "ptrTranCode": transForm.get('ptr_trancode').value || '',
+      "dbName": this.selectedOption
+  },
+  "petEventCode": transForm.get('pet_eventcode').value || '',
+  "ptrTranDesc": transForm.get('ptr_trandesc').value || '',
+  "systemGenerated":transForm.get('systemgen').value || ''
+
+}
+
+    console.log(trans);
     console.log(this.selectedOption)
   if(transForm.valid){
-    this.http.post(url , body,{responseType:"text"}).subscribe(
+    this.http.post(url , trans,{responseType:"text"}).subscribe(
       response => {
         if(response.includes("effected")){
         this.toastr.success("Transaction_Type added succesfully");

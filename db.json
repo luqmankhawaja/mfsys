@@ -65,6 +65,14 @@
       "Password": "asdfghjkl",
       "confirmPassword": "asdfghjkl",
       "id": 24
+    },
+    {
+      "userId": "1122",
+      "name": "Luqman Hakeem Khawaja",
+      "email": "luqmanhakeem920@gmail.com",
+      "phone": "03466664190",
+      "password": "asdfghjkl",
+      "id": 25
     }
   ],
   "events": [
@@ -303,5 +311,31 @@
       "generate": "sbjkfn.com",
       "id": 4
     }
-  ]
+  ],
+ "release":[
+  {
+    "version":2.0,
+    "userId":"22452",
+     "status":"in prog",
+     "file":"xyz.txt"
+  },
+  {
+    "version":2.1,
+    "userId":"77789",
+     "status":"in prog",
+     "file":"xyz.sql"
+  },
+  {
+    "version":1.0,
+    "userId":"980-",
+     "status":"in prog",
+     "file":"xyz.txt"
+  },
+  {
+    "version":3.0,
+    "userId":"22452",
+     "status":"in prog",
+     "file":"sgh.sql"
+  }
+ ]
 }

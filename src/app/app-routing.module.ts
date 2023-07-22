@@ -9,6 +9,7 @@ import { ChargesComponent } from './components/charges/charges.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthGuard } from './services/auth.guard';
 import { AuthServiceService } from './services/auth-service.service';
+import { ReleaseComponent } from './components/release/release.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'event', component: EventComponent },
       { path: 'transaction', component: TransactionComponent },
       { path: 'charges', component: ChargesComponent },
+      { path:'release', component:ReleaseComponent}
     ]
   },
   { path: 'sign-in', component: SignInComponent },
