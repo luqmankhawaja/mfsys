@@ -9,16 +9,14 @@
 
 .card {
   display: flex;
-  margin:4% auto;
-  height:40%;
+  margin:2% auto;
+  height:50%;
   flex-direction: column;
   width: 500px;
-  background: #757F9A;
+  background: #dadbe0;
   border-radius: 6px;
   box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-
   align-items: center;
-
   backdrop-filter: saturate(10px) ;
   transition: 0.3s ease-in-out;
 }
@@ -40,77 +38,22 @@ background: linear-gradient(#d7cfcf, #9198e5);
 transition: 0.5s ease-in-out;
 background: linear-gradient(#9198e5, #712020);
 }
-
-
-                       /* CSS for Radios */
-
-.radio-inputs {
-  margin: 0.5% auto;
-  position: relative;
+.btn-card{
   display: flex;
-  flex-wrap: wrap;
-  border-radius: 0.5rem;
-  background-color: #334d50;
-  box-sizing:content-box;
-  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
-  padding: 0.25rem;
-  width: 200px;
-  height: 30px;
-  font-size: 14px;
-}
-.radio-inputs .radio {
-  flex: 1 1 auto;
-  text-align: center;
-
+  margin:4% auto;
+  height:40%;
+  flex-direction: row;
+  width: 500px;
 }
 
-.radio-inputs .radio input {
-  display: none;
-}
-
-.radio-inputs .radio .name {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: none;
-  padding: .5rem 0;
-  color: rgb(245, 247, 250);
-  transition: all .15s ease-in-out;
-}
-
-.radio-inputs .radio input:checked + .name {
-  background-color: #0c0c0c;
-  font-weight: 600;
-}
-label {
-  display: block;
-  margin: auto;
-}
-
-#data-dropdown {
-  margin-right: 10px;
-}
-
-#new-data-input {
-  display: none;
-  margin-right: 10px;
-}
-
-#search-results {
-  margin-top: 20px;
-  font-weight: bold;
-}
-
-
-button {
-  margin-top: 2%;
+.btn {
+  margin: 2%  5%;
   padding: 1.0em 2em;
   font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 2.0px;
+  letter-spacing: 1.0px;
   font-weight: 400;
+  padding: auto;
   color: #000;
   background-color: #fff;
   border: none;
@@ -121,14 +64,14 @@ button {
   outline: none;
 }
 
-button:hover {
+.btn:hover {
   background-color: #072d66;
   box-shadow: 0px 15px 20px rgba(20, 103, 211, 0.4);
   color: #fff;
   transform: translateY(-7px);
 }
 
-button:active {
+.btn:active {
   transform: translateY(-1px);
 }
 

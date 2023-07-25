@@ -42,9 +42,9 @@
         <thead>
           <tr>
             <th>Select</th>
-            <th>pet_eventcode</th>
-            <th>pet_eventdesc</th>
-            <th>system_generated</th>
+            <th>petEventCode</th>
+            <th>petEventDesc</th>
+            <th>systemGenerated</th>
             <th>Update Events</th>
             <th>Generate Script</th>
             <th><i class="fas fa-trash" (click)="delMultipleEvents(selectedItems)"></i></th>
@@ -60,9 +60,9 @@
                 (change)="updateSelectedRows(item)"
               />
             </td>
-           <td> {{item.pet_eventcode }}  </td>
-           <td> {{ item.pet_eventdesc }} </td>
-           <td> {{ item.system_generated }} </td>
+           <td> {{item.eventId.petEventCode }}  </td>
+           <td> {{ item.petEventDesc }} </td>
+           <td> {{ item.systemGenerated }} </td>
            <td>
             <i  class="far fa-edit"  [disabled]="!item.selected"  (click)="editEvent(item)" >
 
@@ -93,21 +93,21 @@
       <form [formGroup]="eventForm" (ngSubmit)="submitForm(eventForm)">
         <div class="form-row">
           <div class="input-data">
-            <input type="number" id="pet_eventcode" name="pet_eventcode" formControlName="pet_eventcode">
+            <input type="number" id="petEventCode" name="petEventCode" [readonly]="updateBtn" formControlName="petEventCode">
             <div class="underline"></div>
-            <label for="pet_eventcode">pet_eventcode:</label>
+            <label for="petEventCode">petEventCode:</label>
           </div>
           <div class="input-data">
-            <input type="varchar" id="pet_eventdesc" name="item.pet_eventdesc" [readonly]="updateBtn" formControlName="pet_eventdesc">
+            <input type="varchar" id="petEventDesc" name="item.petEventDesc"  formControlName="petEventDesc">
             <div class="underline"></div>
-            <label for="pet_eventdesc">pet_eventdesc:</label>
+            <label for="petEventDesc">petEventDesc:</label>
           </div>
         </div>
         <div class="form-row">
             <div class="input-data">
-              <input type="number" name="system_generated" formControlName="system_generated" maxlength="1">
+              <input type="number" name="systemGenerated" formControlName="systemGenerated" maxlength="1">
               <div class="underline"></div>
-              <label for="system_generated">system_generated:</label>
+              <label for="systemGenerated">systemGenerated:</label>
             </div>
             <div class="input-data">
 
@@ -134,22 +134,22 @@
           <input
               type="number"
               [(ngModel)]="filterationNumber"
-                (input)="dataFilteration()"
+                (input)="filteration()"
                 placeholder="Enter a Event Code to search"
           />
     <table class="table" >
         <thead>
            <tr>
-              <th>pet_eventcode</th>
-              <th>pet_eventdesc</th>
-              <th>system_generated</th>
+              <th>petEventCode</th>
+              <th>petEventDesc</th>
+              <th>systemGenerated</th>
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let item of dataFilteration; let i = index">
-               <td> {{item.pet_eventcode }}  </td>
-               <td> {{ item.pet_eventdesc }} </td>
-               <td> {{ item.system_generated }} </td>
+               <td> {{item.eventId.petEventCode }}  </td>
+               <td> {{ item.petEventDesc }} </td>
+               <td> {{ item.systemGenerated }} </td>
             </tr>
         </tbody>
     </table>

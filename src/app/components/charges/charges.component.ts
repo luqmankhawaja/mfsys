@@ -30,27 +30,27 @@ export class ChargesComponent implements OnInit {
   filterationNumber!:'varchar';
 
   depositForm=new FormGroup({
-    pch_chrgcode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    por_orgacode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
-    pch_chrgdesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
-    pch_chrgshort:new FormControl('',[Validators.required,Validators.maxLength(20)]),
-    pel_elmtcode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
-    ptr_trancode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    pch_chrgprofit:new FormControl('',[Validators.required,Validators.maxLength(1)]),
-    soc_charges:new FormControl('',[Validators.maxLength(1)])
+    pchChrgCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    porOrgaCode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    pchChrgDesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
+    pchChrgShort:new FormControl('',[Validators.required,Validators.maxLength(20)]),
+    pelElmtCode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    ptrTranCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    pchChrgProfit:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    socCharges:new FormControl('',[Validators.maxLength(1)])
   })
 
   loanForm=new FormGroup({
-    pch_chrgcode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    por_orgacode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
-    pch_chrgdesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
-    pch_chrgshort:new FormControl('',[Validators.required,Validators.maxLength(20)]),
-    pel_elmtcode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
-    ptr_trancode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    pch_chrginterest:new FormControl('',[Validators.maxLength(1)]),
-    pch_chrgpenalty:new FormControl('',[Validators.required,Validators.maxLength(1)]),
-    pch_chrgprincipal:new FormControl('',[Validators.required,Validators.maxLength(1)]),
-    soc_charges:new FormControl('',[Validators.maxLength(1)])
+    pchChrgCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    porOrgaCode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    pchChrgDesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
+    pchChrgShort:new FormControl('',[Validators.required,Validators.maxLength(20)]),
+    pelElmtCode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    ptrTranCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    pchChrgInterest:new FormControl('',[Validators.maxLength(1)]),
+    pchChrgPenalty:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    pchChrgPrincipal:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    socCharges:new FormControl('',[Validators.maxLength(1)])
 
   })
 
@@ -64,11 +64,31 @@ export class ChargesComponent implements OnInit {
   ngOnInit(): void {
 
   }
+  chargesTable(){
+    this.showTable=!this.showTable;
+    if(this.selectedOption=='loan'||this.selectedOption=='deposit'){
+    this.http.get<any>(`http://192.168.1.67:8080/${this.selectedOption}/charges/view`)
+    .subscribe((response) =>  {
+      this.charges=response;
+      this.filteredData=response;
+    });
+     //this.filteredData = this.data;
 
+  }
+  }
+
+  filterData() {
+  if(this.searchNumber.length>0){
+    this.filteredData = this.charges.filter((item:{ chargesId:{ pchChrgCode: string}; }) => item.chargesId.pchChrgCode === this.searchNumber);
+  }
+  else{
+    this.filteredData=this.charges
+  }
+   }
 
 populateTable(){
   this.chrgTable=!this.chrgTable;
-  this.http.get<any>(`http://192.168.1.51:8080/getData/charges/all`)
+  this.http.get<any>(`http://192.168.1.67:8080/viewAll/charges`)
 
   .subscribe((response) =>  {
     this.allCharges=response;
@@ -79,7 +99,7 @@ populateTable(){
 
 filteration(){
   if(this.filterationNumber.length>0){
-    this.dataFilteration = this.allCharges.filter((item: { pch_chrgcode: string; }) => item.pch_chrgcode === this.filterationNumber);
+    this.dataFilteration = this.allCharges.filter((item:{ chargesId:{ pchChrgCode: string };}) => item.chargesId.pchChrgCode === this.filterationNumber);
   }
   else{
     this.dataFilteration=this.charges
@@ -89,27 +109,7 @@ filteration(){
 
 
 
-chargesTable(){
-  this.showTable=!this.showTable;
-  if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
-  this.http.get<any>(`http://192.168.1.51:8080/getData/charges/${this.selectedOption}`)
-  .subscribe((response) =>  {
-    this.charges=response;
-    this.filteredData=response;
-  });
-   //this.filteredData = this.data;
 
-}
-}
-
-filterData() {
-if(this.searchNumber.length>0){
-  this.filteredData = this.charges.filter((item: { pch_chrgcode: string; }) => item.pch_chrgcode === this.searchNumber);
-}
-else{
-  this.filteredData=this.charges
-}
- }
 
 
 addCharges(form:NgForm){
@@ -121,17 +121,30 @@ addCharges(form:NgForm){
 
 
   onLoanSubmit(loanForm) {
-    const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/charges/body`;
-    const body = JSON.stringify(this.loanForm.value);
+    const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/add/body`;
+    const body = {
+      chargesId:{
+        pchChrgCode:loanForm.get('pchChrgCode').value|| '',
+        porOrgaCode:loanForm.get('porOrgaCode').value|| '',
+      },
+      pchChrgDesc:loanForm.get('pchChrgDesc').value|| '',
+      pchChrgShort:loanForm.get('pchChrgShort').value|| '',
+      pelElmtCode:loanForm.get('pelElmtCode').value|| '',
+      ptrTranCode:loanForm.get('ptrTranCode').value|| '',
+      pchChrgInterest:loanForm.get('pchChrgInterest').value||'',
+      pchChrgPenalty:loanForm.get('pchChrgPenalty').value||'',
+      pchChrgPrincipal:loanForm.get('pchChrgPrincipal').value||'',
+      socCharges:loanForm.get('socCharges').value||''
+    }
     console.log(body);
     console.log(this.selectedOption)
   if(loanForm.valid){
-    this.http.post(url , body,{responseType:"text"}).subscribe(
+    this.http.post(url , body).subscribe(
       response => {
-        if(response.includes("effected")){
+
         this.toastr.success("Data added succesfully");
         loanForm.reset();
-        }
+
   },(error: any) => {
     if(error){
       this.toastr.error("error");
@@ -143,18 +156,29 @@ addCharges(form:NgForm){
  }
 
  onDepositSubmit(depositForm){
-  const url = `http://192.168.1.51:8080/addcolumns/${this.selectedOption}/charges/body`;
-    const body = JSON.stringify(this.depositForm.value);
+  const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/add/body`;
+    const body = {
+      chargesId:{
+        pchChrgCode:depositForm.get('pchChrgCode').value|| '',
+        porOrgaCode:depositForm.get('porOrgaCode').value|| '',
+      },
+      pchChrgDesc:depositForm.get('pchChrgDesc').value|| '',
+      pchChrgShort:depositForm.get('pchChrgShort').value|| '',
+      pelElmtCode:depositForm.get('pelElmtCode').value|| '',
+      ptrTranCode:depositForm.get('ptrTranCode').value|| '',
+      pchChrgProfit:depositForm.get('pchChrgProfit').value|| '',
+      socCharges:depositForm.get('socCharges').value|| '',
+    }
     console.log(body);
     console.log(this.selectedOption)
   if(depositForm.valid){
-    this.http.post(url , body,{responseType:"text"}).subscribe(
+    this.http.post(url , body).subscribe(
       response => {
-        if(response.includes("effected")){
         this.toastr.success("Data added succesfully");
         depositForm.reset();
-        }
-  },(error: any) => {
+
+  },
+  (error: any) => {
     if(error){
       this.toastr.error("error");
       console.log(error)
@@ -172,33 +196,38 @@ editCharge(item: any){
 this.selectedCharge = item;
 if(this.selectedOption==='loan'){
     this.loanForm.patchValue({
-     pch_chrgcode: item.pch_chrgcode,
-     por_orgacode: item.por_orgacode,
-     pch_chrgdesc: item.pch_chrgdesc,
-     pch_chrgshort: item.pch_chrgshort,
-     pel_elmtcode: item.pel_elmtcode,
-     ptr_trancode: item.ptr_trancode,
-     pch_chrginterest: item.pch_chrginterest,
-     pch_chrgpenalty: item.pch_chrgpenalty,
-     pch_chrgprincipal: item.pch_chrgprincipal,
-     soc_charges: item.soc_charges
+     pchChrgCode: item.chargesId.pchChrgCode,
+     porOrgaCode: item.chargesId.porOrgaCode,
+     pchChrgDesc: item.pchChrgDesc,
+     pchChrgShort: item.pchChrgShort,
+     pelElmtCode: item.pelElmtCode,
+     ptrTranCode: item.ptrTranCode,
+     pchChrgInterest: item.pchChrgInterest,
+     pchChrgPenalty: item.pchChrgPenalty,
+     pchChrgPrincipal: item.pchChrgPrincipal,
+     socCharges: item.socCharges
  });
 }
 else this.depositForm.patchValue({
-    pch_chrgcode: item.pch_chrgcode,
-     por_orgacode: item.por_orgacode,
-     pch_chrgdesc: item.pch_chrgdesc,
-     pch_chrgshort: item.pch_chrgshort,
-     pel_elmtcode: item.pel_elmtcode,
-     ptr_trancode: item.ptr_trancode,
-     pch_chrgprofit: item.pch_chrgprofit,
-     soc_charges:item.soc_charges
+    pchChrgCode: item.chargesId.pchChrgCode,
+     porOrgaCode: item.chargesId.porOrgaCode,
+     pchChrgDesc: item.pchChrgDesc,
+     pchChrgShort: item.pchChrgShort,
+     pelElmtCode: item.pelElmtCode,
+     ptrTranCode: item.ptrTranCode,
+     pchChrgProfit: item.pchChrgProfit,
+     socCharges:item.socCharges
 });
 }
 delCharge(selected: any ) {
   console.log(selected);
-  const requestBody: String = JSON.stringify(selected);
-    return this.http.delete(`http://192.168.1.51:8080/delete/${this.selectedOption}/charges/requestBody`, {body:requestBody}).subscribe(
+  const requestBody= [
+    {
+    pchChrgCode: selected.chargesId.pchChrgCode,
+    porOrgaCode:selected.chargesId.porOrgaCode
+    }
+  ]
+    return this.http.delete(`http://192.168.1.67:8080/${this.selectedOption}/charges/delete/requestBody`, {body:requestBody}).subscribe(
       response=>{
         console.log('Charge Deleted Successfully');
         this.toastr.success(' Charge Deleted Successfully');
@@ -211,7 +240,7 @@ updateSelectedRows(item: any) {
     if (item.selected) {
     this.selectedRows.push(item);
     } else {
-    const index = this.selectedRows.findIndex((selectedItem) => selectedItem.pch_chrgcode === item.pch_chrgcode && selectedItem.por_orgacode === item.por_orgacode);
+    const index = this.selectedRows.findIndex((selectedItem) => selectedItem.pchChrgCode === item.pchChrgCode && selectedItem.porOrgaCode === item.porOrgaCode);
       if (index !== -1) {
         this.selectedRows.splice(index, 1);
     }
@@ -219,52 +248,18 @@ updateSelectedRows(item: any) {
 }
 
 
-delMultipleCharges() {
+delMultipleCharges(selectedItem:any) {
   console.log(this.selectedRows);
-  if(this.selectedOption==='loan'){
   const payload = this.selectedRows.map((selectedItem) => {
     return {
-      pch_chrgcode: selectedItem.pch_chrgcode,
-      por_orgacode: selectedItem.por_orgacode,
-      pch_chrgdesc: selectedItem.pch_chrgdesc,
-      pch_chrgshort: selectedItem.pch_chrgshort,
-      pel_elmtcode: selectedItem.pel_elmtcode,
-      ptr_trancode: selectedItem.ptr_trancode,
-      pch_chrginterest: selectedItem.pch_chrginterest,
-      pch_chrgpenalty: selectedItem.pch_chrgpenalty,
-      pch_chrgprincipal: selectedItem.pch_chrgprincipal,
-      soc_charges: selectedItem.soc_charges
+      pchChrgCode: selectedItem.chargesId.pchChrgCode,
+      porOrgaCode: selectedItem.chargesId.porOrgaCode
     };
   });
+  console.log(payload)
+  console.log(this.selectedOption)
   return this.http
-    .delete(`http://http://192.168.1.51:8080/deleteAll/charges/${this.selectedOption}/requestBody`, { body: payload })
-    .subscribe(
-      () => {
-        console.log('Selected rows deleted successfully');
-        this.toastr.success('Selected rows deleted successfully');
-      },
-      (error) => {
-        console.error('Failed to delete selected rows:', error);
-      }
-    );
-  }
-  else{
-
-      const payload = this.selectedRows.map((selectedItem) => {
-    return {
-      pch_chrgcode: selectedItem.pch_chrgcode,
-      por_orgacode: selectedItem.por_orgacode,
-      pch_chrgdesc: selectedItem.pch_chrgdesc,
-      pch_chrgshort: selectedItem.pch_chrgshort,
-      pel_elmtcode: selectedItem.pel_elmtcode,
-      ptr_trancode: selectedItem.ptr_trancode,
-      pch_chrgprofit: selectedItem.pch_chrgprofit,
-      soc_charges:selectedItem.soc_charges
-    };
-  });
-
-  return this.http
-    .delete(`http://http://192.168.1.51:8080/deleteAll/charges/${this.selectedOption}/requestBody`, { body: payload })
+    .delete(`http://192.168.1.67:8080/${this.selectedOption}/charges/delete/payload`, { body: payload })
     .subscribe(
       () => {
         console.log('Selected rows deleted successfully');
@@ -275,23 +270,36 @@ delMultipleCharges() {
       }
     );
 
-  }
 }
 
 
 
 updateLoan( event:Event,loanForm){
     event.preventDefault();
-    const url = `http://192.168.1.51:8080/update/charges/${this.selectedOption}/body`;
-    const body = JSON.stringify(this.loanForm.value);
+    const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/update/body`;
+    const body = {
+      chargesId:{
+        pchChrgCode:loanForm.get('pchChrgCode').value|| '',
+        porOrgaCode:loanForm.get('porOrgaCode').value|| '',
+      },
+      pchChrgDesc:loanForm.get('pchChrgDesc').value|| '',
+      pchChrgShort:loanForm.get('pchChrgShort').value|| '',
+      pelElmtCode:loanForm.get('pelElmtCode').value|| '',
+      ptrTranCode:loanForm.get('ptrTranCode').value|| '',
+      pchChrgInterest:loanForm.get('pchChrgInterest').value||'',
+      pchChrgPenalty:loanForm.get('pchChrgPenalty').value||'',
+      pchChrgPrincipal:loanForm.get('pchChrgPrincipal').value||'',
+      socCharges:loanForm.get('socCharges').value||''
+    };
     console.log(body);
     console.log(this.selectedOption)
       if(loanForm.valid){
-        this.http.put(url,body,{responseType:"text"}).subscribe(
+        this.http.put(url,body).subscribe(
           response => {
             console.log(response);
             console.log('Charge data Updated successfully');
               this.toastr.success('Charge data Updated successfully');
+              loanForm.reset()
             },
             error => {
               this.toastr.warning('Error updating form data');
@@ -302,16 +310,28 @@ updateLoan( event:Event,loanForm){
 
 updateDeposit( event:Event,depositForm){
     event.preventDefault();
-    const url = `http://192.168.1.51:8080/update/charges/${this.selectedOption}/body`;
-    const body = JSON.stringify(this.depositForm.value);
+    const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/update/body`;
+    const body ={
+      chargesId:{
+        pchChrgCode:depositForm.get('pchChrgCode').value|| '',
+        porOrgaCode:depositForm.get('porOrgaCode').value|| '',
+      },
+      pchChrgDesc:depositForm.get('pchChrgDesc').value|| '',
+      pchChrgShort:depositForm.get('pchChrgShort').value|| '',
+      pelElmtCode:depositForm.get('pelElmtCode').value|| '',
+      ptrTranCode:depositForm.get('ptrTranCode').value|| '',
+      pchChrgProfit:depositForm.get('pchChrgProfit').value|| '',
+      socCharges:depositForm.get('socCharges').value|| ''
+    };
     console.log(body);
     console.log(this.selectedOption)
       if(depositForm.valid){
-        this.http.put(url,body,{responseType:"text"}).subscribe(
+        this.http.put(url,body).subscribe(
           response => {
             console.log(response);
             console.log('Charge data Updated successfully');
               this.toastr.success('Charge data Updated successfully');
+              depositForm.reset();
             },
             error => {
               this.toastr.warning('Error updating form data');
@@ -322,21 +342,21 @@ updateDeposit( event:Event,depositForm){
   genScript(selected: any) {
     if(this.selectedOption==='loan'){
     const requestBody = {
-      pch_chrgcode: selected.pch_chrgcode,
-      por_orgacode: selected.por_orgacode,
-      pch_chrgdesc: selected.pch_chrgdesc,
-      pch_chrgshort: selected.pch_chrgshort,
-      pel_elmtcode: selected.pel_elmtcode,
-      ptr_trancode: selected.ptr_trancode,
-      pch_chrginterest: selected.pch_chrginterest,
-      pch_chrgpenalty: selected.pch_chrgpenalty,
-      pch_chrgprincipal: selected.pch_chrgprincipal,
-      soc_charges: selected.soc_charges,
+      pchChrgCode: selected.pchChrgCode,
+      porOrgaCode: selected.porOrgaCode,
+      pchChrgDesc: selected.pchChrgDesc,
+      pchChrgShort: selected.pchChrgShort,
+      pelElmtCode: selected.pelElmtCode,
+      ptrTranCode: selected.ptrTranCode,
+      pchChrgInterest: selected.pchChrgInterest,
+      pchChrgPenalty: selected.pchChrgPenalty,
+      pchChrgprincipal: selected.pchChrgprincipal,
+      socCharges: selected.socCharges,
     };
     console.log(requestBody);
     this.http
       .post<string>(
-        `http://192.168.1.51:8080/generateScript/charges/${this.selectedOption}/requestBody`,
+        `http://192.168.1.67:8080/generateScript/charges/${this.selectedOption}/requestBody`,
         requestBody,
         { responseType: 'text' as 'json' }
       )
@@ -348,19 +368,19 @@ updateDeposit( event:Event,depositForm){
   }
 else{
   const requestBody = {
-    pch_chrgcode: selected.pch_chrgcode,
-    por_orgacode: selected.por_orgacode,
-    pch_chrgdesc: selected.pch_chrgdesc,
-    pch_chrgshort: selected.pch_chrgshort,
-    pel_elmtcode: selected.pel_elmtcode,
-    ptr_trancode: selected.ptr_trancode,
-    pch_chrgprofit: selected.pch_chrgprofit,
-    soc_charges: selected.soc_charges,
+    pchChrgCode: selected.pchChrgCode,
+    porOrgaCode: selected.porOrgaCode,
+    pchChrgDesc: selected.pchChrgDesc,
+    pchChrgShort: selected.pchChrgShort,
+    pelElmtCode: selected.pelElmtCode,
+    ptrTranCode: selected.ptrTranCode,
+    pchChrgProfit: selected.pchChrgProfit,
+    socCharges: selected.socCharges,
   };
   console.log(requestBody);
   this.http
   .post<string>(
-    `http://192.168.1.51:8080/generateScript/charges/${this.selectedOption}/requestBody`,
+    `http://192.168.1.67:8080/generateScript/charges/${this.selectedOption}/requestBody`,
     requestBody,
     { responseType: 'text' as 'json' }
   )

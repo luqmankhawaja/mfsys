@@ -35,17 +35,17 @@
           <thead>
             <tr>
               <th>Select</th>
-              <th>pch_chrgcode</th>
-              <th>por_orgacode</th>
-              <th>pch_chrgdesc</th>
-              <th>pch_chrgshort</th>
-              <th>pel_elmtcode</th>
-              <th>ptr_trancode</th>
-              <th *ngIf="selectedOption !== 'loan'">pch_chrgprofit</th>
-              <th *ngIf="selectedOption !== 'deposit'">pch_chrginterest</th>
-              <th *ngIf="selectedOption !== 'deposit'">pch_chrgprincipal</th>
-              <th *ngIf="selectedOption !== 'deposit'">pch_chrgpenality</th>
-              <th>soc_charges</th>
+              <th>pchChrgCode</th>
+              <th>porOrgaCode</th>
+              <th>pchChrgDesc</th>
+              <th>pchChrgShort</th>
+              <th>pelElmtCode</th>
+              <th>ptrTranCode</th>
+              <th *ngIf="selectedOption !== 'loan'">pchChrgProfit</th>
+              <th *ngIf="selectedOption !== 'deposit'">pchChrgInterest</th>
+              <th *ngIf="selectedOption !== 'deposit'">pchChrgPrincipal</th>
+              <th *ngIf="selectedOption !== 'deposit'">pchChrgPenality</th>
+              <th>socCharges</th>
               <th>Generate Script</th>
               <th>Update Charge</th>
               <th><i class="fas fa-trash" (click)="delMultipleCharges(selectedRows)"></i></th>
@@ -61,17 +61,17 @@
                   (change)="updateSelectedRows(item)"
                 />
               </td>
-              <td> {{ item.pch_chrgcode }} </td>
-              <td> {{item.por_orgacode}} </td>
-              <td> {{ item.pch_chrgdesc }} </td>
-              <td> {{ item.pch_chrgshort }} </td>
-              <td> {{ item.pel_elmtcode }}  </td>
-              <td> {{ item.ptr_trancode }}  </td>
-              <td *ngIf="selectedOption !== 'loan'"> {{item.pch_chrgprofit }} </td>
-              <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrginterest}}</td>
-              <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrgprincipal}}</td>
-              <td *ngIf="selectedOption !== 'deposit'">{{item.pch_chrgpenalty}}</td>
-              <td> {{ item.soc_charges }} </td>
+              <td> {{ item.chargesId.pchChrgCode }} </td>
+              <td> {{item.chargesId.porOrgaCode }} </td>
+              <td> {{ item.pchChrgDesc }} </td>
+              <td> {{ item.pchChrgShort }} </td>
+              <td> {{ item.pelElmtCode }}  </td>
+              <td> {{ item.ptrTranCode }}  </td>
+              <td *ngIf="selectedOption !== 'loan'"> {{item.pchChrgProfit }} </td>
+              <td *ngIf="selectedOption !== 'deposit'">{{item.pchChrgInterest}}</td>
+              <td *ngIf="selectedOption !== 'deposit'">{{item.pchChrgPrincipal}}</td>
+              <td *ngIf="selectedOption !== 'deposit'">{{item.pchChrgPenalty}}</td>
+              <td> {{ item.socCharges }} </td>
               <td>
                   <i class="fas fa-redo" [disabled]="!item.selected" (click)="genScript(item)"></i>
               </td>
@@ -105,50 +105,50 @@
         <form [formGroup]="depositForm" (ngSubmit)="onDepositSubmit(depositForm)" >
             <div class="form-row">
               <div class="input-data">
-                <input type="varchar" name="pch_chrgcode" [readonly]="updateBtn" formControlName="pch_chrgcode"  maxlength="3" />
+                <input type="varchar" name="pchChrgCode" [readonly]="updateBtn" formControlName="pchChrgCode"  maxlength="3" />
                 <div class="underline"></div>
-                <label for="pch_chrgcode">pch_chrgcode:</label>
+                <label for="pchChrgCode">pchChrgCode:</label>
               </div>
               <div class="input-data">
-                <input type="varchar" name="por_orgacode" formControlName="por_orgacode"  maxlength="10" />
+                <input type="varchar" name="porOrgaCode" formControlName="porOrgaCode"  maxlength="10" />
                 <div class="underline"></div>
-                <label for="por_orgacode">por_orgacode:</label>
+                <label for="porOrgaCode">porOrgaCode:</label>
               </div>
             </div>
             <div class="form-row">
                 <div class="input-data">
-                  <input  type="varchar" name="pch_chrgdesc" formControlName="pch_chrgdesc"  maxlength="40" />
+                  <input  type="varchar" name="pchChrgDesc" formControlName="pchChrgDesc"  maxlength="40" />
                   <div class="underline"></div>
-                  <label for="pch_chrgdesc">pch_chrgdesc:</label>
+                  <label for="pchChrgDesc">pchChrgDesc:</label>
                 </div>
                 <div class="input-data">
-                  <input type="varchar"  name="pch_chrgshort" formControlName="pch_chrgshort"   maxlength="20"  />
+                  <input type="varchar"  name="pchChrgShort" formControlName="pchChrgShort"   maxlength="20"  />
                   <div class="underline"></div>
-                  <label for="pch_chrgshort">pch_chrgshort:</label>
+                  <label for="pchChrgShort">pchChrgShort:</label>
                 </div>
             </div>
             <div class="form-row">
                 <div class="input-data">
-                  <input  type="varchar" name="pel_elmtcode" formControlName="pel_elmtcode"   maxlength="10" />
+                  <input  type="varchar" name="pelElmtCode" formControlName="pelElmtCode"   maxlength="10" />
                   <div class="underline"></div>
-                  <label for="pel_elmtcode">pel_elmtcode:</label>
+                  <label for="pelElmtCode">pelElmtCode:</label>
                 </div>
                 <div class="input-data">
-                  <input type="varchar" name="ptr_trancode"  formControlName="ptr_trancode"    maxlength="3"/>
+                  <input type="varchar" name="ptrTranCode"  formControlName="ptrTranCode"    maxlength="3"/>
                   <div class="underline"></div>
-                  <label for="ptr_trancode">ptr_trancode:</label>
+                  <label for="ptrTranCode">ptrTranCode:</label>
                 </div>
             </div>
             <div class="form-row">
               <div class="input-data">
-                <input type="tinyint" name="pch_chrgprofit" formControlName="pch_chrgprofit"  maxlength="1" />
+                <input type="tinyint" name="pchChrgProfit" formControlName="pchChrgProfit"  maxlength="1" />
                 <div class="underline"></div>
-                <label for="pch_chrgprofit">pch_chrgprofit:</label>
+                <label for="pchChrgProfit">pchChrgProfit:</label>
               </div>
               <div class="input-data">
-                <input type="tinyint" name="soc_charges"  formControlName="soc_charges"  maxlength="1" />
+                <input type="tinyint" name="socCharges"  formControlName="socCharges"  maxlength="1" />
                 <div class="underline"></div>
-                <label for="soc_charges">soc_charges:</label>
+                <label for="socCharges">socCharges:</label>
               </div>
           </div>
           <!-- <div class="form-row">
@@ -190,62 +190,62 @@
       <form [formGroup]="loanForm" (ngSubmit)="onLoanSubmit(loanForm)">
         <div class="form-row">
           <div class="input-data">
-            <input type="varchar" id="pch_chrgcode" [readonly]="updateBtn" name="pch_chrgcode" formControlName="pch_chrgcode" maxlength="3">
+            <input type="varchar" id="pchChrgCode" [readonly]="updateBtn" name="pchChrgCode" formControlName="pchChrgCode" maxlength="3">
             <div class="underline"></div>
-            <label for="pch_chrgcode">pch_chrgcode:</label>
+            <label for="pchChrgCode">pchChrgCode:</label>
           </div>
           <div class="input-data">
-            <input type="varchar" id="por_orgacode"  formControlName="por_orgacode" maxlength="10">
+            <input type="varchar" id="porOrgaCode"  formControlName="porOrgaCode" maxlength="10">
             <div class="underline"></div>
-            <label for="por_orgacode">por_orgacode:</label>
+            <label for="porOrgaCode">porOrgaCode:</label>
           </div>
         </div>
         <div class="form-row">
             <div class="input-data">
-              <input type="varchar" id="pch_chrgdesc" name="pch_chrgdesc" formControlName="pch_chrgdesc" maxlength="40">
+              <input type="varchar" id="pchChrgDesc" name="pchChrgDesc" formControlName="pchChrgDesc" maxlength="40">
               <div class="underline"></div>
-              <label for="pch_chrgdesc">pch_chrgdesc:</label>
+              <label for="pchChrgDesc">pchChrgDesc:</label>
             </div>
             <div class="input-data">
-              <input type="varchar" name="pch_chrgshort" formControlName="pch_chrgshort" maxlength="20">
+              <input type="varchar" name="pchChrgShort" formControlName="pchChrgShort" maxlength="20">
               <div class="underline"></div>
-              <label for="ptr_trandesc">ptr_trandesc:</label>
+              <label for="pchChrgShort">pchChrgShort:</label>
             </div>
         </div>
         <div class="form-row">
             <div class="input-data">
-              <input type="varchar" name="pel_elmtcode" formControlName="pel_elmtcode" maxlength="10">
+              <input type="varchar" name="pelElmtCode" formControlName="pelElmtCode" maxlength="10">
               <div class="underline"></div>
-              <label for="pel_elmtcode">pel_elmtcode:</label>
+              <label for="pelElmtCode">pelElmtCode:</label>
             </div>
             <div class="input-data">
-              <input type="varchar" name="ptr_trancode" formControlName="ptr_trancode" maxlength="3">
+              <input type="varchar" name="ptrTranCode" formControlName="ptrTranCode" maxlength="3">
               <div class="underline"></div>
-              <label for="ptr_trancode">ptr_trancode:</label>
+              <label for="ptrTranCode">ptrTranCode:</label>
             </div>
         </div>
         <div class="form-row">
           <div class="input-data">
-            <input type="tinyint" name="pch_chrginterest" formControlName="pch_chrginterest" maxlength="1">
+            <input type="tinyint" name="pchChrgInterest" formControlName="pchChrgInterest" maxlength="1">
             <div class="underline"></div>
-            <label for="pch_chrginterest">pch_chrginterest:</label>
+            <label for="pchChrgInterest">pchChrgInterest:</label>
           </div>
           <div class="input-data">
-            <input type="tinyint" name="pch_chrgpenalty" formControlName="pch_chrgpenalty" maxlength="1">
+            <input type="tinyint" name="pchChrgPenalty" formControlName="pchChrgPenalty" maxlength="1">
             <div class="underline"></div>
-            <label for="pch_chrgpenalty">pch_chrgpenality:</label>
+            <label for="pchChrgPenalty">pch_chrgpenality:</label>
           </div>
         </div>
         <div class="form-row">
           <div class="input-data">
-            <input type="tinyint" name="pch_chrgprincipal" formControlName="pch_chrgprincipal" maxlength="1">
+            <input type="tinyint" name="pchChrgPrincipal" formControlName="pchChrgPrincipal" maxlength="1">
             <div class="underline"></div>
-            <label for="pch_chrgprincipal">pch_chrgprincipal:</label>
+            <label for="pchChrgPrincipal">pchChrgPrincipal:</label>
           </div>
           <div class="input-data">
-            <input type="tinyint" name="soc_charges" formControlName="soc_charges" maxlength="1">
+            <input type="tinyint" name="socCharges" formControlName="socCharges" maxlength="1">
             <div class="underline"></div>
-            <label for="soc_charges">soc_charges:</label>
+            <label for="socCharges">socCharges:</label>
           </div>
         </div>
 
@@ -270,34 +270,34 @@
       <table class="table">
         <thead>
           <tr>
-            <th>pch_chrgcode</th>
-            <th>por_orgacode</th>
-            <th>pch_chrgdesc</th>
-            <th>pch_chrgshort</th>
-            <th>pel_elmtcode</th>
-            <th>ptr_trancode</th>
-            <th >pch_chrgprofit</th>
-            <th >pch_chrginterest</th>
-            <th >pch_chrgprincipal</th>
-            <th >pch_chrgpenality</th>
-            <th>soc_charges</th>
+            <th>pchChrgCode</th>
+            <th>porOrgaCode</th>
+            <th>pchChrgDesc</th>
+            <th>pchChrgShort</th>
+            <th>pelElmtCode</th>
+            <th>ptrTranCode</th>
+            <th >pchChrgProfit</th>
+            <th >pchChrgInterest</th>
+            <th >pchChrgPrincipal</th>
+            <th >pchChrgPenality</th>
+            <th>socCharges</th>
 
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of dataFilteration; let i = index">
-            <td> {{ item.pch_chrgcode }} </td>
-            <td> {{item.por_orgacode}} </td>
-            <td> {{ item.pch_chrgdesc }} </td>
-            <td> {{ item.pch_chrgshort }} </td>
-            <td> {{ item.pel_elmtcode }}  </td>
-            <td> {{ item.ptr_trancode }}  </td>
-            <td> {{item.pch_chrgprofit }} </td>
-            <td> {{item.pch_chrgprofit }} </td>
-            <td >{{item.pch_chrginterest}}</td>
-            <td>{{item.pch_chrgprincipal}}</td>
-            <td>{{item.pch_chrgpenalty}}</td>
-            <td> {{ item.soc_charges }} </td>
+            <td> {{ item.chargesId.pchChrgCode }} </td>
+              <td> {{item.chargesId.porOrgaCode }} </td>
+            <td> {{ item.pchChrgDesc }} </td>
+            <td> {{ item.pchChrgShort }} </td>
+            <td> {{ item.pelElmtCode }}  </td>
+            <td> {{ item.ptrTranCode }}  </td>
+            <td> {{item.pchChrgProfit }} </td>
+            <td> {{item.pchChrgProfit }} </td>
+            <td >{{item.pchChrgInterest}}</td>
+            <td>{{item.pchChrgPrincipal}}</td>
+            <td>{{item.pchChrgPenalty}}</td>
+            <td> {{ item.socCharges }} </td>
 
           </tr>
         </tbody>

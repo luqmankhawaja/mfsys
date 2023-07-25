@@ -38,9 +38,9 @@ export class EventComponent implements OnInit {
   data=[];
 
   eventForm=new FormGroup({
-    pet_eventcode:new FormControl('',[Validators.required]),
-    pet_eventdesc:new FormControl('',[Validators.required]),
-    system_generated:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    petEventCode:new FormControl('',[Validators.required]),
+    petEventDesc:new FormControl('',[Validators.required]),
+    systemGenerated:new FormControl('',[Validators.required,Validators.maxLength(1)]),
 
 
   })
@@ -65,7 +65,7 @@ export class EventComponent implements OnInit {
    eventTable() {
       this.showEvent=!this.showEvent
       if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
-      this.http.get<any>(`http://192.168.1.51:8080/getData/event/${this.selectedOption}`)
+      this.http.get<any>(`http://192.168.1.67:8080/${this.selectedOption}/event/view`)
 
       .subscribe((response) =>  {
         this.events=response;
@@ -73,42 +73,54 @@ export class EventComponent implements OnInit {
       });
     }
    }
-  filterData() {
-      if(this.searchNumber!== null)
-       this.filteredData = this.events.filter((item: { pet_eventcode: string; }) => item.pet_eventcode=== this.searchNumber);
-
-      else
-        this.filteredData=this.events
+   filterData() {
+    if (this.searchNumber !== null) {
+      this.filteredData = this.events.filter((item: { eventId: { petEventCode: number }; }) => item.eventId.petEventCode === Number(this.searchNumber));
+    } else {
+      this.filteredData = this.events;
+    }
   }
+
+
   // Table For All events
   populateTable(){
     this.allEventsTable=!this.allEventsTable;
-    this.http.get<any>(`http://192.168.1.51:8080/getData/event/all`).subscribe((response)=>{
+    this.http.get<any>(`http://192.168.1.67:8080/viewAll/event`).subscribe((response)=>{
       this.allEvents=response;
       this.dataFilteration=response;
-    })
+    });
 
   }
   filteration(){
-    if(this.filterationNumber.length>0)
-      this.dataFilteration=this.allEvents.filter((item:{pet_eventcode:string;})=>item.pet_eventcode===this.filterationNumber)
-    else
-      this.dataFilteration=this.allEvents;
+    if (this.filterationNumber !== null) {
+      this.dataFilteration = this.allEvents.filter((item: { eventId: { petEventCode: number }; }) => item.eventId.petEventCode === Number(this.searchNumber));
+    } else {
+      this.dataFilteration = this.allEvents;
+    }
   }
 
   submitForm(eventForm) {
     // if(this.selectedOption==='deposit')
-    const url = `http://192.168.1.51:8080/add/body`;
-    const body = JSON.stringify(this.eventForm.value);
-    console.log(body);
+    const url = `http://192.168.1.67:8080/${this.selectedOption}/event/add/body`;
+    const  payload={
+      eventId:{
+        "petEventCode": eventForm.get('petEventCode').value || '',
+        "dbName":this.selectedOption
+
+      },
+
+        "petEventDesc": eventForm.get('petEventDesc').value || '',
+        "systemGenerated":eventForm.get('systemGenerated').value || ''
+
+  }
+    console.log(payload);
     console.log(this.selectedOption)
   if(eventForm.valid){
-    this.http.post(url , body,{responseType:"text"}).subscribe(
+    this.http.post(url , payload).subscribe(
       response => {
-        if(response.includes("effected")){
         this.toastr.success("Data added succesfully");
         eventForm.reset();
-        }
+
   },(error: any) => {
     if(error){
       this.toastr.error("error");
@@ -119,10 +131,22 @@ export class EventComponent implements OnInit {
   }
 
 }
-   delEvent(selected: any ) {
-        console.log(selected);
-        const requestBody: String = JSON.stringify(selected);
-          return this.http.delete(`http://192.168.1.51:8080/delete/${this.selectedOption}/event/requestBody`, {body:requestBody}).subscribe(
+delEvent(selected: any) {
+  console.log(selected);
+  const payload = [
+    {
+
+        petEventCode: selected.eventId.petEventCode,
+        dbName: this.selectedOption
+
+    }
+  ];
+
+  // Now you have an array containing the payload objects
+  console.log(payload);
+
+
+          return this.http.delete<any[]>(`http://192.168.1.67:8080/${this.selectedOption}/event/delete/payload`, {body:payload}).subscribe(
             response=>{
               console.log('Event Deleted Successfully');
               this.toastr.success(' Event Deleted Successfully');
@@ -130,30 +154,17 @@ export class EventComponent implements OnInit {
           );
 
     }
-    updateSelectedRows(item: any) {
-
-      if (item.selected) {
-      this.selectedRows.push(item);
-      } else {
-      const index = this.selectedRows.findIndex((selectedItem) => selectedItem.pet_eventcode === item.pet_eventcode && selectedItem.pet_eventdesc === item.pet_eventdesc);
-        if (index !== -1) {
-          this.selectedRows.splice(index, 1);
-      }
-    }
-  }
-
-  delMultipleEvents(){
+  delMultipleEvents(selectedItem:any){
     console.log(this.selectedRows);
     const payload = this.selectedRows.map((selectedItem) => {
       return {
-        pet_eventcode: selectedItem.pet_eventcode,
-        pet_eventdesc: selectedItem.pet_eventdesc,
-        system_generated: selectedItem.system_generated,
-
+        petEventCode: selectedItem.eventId.petEventCode,
+        dbName: this.selectedOption,
       };
     });
+    console.log(payload)
     return this.http
-      .delete(`http://http://192.168.1.51:8080/deleteAll/event/${this.selectedOption}/requestBody`, { body: payload })
+      .delete<any>(`http://192.168.1.67:8080/${this.selectedOption}/event/delete/payload`, {body:payload})
       .subscribe(
         () => {
           console.log('Selected rows deleted successfully');
@@ -171,48 +182,72 @@ export class EventComponent implements OnInit {
     this.hideBtn=!this.hideBtn;
     this.selectedEvent = item;
     this.eventForm.patchValue({
-    pet_eventcode: item.pet_eventcode,
-    pet_eventdesc: item.pet_eventdesc,
-    system_generated: item.system_generated
+    petEventCode: item.eventId.petEventCode,
+    petEventDesc: item.petEventDesc,
+    systemGenerated: item.systemGenerated
 
   });
 
     }
+    updateSelectedRows(item: any) {
+
+      if (item.selected) {
+      this.selectedRows.push(item);
+      } else {
+      const index = this.selectedRows.findIndex((selectedItem) => selectedItem.eventId.pet_eventcode === item.eventId.pet_eventcode && selectedItem.pet_eventdesc === item.pet_eventdesc);
+        if (index !== -1) {
+          this.selectedRows.splice(index, 1);
+      }
+    }
+  }
   updateEvent(event:Event,eventForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.57:8080/update/event/${this.selectedOption}/body`;
-    const body = JSON.stringify(this.eventForm.value);
-    console.log(body);
+    const url = `http://192.168.1.67:8080/${this.selectedOption}/event/update/body`;
+    const  payload={
+      eventId:{
+        "petEventCode": eventForm.get('petEventCode').value || '',
+        "dbName":this.selectedOption
+
+      },
+
+        "petEventDesc": eventForm.get('petEventDesc').value || '',
+        "systemGenerated":eventForm.get('systemGenerated').value || ''
+
+  }
+    console.log(payload);
     console.log(this.selectedOption)
-    if(eventForm.valid){
-        this.http.put(url,body,{responseType:"text"}).subscribe(
-          response => {
-            console.log(response);
-            console.log('Event data Updated successfully');
-              this.toastr.success('Event data Updated successfully');
-            },
-            error => {
-              this.toastr.warning('Error updating form data');
-            }
-          );
-      }
+  if(eventForm.valid){
+    this.http.put(url , payload).subscribe(
+      response => {
+
+        this.toastr.success("Data updated succesfully");
+        eventForm.reset();
+
+  },(error: any) => {
+    if(error){
+      this.toastr.error("error");
+      console.log(error)
+    }
+  }
+    );
+  }
+
   }
 
   genScript(selected:any) {
     const requestBody = {
-      pet_eventcode: selected.pet_eventcode,
-        pet_eventdesc: selected.pet_eventdesc,
-        system_generated: selected.system_generated,
+      eventId:{
+      petEventCode: selected.eventId.petEventCode,
+      dbName:this.selectedOption
+      },
+        petEventDesc: selected.petEventDesc,
+        systemGenerated: selected.systemGenerated,
     };
     console.log(requestBody);
-    this.http
-      .post<string>(
-        `http://192.168.1.51:8080/generateScript/event/${this.selectedOption}/requestBody`,
-        requestBody,
-        { responseType: 'text' as 'json' }
-      )
+    this.http.post<any>(`http://192.168.1.67:8080/${this.selectedOption}/event/generateScript/requestBody`,{body:requestBody})
       .subscribe((response) => {
         alert(response);
+
         console.log('Script Generated');
         this.toastr.success('Script Generated Successfully');
       });

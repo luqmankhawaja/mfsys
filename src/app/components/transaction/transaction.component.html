@@ -35,10 +35,10 @@
           <thead>
             <tr>
               <th>Select</th>
-              <th>por_orgacode</th>
-              <th>ptr_trancode</th>
-              <th>pet_eventcode</th>
-              <th>ptr_trandesc</th>
+              <th>porOrgaCode</th>
+              <th>ptrTranCode</th>
+              <th>petEventCode</th>
+              <th>ptrTranDesc</th>
               <th>System Generated</th>
               <th>Update Transaction</th>
               <th>Generate Script</th>
@@ -55,19 +55,19 @@
                   name="selected{{ item }}"
                   (change)="updateSelectedRows(item)"  />
               </td>
-              <td>{{ item.por_orgacode }} </td>
+              <td>{{ item.porOrgaCode }} </td>
 
 
-              <td> {{ item.ptr_trancode }} </td>
+              <td> {{ item.ptrTranCode }} </td>
 
 
-              <td>{{ item.pet_eventcode }} </td>
+              <td>{{ item.petEventCode }} </td>
 
 
-              <td> {{ item.ptr_trandesc }} </td>
+              <td> {{ item.ptrTranDesc }} </td>
 
 
-              <td>{{ item.systemgen }}
+              <td>{{ item.systemGenerated }}
 
 
               </td>
@@ -97,33 +97,33 @@
       <form [formGroup]="transForm" (ngSubmit)="submitForm(transForm)">
         <div class="form-row">
           <div class="input-data">
-            <input type="varchar" id="por_orgacode" name="por_orgacode" formControlName="por_orgacode">
+            <input type="varchar" id="porOrgaCode" name="porOrgaCode" formControlName="porOrgaCode">
             <div class="underline"></div>
-            <label for="por_orgacode">por_orgacode:</label>
+            <label for="porOrgaCode">porOrgaCode:</label>
           </div>
           <div class="input-data">
-            <input type="varchar" id="ptr_trancode" [readonly]="updateBtn" formControlName="ptr_trancode">
+            <input type="varchar" id="ptrTranCode" [readonly]="updateBtn" formControlName="ptrTranCode">
             <div class="underline"></div>
-            <label for="ptr_trancode">ptr_trancode:</label>
+            <label for="ptrTranCode">ptrTranCode:</label>
           </div>
         </div>
         <div class="form-row">
             <div class="input-data">
-              <input type="number" id="pet_eventcode" name="por_orgacode" formControlName="pet_eventcode">
+              <input type="number" id="petEventCode" name="porOrgaCode" formControlName="petEventCode">
               <div class="underline"></div>
-              <label for="pet_eventcode">pet_eventcode:</label>
+              <label for="petEventCode">petEventCode:</label>
             </div>
             <div class="input-data">
-              <input type="varchar" name="ptr_trandesc" formControlName="ptr_trandesc">
+              <input type="varchar" name="ptrTranDesc" formControlName="ptrTranDesc">
               <div class="underline"></div>
-              <label for="ptr_trandesc">ptr_trandesc:</label>
+              <label for="ptrTranDesc">ptrTranDesc:</label>
             </div>
         </div>
         <div class="form-row">
             <div class="input-data">
-              <input type="tinyint" name="systemgen" formControlName="systemgen">
+              <input type="tinyint" name="systemGenerated" formControlName="systemGenerated">
               <div class="underline"></div>
-              <label for="systemgen">systemgen:</label>
+              <label for="systemGenerated">systemGenerated:</label>
             </div>
             <div class="input-data">
             </div>
@@ -150,20 +150,20 @@
     <table class="table" >
       <thead>
         <tr>
-          <th>por_orgacode</th>
-          <th>ptr_trancode</th>
-          <th>pet_eventcode</th>
-          <th>ptr_trandesc</th>
+          <th>porOrgaCode</th>
+          <th>ptrTranCode</th>
+          <th>petEventCode</th>
+          <th>ptrTranDesc</th>
           <th>System Generated</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of dataFilteration">
-          <td> {{ item.por_orgacode }}  </td>
-          <td>{{ item.ptr_trancode }} </td>
-          <td>{{ item.pet_eventcode }} </td>
-          <td>{{ item.ptr_trandesc }} </td>
-          <td>{{ item.systemgen }} </td>
+          <td> {{ item.porOrgaCode }}  </td>
+          <td>{{ item.ptrTranCode }} </td>
+          <td>{{ item.petEventCode }} </td>
+          <td>{{ item.ptrTranDesc }} </td>
+          <td>{{ item.systemGenerated }} </td>
         </tr>
       </tbody>
     </table>

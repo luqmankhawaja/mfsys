@@ -38,11 +38,11 @@ export class TransactionComponent implements OnInit {
   }
 
   transForm=new FormGroup({
-    por_orgacode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
-    ptr_trancode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
-    pet_eventcode:new FormControl('',[Validators.required]),
-    ptr_trandesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
-    systemgen:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    porOrgaCode:new FormControl('',[Validators.required,Validators.maxLength(10)]),
+    ptrTranCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
+    petEventCode:new FormControl('',[Validators.required]),
+    ptrTranDesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
+    systemGeneratederated:new FormControl('',[Validators.required,Validators.maxLength(1)]),
   })
 
 //          Table For Selected Data
@@ -52,7 +52,7 @@ transTable(){
   this.showTable=!this.showTable;
   if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
 
-  this.http.get<any>(`http://192.168.1.51:8080/getData/transaction_type/${this.selectedOption}`)
+  this.http.get<any>(`http://192.168.1.67:8080/${this.selectedOption}/transaction/view`)
   .subscribe((response) =>  {
     this.transactions=response;
     this.filteredData=response;
@@ -62,7 +62,7 @@ transTable(){
 filterData() {
 
     if(this.searchNumber!== null){
-      this.filteredData = this.transactions.filter(item => item.ptr_trancode === this.searchNumber);
+      this.filteredData = this.transactions.filter(item => item.ptrTranCode === this.searchNumber);
   }
     else{
      this.filteredData=this.transactions
@@ -74,7 +74,7 @@ filterData() {
 
 populateTable(){
   this.allTransTable=!this.allTransTable;
-  this.http.get<any>(`http://192.168.1.51:8080/getData/transaction_type/all`).subscribe((response)=>{
+  this.http.get<any>(`http://192.168.1.67:8080/viewAll/transaction/`).subscribe((response)=>{
     this.allTransactions=response;
     this.dataFilteration=response;
 
@@ -83,38 +83,37 @@ populateTable(){
 }
 filteration(){
   if(this.filterationNumber.length>0)
-    this.dataFilteration=this.allTransactions.filter(item=>item.ptr_trancode===this.filterationNumber)
+    this.dataFilteration=this.allTransactions.filter(item=>item.ptrTranCode===this.filterationNumber)
   else
     this.dataFilteration=this.allTransactions
 }
 
 submitForm(transForm) {
 
-  const url = `http://192.168.1.57:8080/${this.selectedOption}/transaction/add/body`;
+  const url = `http://192.168.1.67:8080/${this.selectedOption}/transaction/add/body`;
 
-let  trans={
+const  payload={
 
     "transId": {
-      "porOrgaCode": transForm.get('por_orgacode').value || '',
-      "ptrTranCode": transForm.get('ptr_trancode').value || '',
+      "porOrgaCode": transForm.get('porOrgaCode').value || '',
+      "ptrTranCode": transForm.get('ptrTranCode').value || '',
       "dbName": this.selectedOption
   },
-  "petEventCode": transForm.get('pet_eventcode').value || '',
-  "ptrTranDesc": transForm.get('ptr_trandesc').value || '',
-  "systemGenerated":transForm.get('systemgen').value || ''
+  "petEventCode": transForm.get('petEventCode').value || '',
+  "ptrTranDesc": transForm.get('ptrTranDesc').value || '',
+  "systemGeneratederated":transForm.get('systemGenerated').value || ''
 
 }
 
-    console.log(trans);
+    console.log(payload);
     console.log(this.selectedOption)
   if(transForm.valid){
-    this.http.post(url , trans,{responseType:"text"}).subscribe(
+    this.http.post(url , payload).subscribe(
       response => {
-        if(response.includes("effected")){
         this.toastr.success("Transaction_Type added succesfully");
         transForm.reset();
-        }
-  },(error: any) => {
+  },
+  (error: any) => {
     if(error){
       this.toastr.error("error");
       console.log(error)
@@ -130,18 +129,24 @@ editTrans(item: any){
   this.hideBtn=!this.hideBtn;
   this.selectedTrans = item;
   this.transForm.patchValue({
-  por_orgacode: item.por_orgacode,
-  ptr_trancode: item.ptr_trancode,
-  pet_eventcode: item.pet_eventcode,
-  ptr_trandesc: item.ptr_trandesc,
-  systemgen: item.systemgen
+  porOrgaCode: item.tranId.porOrgaCode,
+  ptrTranCode: item.tranId.ptrTranCode,
+  petEventCode: item.petEventCode,
+  ptrTranDesc: item.ptrTranDesc,
+  systemGenerated: item.systemGenerated
 });
 }
 
 delTrans(selected:any) {
   console.log(selected);
-        const requestBody: String = JSON.stringify(selected);
-          return this.http.delete(`http://192.168.1.51:8080/delete/${this.selectedOption}/transaction_type/requestBody`, {body:requestBody}).subscribe(
+        const requestBody=[
+          {
+          porOrgaCode:selected.porOrgaCode,
+          ptrTranCode:selected.ptrTranCode,
+          dbName:this.selectedOption
+          }
+        ]
+          return this.http.delete(`http://192.168.1.67:8080/${this.selectedOption}/transaction/delete/requestBody`, {body:requestBody}).subscribe(
             response=>{
               console.log('Transaction_Type Deleted Successfully');
               this.toastr.success(' Transaction_Type Deleted Successfully');
@@ -155,7 +160,7 @@ updateSelectedRows(item: any) {
   if (item.selected) {
   this.selectedRows.push(item);
   } else {
-  const index = this.selectedRows.findIndex((selectedItem) => selectedItem.por_orgacode === item.por_orgacode && selectedItem.ptr_trancode === item.ptr_trancode);
+  const index = this.selectedRows.findIndex((selectedItem) => selectedItem.porOrgaCode === item.porOrgaCode && selectedItem.ptrTranCode === item.ptrTranCode);
     if (index !== -1) {
       this.selectedRows.splice(index, 1);
   }
@@ -166,16 +171,16 @@ delMultipleTrans() {
 
   const payload = this.selectedRows.map((selectedItem) => {
     return {
-      por_orgacode: selectedItem.por_orgacode,
-      ptr_trancode: selectedItem.ptr_trancode,
-      pet_eventcode: selectedItem.pet_eventcode,
-      ptr_trandesc: selectedItem.ptr_trandesc,
-      systemgen: selectedItem.systemgen,
+
+        porOrgaCode:selectedItem.tranId.porOrgaCode,
+        ptrTranCode:selectedItem.tranId.ptrTranCode,
+        dbName:this.selectedOption
+
 
     };
   });
   return this.http
-    .delete(`http://http://192.168.1.51:8080/deleteAll/transactions_type/${this.selectedOption}/requestBody`, { body: payload })
+    .delete(`http://http://192.168.1.67:8080/${this.selectedOption}/transaction/deleteAll/requestBody`, { body: payload })
     .subscribe(
       () => {
         console.log('Selected rows deleted successfully');
@@ -190,12 +195,21 @@ delMultipleTrans() {
 
   updateTrans(event:Event,transForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.51:8080/update/transactions_type/${this.selectedOption}/body`;
-    const body = JSON.stringify(this.transForm.value);
+    const url = `http://192.168.1.67:8080/${this.selectedOption}/transaction/update/body`;
+    const body = {
+      "transId": {
+        "porOrgaCode": transForm.get('porOrgaCode').value || '',
+        "ptrTranCode": transForm.get('ptrTranCode').value || '',
+        "dbName": this.selectedOption
+    },
+    "petEventCode": transForm.get('petEventCode').value || '',
+    "ptrTranDesc": transForm.get('ptrTranDesc').value || '',
+    "systemGeneratederated":transForm.get('systemGenerated').value || ''
+    }
     console.log(body);
     console.log(this.selectedOption)
     if(transForm.valid){
-        this.http.put(url,body,{responseType:"text"}).subscribe(
+        this.http.put(url,body).subscribe(
           response => {
             console.log(response);
             console.log('Transaction_type Updated successfully');
@@ -210,20 +224,20 @@ delMultipleTrans() {
   genScript(selected:any){
 
     const requestBody = {
-
-          por_orgacode: selected.por_orgacode,
-          ptr_trancode: selected.ptr_trancode,
-          pet_eventcode: selected.pet_eventcode,
-          ptr_trandesc: selected.ptr_trandesc,
-          systemgen: selected.systemgen,
+        tranId:{
+          porOrgaCode: selected.tranId.porOrgaCode,
+          ptrTranCode: selected.tranId.ptrTranCode
+        },
+          petEventCode: selected.petEventCode,
+          ptrTranDesc: selected.ptrTranDesc,
+          systemGenerated: selected.systemGenerated,
 
 
       };
       console.log(requestBody);
       this.http
-        .post<string>(`http://192.168.1.51:8080/generateScript/transactions_type/${this.selectedOption}/requestBody`,
-        requestBody,
-        { responseType: 'text' as 'json' }).subscribe((response)=>{
+        .post<any>(`http://192.168.1.67:8080/${this.selectedOption}/transaction/generateScript/requestBody`,{body:requestBody}
+        ).subscribe((response)=>{
       alert(response)
       console.log("Script Generated");
       this.toastr.success('Script Generated Successfully');

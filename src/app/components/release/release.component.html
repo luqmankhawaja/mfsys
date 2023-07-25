@@ -1,37 +1,33 @@
 <div class="background">
   <app-nav-bar></app-nav-bar>
-    <div class="card">
+    <div class="btn-card">
+      <button class="btn" (click)="releaseTable()" >
+        <span> Release Version </span>
+      </button>
+      <button class="btn" (click)="showCard = true">
+        <span> Register Version </span>
+      </button>
+    </div>
+    <div class="card" *ngIf="showCard">
       <h2>Select Option</h2>
       <div class="radio-inputs">
-        <label class="radio">
-          <input type="radio"  name="Script" value="script" [(ngModel)]="selectedOption">
-          <span class="name">Script</span>
-        </label>
-        <label class="radio">
-          <input type="radio"  name="Store Procedure" value="s_procedure" [(ngModel)]="selectedOption">
-          <span class="name">Store Proced.</span>
-        </label>
+        <input type="radio"  name="Script" value="script" [(ngModel)]="selectedOption">
+        <label for="html">Script</label>
+        <input type="radio"  name="Store Procedure" value="s_procedure" [(ngModel)]="selectedOption">
+        <label for="css">Store Procedure</label>
       </div>
-      <div class="btn-container">
-          <button class="card-btn" (click)="releaseTable()" >
-            <span> Release Version </span>
-          </button>
-          <button class="card-btn">
-            <span> Register Version </span>
-          </button>
 
-      </div>
       <div  *ngIf="selectedOption">
         <input list="versions" name="versions" [(ngModel)]="selectedVersion" >
     <datalist id="versions">
-      <option *ngFor="let opt of versions" [value]="opt">{{ opt }}</option>
+      <option *ngFor="let item of versions" >{{ item.version }}</option>
     </datalist>
-        <button (click)="onSave()">Save</button>
+        <button (click)="onSave()" (click)="saveVersion()">Save</button>
 
       </div>
 
     </div>
-    <div class="form-container" >
+    <div class="form-container" *ngIf="showForm" >
       <form [formGroup]="releaseForm">
         <div>
           <label for="selected-option-value">Selected Option </label>

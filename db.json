@@ -312,30 +312,54 @@
       "id": 4
     }
   ],
- "release":[
-  {
-    "version":2.0,
-    "userId":"22452",
-     "status":"in prog",
-     "file":"xyz.txt"
-  },
-  {
-    "version":2.1,
-    "userId":"77789",
-     "status":"in prog",
-     "file":"xyz.sql"
-  },
-  {
-    "version":1.0,
-    "userId":"980-",
-     "status":"in prog",
-     "file":"xyz.txt"
-  },
-  {
-    "version":3.0,
-    "userId":"22452",
-     "status":"in prog",
-     "file":"sgh.sql"
-  }
- ]
+  "versions": [
+    {
+      "version": 2,
+      "id": 1
+    },
+    {
+      "version": 2.1,
+      "id": 2
+    },
+    {
+      "version": 1,
+      "id": 3
+    },
+    {
+      "version": 3,
+      "id": 4
+    },
+    {
+      "id": 5
+    },
+    {
+      "id": 6
+    }
+  ],
+  "release": [
+    {
+      "version": 2,
+      "userId": "22452",
+      "status": "in prog",
+      "file": "xyz.txt"
+    },
+    {
+      "version": 2.1,
+      "userId": "77789",
+      "status": "in prog",
+      "file": "xyz.sql"
+    },
+    {
+      "version": 1,
+      "userId": "980-",
+      "status": "in prog",
+      "file": "xyz.txt"
+    },
+    {
+      "version": 3,
+      "userId": "22452",
+      "status": "in prog",
+      "file": "sgh.sql"
+    }
+  ]
 }

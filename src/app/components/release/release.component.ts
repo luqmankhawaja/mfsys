@@ -8,10 +8,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ReleaseComponent implements OnInit {
   showTable=false;
+  showCard=false;
+  showForm=false;
   selectedOption!: string;
   selectedVersion!: string;
   releaseData:any[]=[];
-  versions = ["1.0", "2.0", "3.0"];
+  versions:any;
   options!: string[];
 
   constructor(private FormBuilder:FormBuilder,private http:HttpClient) { }
@@ -31,15 +33,45 @@ export class ReleaseComponent implements OnInit {
   }
 
   setOptions() {
-    setTimeout(() => {
-      this.versions = this.options;
-    }, 5000)
+      this.http.get<any>(`http://192.168.1.67:8080/getVersions`)
+      .subscribe(
+        (response) => {
+
+          console.log(response)
+          this.versions = response.map((item) => item.releaseVersion);
+          // this.toastr.success('Signup successfully');
+
+        },
+        (error) => {
+          // this.toastr.warning('Please enter valid data');
+
+        }
+      );
+
   }
   onSave(){
+    this.showForm=!this.showForm
     this.releaseForm.patchValue({
       selectedOption:this.selectedOption,
       selectedVersion:this.selectedVersion
     });
+  }
+  saveVersion(){
+    console.log(this.selectedVersion)
+    const requestBody=this.selectedVersion;
+    this.http.post<string>('http://localhost:3000/versions',requestBody).subscribe(
+      (response) => {
+
+        console.log(response)
+
+        // this.toastr.success('Signup successfully');
+
+      },
+      (error) => {
+        // this.toastr.warning('Please enter valid data');
+
+      }
+    );
   }
   onFileUpload(event: Event) {
     const inputFiles = (event.target as HTMLInputElement).files;
