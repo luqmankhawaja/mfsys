@@ -16,6 +16,7 @@ import { forkJoin } from 'rxjs';
 export class EventComponent implements OnInit {
 
   updateBtn=false;
+  showEditPopup = false;
   hideBtn=true;
   showEvent=false;
   allEvents:any[]=[];
@@ -65,7 +66,7 @@ export class EventComponent implements OnInit {
    eventTable() {
       this.showEvent=!this.showEvent
       if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
-      this.http.get<any>(`http://192.168.1.67:8080/${this.selectedOption}/event/view`)
+      this.http.get<any>(`http://localhost:8080/${this.selectedOption}/event/view`)
 
       .subscribe((response) =>  {
         this.events=response;
@@ -85,7 +86,7 @@ export class EventComponent implements OnInit {
   // Table For All events
   populateTable(){
     this.allEventsTable=!this.allEventsTable;
-    this.http.get<any>(`http://192.168.1.67:8080/viewAll/event`).subscribe((response)=>{
+    this.http.get<any>(`http://localhost:8080/viewAll/event`).subscribe((response)=>{
       this.allEvents=response;
       this.dataFilteration=response;
     });
@@ -101,7 +102,7 @@ export class EventComponent implements OnInit {
 
   submitForm(eventForm) {
     // if(this.selectedOption==='deposit')
-    const url = `http://192.168.1.67:8080/${this.selectedOption}/event/add/body`;
+    const url = `http://localhost:8080/${this.selectedOption}/event/add/body`;
     const  payload={
       eventId:{
         "petEventCode": eventForm.get('petEventCode').value || '',
@@ -146,7 +147,7 @@ delEvent(selected: any) {
   console.log(payload);
 
 
-          return this.http.delete<any[]>(`http://192.168.1.67:8080/${this.selectedOption}/event/delete/payload`, {body:payload}).subscribe(
+          return this.http.delete<any[]>(`http://localhost:8080/${this.selectedOption}/event/delete/payload`, {body:payload}).subscribe(
             response=>{
               console.log('Event Deleted Successfully');
               this.toastr.success(' Event Deleted Successfully');
@@ -164,7 +165,7 @@ delEvent(selected: any) {
     });
     console.log(payload)
     return this.http
-      .delete<any>(`http://192.168.1.67:8080/${this.selectedOption}/event/delete/payload`, {body:payload})
+      .delete<any>(`http://localhost:8080/${this.selectedOption}/event/delete/payload`, {body:payload})
       .subscribe(
         () => {
           console.log('Selected rows deleted successfully');
@@ -176,8 +177,12 @@ delEvent(selected: any) {
       );
   }
 
-
+  closePopup() {
+    this.showEditPopup=false;
+    this.eventForm.reset();
+  }
   editEvent(item: any){
+    this.showEditPopup = !this.showEditPopup;
     this.updateBtn=!this.updateBtn;
     this.hideBtn=!this.hideBtn;
     this.selectedEvent = item;
@@ -202,7 +207,7 @@ delEvent(selected: any) {
   }
   updateEvent(event:Event,eventForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.67:8080/${this.selectedOption}/event/update/body`;
+    const url = `http://localhost:8080/${this.selectedOption}/event/update/body`;
     const  payload={
       eventId:{
         "petEventCode": eventForm.get('petEventCode').value || '',
@@ -222,6 +227,7 @@ delEvent(selected: any) {
 
         this.toastr.success("Data updated succesfully");
         eventForm.reset();
+        this.showEditPopup = false;
 
   },(error: any) => {
     if(error){
@@ -234,25 +240,42 @@ delEvent(selected: any) {
 
   }
 
-  genScript(selected:any) {
+  genScript(selected: any) {
     const requestBody = {
-      eventId:{
-      petEventCode: selected.eventId.petEventCode,
-      dbName:this.selectedOption
+      eventId: {
+        petEventCode: selected.eventId.petEventCode,
+        dbName: this.selectedOption,
       },
-        petEventDesc: selected.petEventDesc,
-        systemGenerated: selected.systemGenerated,
+      petEventDesc: selected.petEventDesc,
+      systemGenerated: selected.systemGenerated,
     };
+
     console.log(requestBody);
-    this.http.post<any>(`http://192.168.1.67:8080/${this.selectedOption}/event/generateScript/requestBody`,{body:requestBody})
-      .subscribe((response) => {
-        alert(response);
 
-        console.log('Script Generated');
-        this.toastr.success('Script Generated Successfully');
-      });
+    this.http
+      .post(`http://localhost:8080/${this.selectedOption}/event/generateScript/requestBody`,requestBody,{ responseType: 'text' }).subscribe(
+        (response) => {
+          alert(response);
+          console.log('Script Generated');
+          this.toastr.success('Script Generated Successfully');
+          const blob = new Blob([JSON.stringify(response)], {
+            type: 'application/txt',
+          });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'response.txt';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        (error) => {
+
+          console.error('Error generating script:', error);
+          this.toastr.error('Error generating script');
+        }
+      );
   }
-
 }
 
 

@@ -13,6 +13,7 @@ import { ProductService } from 'src/app/services/product-service.service';
 
 export class TransactionComponent implements OnInit {
   showTable=false;
+  showEditPopup=false;
   showTransaction=false;
   allTransTable=false;
   hideBtn=true;
@@ -52,7 +53,7 @@ transTable(){
   this.showTable=!this.showTable;
   if(this.selectedOption=='generalledger'|| this.selectedOption=='loan'||this.selectedOption=='deposit'){
 
-  this.http.get<any>(`http://192.168.1.67:8080/${this.selectedOption}/transaction/view`)
+  this.http.get<any>(`http://localhost:8080/${this.selectedOption}/transaction/view`)
   .subscribe((response) =>  {
     this.transactions=response;
     this.filteredData=response;
@@ -62,7 +63,7 @@ transTable(){
 filterData() {
 
     if(this.searchNumber!== null){
-      this.filteredData = this.transactions.filter(item => item.ptrTranCode === this.searchNumber);
+      this.filteredData = this.transactions.filter((item:{ transId:{ ptrTranCode: string}; }) => item.transId.ptrTranCode=== this.searchNumber);
   }
     else{
      this.filteredData=this.transactions
@@ -74,7 +75,7 @@ filterData() {
 
 populateTable(){
   this.allTransTable=!this.allTransTable;
-  this.http.get<any>(`http://192.168.1.67:8080/viewAll/transaction/`).subscribe((response)=>{
+  this.http.get<any>(`http://localhost:8080/viewAll/transaction`).subscribe((response)=>{
     this.allTransactions=response;
     this.dataFilteration=response;
 
@@ -83,14 +84,14 @@ populateTable(){
 }
 filteration(){
   if(this.filterationNumber.length>0)
-    this.dataFilteration=this.allTransactions.filter(item=>item.ptrTranCode===this.filterationNumber)
+    this.dataFilteration=this.allTransactions.filter((item:{ transId:{ ptrTranCode: string}; }) => item.transId.ptrTranCode===this.filterationNumber)
   else
     this.dataFilteration=this.allTransactions
 }
 
 submitForm(transForm) {
 
-  const url = `http://192.168.1.67:8080/${this.selectedOption}/transaction/add/body`;
+  const url = `http://localhost:8080/${this.selectedOption}/transaction/add/body`;
 
 const  payload={
 
@@ -125,6 +126,7 @@ const  payload={
 }
 
 editTrans(item: any){
+  this.showEditPopup=!this.showEditPopup;
   this.updateBtn=!this.updateBtn;
   this.hideBtn=!this.hideBtn;
   this.selectedTrans = item;
@@ -136,6 +138,10 @@ editTrans(item: any){
   systemGenerated: item.systemGenerated
 });
 }
+closePopup() {
+  this.showEditPopup=false;
+  this.transForm.reset();
+}
 
 delTrans(selected:any) {
   console.log(selected);
@@ -146,7 +152,7 @@ delTrans(selected:any) {
           dbName:this.selectedOption
           }
         ]
-          return this.http.delete(`http://192.168.1.67:8080/${this.selectedOption}/transaction/delete/requestBody`, {body:requestBody}).subscribe(
+          return this.http.delete(`http://localhost:8080/${this.selectedOption}/transaction/delete/requestBody`, {body:requestBody}).subscribe(
             response=>{
               console.log('Transaction_Type Deleted Successfully');
               this.toastr.success(' Transaction_Type Deleted Successfully');
@@ -180,7 +186,7 @@ delMultipleTrans() {
     };
   });
   return this.http
-    .delete(`http://http://192.168.1.67:8080/${this.selectedOption}/transaction/deleteAll/requestBody`, { body: payload })
+    .delete(`http://http://localhost:8080/${this.selectedOption}/transaction/deleteAll/requestBody`, { body: payload })
     .subscribe(
       () => {
         console.log('Selected rows deleted successfully');
@@ -195,7 +201,7 @@ delMultipleTrans() {
 
   updateTrans(event:Event,transForm ) {
     event.preventDefault();
-    const url = `http://192.168.1.67:8080/${this.selectedOption}/transaction/update/body`;
+    const url = `http://localhost:8080/${this.selectedOption}/transaction/update/body`;
     const body = {
       "transId": {
         "porOrgaCode": transForm.get('porOrgaCode').value || '',
@@ -214,6 +220,8 @@ delMultipleTrans() {
             console.log(response);
             console.log('Transaction_type Updated successfully');
               this.toastr.success('Transaction_type Updated successfully');
+              transForm.reset();
+              this.showEditPopup=false;
             },
             error => {
               this.toastr.warning('Error updating form data');
@@ -235,15 +243,31 @@ delMultipleTrans() {
 
       };
       console.log(requestBody);
-      this.http
-        .post<any>(`http://192.168.1.67:8080/${this.selectedOption}/transaction/generateScript/requestBody`,{body:requestBody}
-        ).subscribe((response)=>{
-      alert(response)
-      console.log("Script Generated");
-      this.toastr.success('Script Generated Successfully');
 
-    });
- }
+      this.http
+        .post(`http://localhost:8080/${this.selectedOption}/transaction/generateScript/requestBody`,requestBody,{ responseType: 'text' }).subscribe(
+          (response) => {
+            alert(response);
+            console.log('Script Generated');
+            this.toastr.success('Script Generated Successfully');
+            const blob = new Blob([JSON.stringify(response)], {
+              type: 'application/txt',
+            });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'response.txt';
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+          },
+          (error) => {
+
+            console.error('Error generating script:', error);
+            this.toastr.error('Error generating script');
+          }
+        );
+    }
 
 }
 

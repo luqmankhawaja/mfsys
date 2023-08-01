@@ -1,334 +1,194 @@
 .background {
-  position: absolute;
-  width:100%;
-  min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to right, #FFEFBA, #ffffff);
-  opacity: 1;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
-/* CSS for Card */
+
+/* Styles for the card containing radio buttons and buttons */
 .card {
-  display: flex;
-  margin:5% auto;
-  height:70px;
-  flex-direction: row;
-  width: 500px;
-  background: linear-gradient(to right,#757F9A, #D7DDE8 );
-  border-radius: 8px;
-  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  margin-top: 3%;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+ .radio-inputs {
+     display: flex;
+     margin-top: 1% ;
+     gap: 10px;
+    margin-left: 45%;
+  }
+  .radio {
+   display: flex;
   align-items: center;
-  backdrop-filter: saturate(10px) ;
-  transition: 0.3s ease-in-out;
-}
-.card:hover {
-  cursor: pointer;
-  transform: scale(1.05);
-}
-.img {
-  width: 50px;
-  height: 50px;
-  margin-left: 10px;
-  border-radius: 10px;
-  background: linear-gradient(#d7cfcf, #9198e5);
-}
+   }
 
-.card:hover > .img {
-  transition: 0.5s ease-in-out;
-  background: linear-gradient(#9198e5, #712020);
-}
-                       /* CSS for Radios */
 
-.radio-inputs {
-  margin: 2% auto;
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  border-radius: 0.5rem;
-  background-color: #334d50;
-  box-sizing:content-box;
-  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
-  padding: 0.25rem;
-  width: 200px;
-  height: 30px;
-  font-size: 14px;
-}
-.radio-inputs .radio {
-  flex: 1 1 auto;
-  text-align: center;
+   .btn-container {
+    display: flex;
+    margin:1% 43%;
+  }
 
-}
 
-.radio-inputs .radio input {
-  display: none;
-}
+  .btn-wrapper {
+    /* flex: 1; */
+    margin: 0 5px;
+  }
 
-.radio-inputs .radio .name {
-  display: flex;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
-  border: none;
-  padding: .5rem 0;
-  color: rgb(245, 247, 250);
-  transition: all .15s ease-in-out;
-}
+  .card-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 120px;
+  }
 
-.radio-inputs .radio input:checked + .name {
-  background-color: #0c0c0c;
-  font-weight: 600;
-}
-.card-btn {
-  width: 5.5em;
-  height: 2.0em;
-  margin: 0.5em;
-  background: #203A43;
-  color: white;
-  border: none;
-  border-radius: 0.625em;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
- }
- button:hover {
-  color: #9198e5;
- }
-
- button:after {
-  content: "";
-  background: white;
-  position: absolute;
-  z-index: -1;
-  left: -20%;
-  right: -20%;
-  top: 0;
-  bottom: 0;
-  transform: skewX(-45deg) scale(0, 1);
-  transition: all 0.5s;
- }
-
- button:hover:after {
-  transform: skewX(-45deg) scale(1, 1);
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
- }
-.table-wrapper{
-  float:right;
-  border-collapse: collapse;
-  border:outset;
-  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-  margin: 40px 20px;
-  max-height:500px;
-  max-width: 700px;
+ /* Table wrapper and input for table filtering */
+.table-wrapper {
   overflow-x: auto;
   overflow-y: auto;
+  max-height: 400px;
+  max-width: 900px;
+  margin-bottom: 20px;
+  margin-top: 2%;
+  margin-left:auto;
+  margin-right: auto;
 }
 
+.table-wrapper input[type="varchar"] {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 400px;
+
+}
+
+/* Responsive table styles */
 .tableFixHead {
-  overflow-y: auto;
-  height: 200px;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 .tableFixHead thead th {
   position: sticky;
   top: 0px;
+  width: fit-content;
 }
-.tableFixHead {
-  border-collapse: collapse;
-  width: 100%;
-}
+
 th,
 td {
-  padding: 8px 16px;
   border: 1px solid #ccc;
-  background: #eee;
-}
-th {
-  background: #375364;
-  color:white;
-}
-
-
-
-
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-*{
-  margin: 0;
-  padding: 0;
-  outline: none;
-  box-sizing: border-box;
-  /* font-family: 'Poppins', sans-serif; */
-}
-
-.container{
-  border:outset;
-  margin: 60px 20px;
-  max-width: 600px;
-  height:500px;
-  background: #fff;
-  padding: 25px 40px 10px 40px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-}
-.container .text{
+  padding: 8px;
   text-align: center;
-  font-size: 41px;
-  font-weight: 600;
-  background: -webkit-linear-gradient(right, #56d8e4, #9f01ea, #56d8e4, #9f01ea);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
-.container form{
-  padding: 30px 0 0 0;
+
+th {
+  background-color: #2b5876;
 }
-.container form .form-row{
+
+/* Container for forms */
+.container {
+  margin-top: 2%;
+  text-align: center;
+  background-color: #ffffff;
+}
+h2{
+  color:darkslategray;
+}
+
+.form-row {
   display: flex;
-  margin: 32px 0;
+  justify-content: center;
+  gap: 20px; /* Adjust this value to control the space between fields */
+  margin-bottom: 10px; /* Add margin between rows of input fields */
 }
-form .form-row .input-data{
+
+.input-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+
+input {
   width: 100%;
-  height: 40px;
-  margin: 0 20px;
-  position: relative;
-}
-form .form-row .textarea{
-  height: 70px;
-}
-.input-data input,
-.textarea textarea{
-  display: block;
-  width: 100%;
-  height: 100%;
-  border: none;
-  font-size: 17px;
-  border-bottom: 2px solid rgba(0,0,0, 0.12);
-}
-.input-data input:focus ~ label, .textarea textarea:focus ~ label,
-.input-data input:valid ~ label, .textarea textarea:valid ~ label{
-  transform: translateY(-20px);
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 14px;
-  color: #3498db;
+  box-sizing: border-box; /* Ensure input width includes padding and border */
 }
-.textarea textarea{
-  resize: none;
-  padding-top: 10px;
-}
-.input-data label{
-  position: absolute;
-  pointer-events: none;
-  bottom: 10px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-.textarea label{
+
+/* Optional: Add underline style for input fields */
+.underline {
   width: 100%;
-  bottom: 40px;
-  background: #fff;
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 5px;
 }
-.input-data .underline{
+
+.close-button {
   position: absolute;
-  bottom: 0;
-  height: 2px;
-  width: 100%;
-}
-.input-data .underline:before{
-  position: absolute;
-  content: "";
-  height: 2px;
-  width: 100%;
-  background: #3498db;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.3s ease;
-}
-.input-data input:focus ~ .underline:before,
-.input-data input:valid ~ .underline:before,
-.textarea textarea:focus ~ .underline:before,
-.textarea textarea:valid ~ .underline:before{
-  transform: scale(1);
-}
-.submit-btn .input-data{
-  overflow: hidden;
-  height: 45px!important;
-  width: 25%!important;
-}
-.submit-btn .input-data .inner{
-  height: 100%;
-  width: 300%;
-  position: absolute;
-  left: -100%;
-  background: -webkit-linear-gradient(right, #56d8e4, #9f01ea, #56d8e4, #9f01ea);
-  transition: all 0.4s;
-}
-.submit-btn .input-data:hover .inner{
-  left: 0;
-}
-.submit-btn .input-data input{
-  background: none;
+  top: 10px;
+  right: 10px;
+  background-color: #ccc;
   border: none;
-  color: #fff;
-  font-size: 17px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
   cursor: pointer;
-  position: relative;
-  z-index: 2;
 }
-@media (max-width: 700px) {
-  .container .text{
-    font-size: 30px;
-  }
-  .container form{
-    padding: 10px 0 0 0;
-  }
-  .container form .form-row{
-    display: block;
-  }
-  form .form-row .input-data{
-    margin: 35px 0!important;
-  }
-  .submit-btn .input-data{
-    width: 40%!important;
-  }
+
+.close-button:hover {
+  background-color: #999;
 }
 
 
-
-/* Table For All Data */
-
-.table-container{
-  margin:3% auto;
-  border-collapse: collapse;
-  border:outset;
-  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
-  max-height:500px;
-  max-width: fit-content;
+/* Table to show all charges */
+.alltable {
+  margin:5% auto;
   overflow-x: auto;
   overflow-y: auto;
+  max-height: 400px;
+  max-width: 1300px;
+  background-color:#ffffff ;
 }
 
-
 .table {
-  overflow-y: auto;
-  height: 200px;
-}
-.table thead th {
-  position: sticky;
-  top: 0px;
-}
-.table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
-th,
-td {
-  padding: 8px 16px;
+
+/* Responsive styles for radio buttons */
+@media (max-width: 768px) {
+  .radio-inputs {
+    flex-direction: column;
+  }
+}
+
+.popup-form {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
   border: 1px solid #ccc;
-  background: #eee;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
 }
-th {
-  background: #314755;
-  color:white;
+.popup-form label {
+  font-weight: bold;
 }
+

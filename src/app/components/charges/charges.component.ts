@@ -13,6 +13,7 @@ import { BrowserModule } from '@angular/platform-browser';
 })
 export class ChargesComponent implements OnInit {
   updateBtn=false;
+  showEditPopup = false;
   showTable=false;
   showCharges=false;
   chrgTable=false;
@@ -67,7 +68,7 @@ export class ChargesComponent implements OnInit {
   chargesTable(){
     this.showTable=!this.showTable;
     if(this.selectedOption=='loan'||this.selectedOption=='deposit'){
-    this.http.get<any>(`http://192.168.1.67:8080/${this.selectedOption}/charges/view`)
+    this.http.get<any>(`http://localhost:8080/${this.selectedOption}/charges/view`)
     .subscribe((response) =>  {
       this.charges=response;
       this.filteredData=response;
@@ -88,7 +89,7 @@ export class ChargesComponent implements OnInit {
 
 populateTable(){
   this.chrgTable=!this.chrgTable;
-  this.http.get<any>(`http://192.168.1.67:8080/viewAll/charges`)
+  this.http.get<any>(`http://localhost:8080/viewAll/charges`)
 
   .subscribe((response) =>  {
     this.allCharges=response;
@@ -121,7 +122,7 @@ addCharges(form:NgForm){
 
 
   onLoanSubmit(loanForm) {
-    const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/add/body`;
+    const url = `http://localhost:8080/${this.selectedOption}/charges/add/body`;
     const body = {
       chargesId:{
         pchChrgCode:loanForm.get('pchChrgCode').value|| '',
@@ -144,6 +145,7 @@ addCharges(form:NgForm){
 
         this.toastr.success("Data added succesfully");
         loanForm.reset();
+        this.showEditPopup = false;
 
   },(error: any) => {
     if(error){
@@ -156,7 +158,7 @@ addCharges(form:NgForm){
  }
 
  onDepositSubmit(depositForm){
-  const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/add/body`;
+  const url = `http://localhost:8080/${this.selectedOption}/charges/add/body`;
     const body = {
       chargesId:{
         pchChrgCode:depositForm.get('pchChrgCode').value|| '',
@@ -188,13 +190,16 @@ addCharges(form:NgForm){
   }
  }
 
-
+ toggleEditPopup() {
+  this.showEditPopup = !this.showEditPopup;
+}
 
 editCharge(item: any){
+  this.showEditPopup = !this.showEditPopup;
   this.updateBtn=!this.updateBtn;
   this.hideBtn=!this.hideBtn;
 this.selectedCharge = item;
-if(this.selectedOption==='loan'){
+if(this.selectedOption==='loan' && item.selected){
     this.loanForm.patchValue({
      pchChrgCode: item.chargesId.pchChrgCode,
      porOrgaCode: item.chargesId.porOrgaCode,
@@ -227,7 +232,7 @@ delCharge(selected: any ) {
     porOrgaCode:selected.chargesId.porOrgaCode
     }
   ]
-    return this.http.delete(`http://192.168.1.67:8080/${this.selectedOption}/charges/delete/requestBody`, {body:requestBody}).subscribe(
+    return this.http.delete(`http://localhost:8080/${this.selectedOption}/charges/delete/requestBody`, {body:requestBody}).subscribe(
       response=>{
         console.log('Charge Deleted Successfully');
         this.toastr.success(' Charge Deleted Successfully');
@@ -259,7 +264,7 @@ delMultipleCharges(selectedItem:any) {
   console.log(payload)
   console.log(this.selectedOption)
   return this.http
-    .delete(`http://192.168.1.67:8080/${this.selectedOption}/charges/delete/payload`, { body: payload })
+    .delete(`http://localhost:8080/${this.selectedOption}/charges/delete/payload`, { body: payload })
     .subscribe(
       () => {
         console.log('Selected rows deleted successfully');
@@ -276,7 +281,7 @@ delMultipleCharges(selectedItem:any) {
 
 updateLoan( event:Event,loanForm){
     event.preventDefault();
-    const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/update/body`;
+    const url = `http://localhost:8080/${this.selectedOption}/charges/update/body`;
     const body = {
       chargesId:{
         pchChrgCode:loanForm.get('pchChrgCode').value|| '',
@@ -299,7 +304,8 @@ updateLoan( event:Event,loanForm){
             console.log(response);
             console.log('Charge data Updated successfully');
               this.toastr.success('Charge data Updated successfully');
-              loanForm.reset()
+              loanForm.reset();
+              this.showEditPopup=false;
             },
             error => {
               this.toastr.warning('Error updating form data');
@@ -310,7 +316,7 @@ updateLoan( event:Event,loanForm){
 
 updateDeposit( event:Event,depositForm){
     event.preventDefault();
-    const url = `http://192.168.1.67:8080/${this.selectedOption}/charges/update/body`;
+    const url = `http://localhost:8080/${this.selectedOption}/charges/update/body`;
     const body ={
       chargesId:{
         pchChrgCode:depositForm.get('pchChrgCode').value|| '',
@@ -332,6 +338,7 @@ updateDeposit( event:Event,depositForm){
             console.log('Charge data Updated successfully');
               this.toastr.success('Charge data Updated successfully');
               depositForm.reset();
+              this.showEditPopup=false;
             },
             error => {
               this.toastr.warning('Error updating form data');
@@ -342,8 +349,10 @@ updateDeposit( event:Event,depositForm){
   genScript(selected: any) {
     if(this.selectedOption==='loan'){
     const requestBody = {
-      pchChrgCode: selected.pchChrgCode,
-      porOrgaCode: selected.porOrgaCode,
+      chargesId:{
+        pchChrgCode: selected.chargesId.pchChrgCode,
+        porOrgaCode: selected.chargesId.porOrgaCode,
+      },
       pchChrgDesc: selected.pchChrgDesc,
       pchChrgShort: selected.pchChrgShort,
       pelElmtCode: selected.pelElmtCode,
@@ -354,41 +363,69 @@ updateDeposit( event:Event,depositForm){
       socCharges: selected.socCharges,
     };
     console.log(requestBody);
+
     this.http
-      .post<string>(
-        `http://192.168.1.67:8080/generateScript/charges/${this.selectedOption}/requestBody`,
-        requestBody,
-        { responseType: 'text' as 'json' }
-      )
-      .subscribe((response) => {
-        alert(response);
-        console.log('Script Generated');
-        this.toastr.success('Script Generated Successfully');
-      });
-  }
-else{
-  const requestBody = {
-    pchChrgCode: selected.pchChrgCode,
-    porOrgaCode: selected.porOrgaCode,
+      .post(`http://localhost:8080/${this.selectedOption}/charges/generateScript/requestBody`,requestBody,{ responseType: 'text' }).subscribe(
+        (response) => {
+          alert(response);
+          console.log('Script Generated');
+          this.toastr.success('Script Generated Successfully');
+          const blob = new Blob([JSON.stringify(response)], {
+            type: 'application/txt',
+          });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'response.txt';
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        (error) => {
+
+          console.error('Error generating script:', error);
+          this.toastr.error('Error generating script');
+        }
+      );
+  }else
+  {
+    const requestBody = {
+    chargesId:{
+    pchChrgCode: selected.chargesId.pchChrgCode,
+    porOrgaCode: selected.chargesId.porOrgaCode},
+
     pchChrgDesc: selected.pchChrgDesc,
     pchChrgShort: selected.pchChrgShort,
     pelElmtCode: selected.pelElmtCode,
     ptrTranCode: selected.ptrTranCode,
     pchChrgProfit: selected.pchChrgProfit,
-    socCharges: selected.socCharges,
+    socCharges: selected.socCharges
+
   };
   console.log(requestBody);
-  this.http
-  .post<string>(
-    `http://192.168.1.67:8080/generateScript/charges/${this.selectedOption}/requestBody`,
-    requestBody,
-    { responseType: 'text' as 'json' }
-  )
-  .subscribe((response) => {
-    alert(response);
-    console.log('Script Generated');
-    this.toastr.success('Script Generated Successfully');
-  });
+
+  this.http.post(`http://localhost:8080/${this.selectedOption}/charges/generateScript/requestBody`,requestBody,{ responseType: 'text' }).subscribe(
+      (response) => {
+        alert(response);
+        console.log('Script Generated');
+        this.toastr.success('Script Generated Successfully');
+        const blob = new Blob([JSON.stringify(response)], {
+          type: 'application/txt',
+        });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'response.txt';
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+
+        console.error('Error generating script:', error);
+        this.toastr.error('Error generating script');
+      }
+    );
 }
 
 }

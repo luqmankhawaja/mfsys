@@ -52,7 +52,7 @@ background: linear-gradient(#9198e5, #712020);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 1.0px;
-  font-weight: 400;
+  font-weight: bold;
   padding: auto;
   color: #000;
   background-color: #fff;
@@ -111,6 +111,8 @@ th {
 }
 
 .form-container {
+  margin: 3% auto;
+  width: 500px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -122,20 +124,31 @@ th {
   flex-direction: column;
 }
 
-.form-container label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.form-container input[type="text"],
-.form-container input[type="file"] {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 5px;
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 
+.form-row input[type="text"],
+.form-row input[type="string"],
+.form-row input[type="date"],
+.form-row input[type="file"] {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.form-container label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
 .form-container button {
+  display: block;
+  margin:10px auto;
   background-color: #007bff;
   font-weight: 400;
   color: #fff;
@@ -145,9 +158,10 @@ th {
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
+  width: 120px;
+  height:40px;
 }
 
 .form-container button:hover {
   background-color: #0056b3;
-
 }

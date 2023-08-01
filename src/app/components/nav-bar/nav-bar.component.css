@@ -9,7 +9,6 @@ nav {
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-
 }
 
 nav .logo {
@@ -17,11 +16,10 @@ nav .logo {
   font-size: 30px;
   text-decoration: none;
   cursor: pointer;
-
-
 }
-nav .btn{
-  color:white;
+
+nav .btn {
+  color: white;
   font-size: 30px;
 }
 
@@ -32,22 +30,19 @@ nav ul {
   margin: 30%;
   justify-content: center; /* Added */
   flex-grow: 1;
-
 }
 
 nav li {
   margin: 0 10px;
-
 }
 
-
-
 nav li a {
-  color: grey;
+  color: rgb(247, 242, 242);
   font-size: 20px;
   text-decoration: none;
   cursor: pointer;
-
+  font-weight: bold; /* Add bold font weight */
+  font-family: 'poppins', sans-serif; /* Change the font family */
 }
 
 nav li a:hover {
@@ -56,7 +51,7 @@ nav li a:hover {
   font-weight: 500;
 }
 
-nav .btn:hover{
-  color:red;
-  font-size:34px;
+nav .btn:hover {
+  color: red;
+  font-size: 34px;
 }

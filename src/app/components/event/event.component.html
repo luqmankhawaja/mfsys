@@ -18,15 +18,16 @@
         </label>
       </div>
       <div class="btn-container">
-        <button *ngIf="selectedOption" class="card-btn" (click)="eventTable()">
-          <span> View
-          </span>
-        </button>
-        <button class="card-btn"  (click)="populateTable()">
-          <span> All Events
-          </span>
-        </button>
-
+        <div class="btn-wrapper">
+          <button *ngIf="selectedOption" class="card-btn" (click)="eventTable()">
+            <span> View</span>
+          </button>
+        </div>
+        <div class="btn-wrapper">
+          <button class="card-btn"  (click)="populateTable()">
+            <span> All Events</span>
+          </button>
+        </div>
       </div>
     </div>
     <div class="table-wrapper" *ngIf="showEvent">
@@ -86,42 +87,38 @@
 
 
 
-  <div class="container" *ngIf=" showEvent ">
-      <div class="text">
+  <div class="container" *ngIf=" showEvent " [class.popup-form]="showEditPopup">
+    <button class="close-button" *ngIf="showEditPopup" (click)="closePopup()">X</button>
+      <h2 class="text">
           Add Record
-      </div>
+      </h2>
       <form [formGroup]="eventForm" (ngSubmit)="submitForm(eventForm)">
         <div class="form-row">
           <div class="input-data">
-            <input type="number" id="petEventCode" name="petEventCode" [readonly]="updateBtn" formControlName="petEventCode">
-            <div class="underline"></div>
             <label for="petEventCode">petEventCode:</label>
+            <input type="number" id="petEventCode" name="petEventCode" [readonly]="updateBtn" formControlName="petEventCode">
           </div>
           <div class="input-data">
-            <input type="varchar" id="petEventDesc" name="item.petEventDesc"  formControlName="petEventDesc">
-            <div class="underline"></div>
             <label for="petEventDesc">petEventDesc:</label>
+            <input type="varchar" id="petEventDesc" name="item.petEventDesc"  formControlName="petEventDesc">
           </div>
         </div>
         <div class="form-row">
             <div class="input-data">
-              <input type="number" name="systemGenerated" formControlName="systemGenerated" maxlength="1">
-              <div class="underline"></div>
               <label for="systemGenerated">systemGenerated:</label>
+              <input type="number" name="systemGenerated" formControlName="systemGenerated" maxlength="1">
             </div>
             <div class="input-data">
 
             </div>
       </div>
       <div class="form-row submit-btn">
-        <button class="input-data" *ngIf="hideBtn">
-           <div class="inner"></div>
-           <input type="submit" value="submit" >
+        <button class="card-btn" type="submit" *ngIf="hideBtn">Submit
+           <!-- <input type="submit" value="submit" > -->
         </button>
 
-        <button class="input-data" *ngIf="updateBtn">
-          <div class="inner"></div>
-          <input type="button" value="Update" (click)="updateEvent($event,eventForm)">
+        <button class="card-btn" *ngIf="updateBtn" (click)="updateEvent($event,eventForm)">
+          Update
         </button>
       </div>
     </form>
@@ -130,7 +127,7 @@
 
   <!-- Table For All Events  -->
 
-  <div class="table-container" *ngIf="allEventsTable">
+  <div class="alltable" *ngIf="allEventsTable">
           <input
               type="number"
               [(ngModel)]="filterationNumber"
