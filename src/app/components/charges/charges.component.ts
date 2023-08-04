@@ -19,7 +19,7 @@ export class ChargesComponent implements OnInit {
   chrgTable=false;
   hideBtn=true;
   formData: any[] = [];
-  searchNumber!: 'varchar';
+  searchNumber!: 'string';
   filteredData: any[] = [];
   dataFilteration:any[]=[];
   selectedRows:any[]=[];
@@ -28,7 +28,7 @@ export class ChargesComponent implements OnInit {
   allCharges:any[]=[];
   updatedCharge:any[]=[];
   selectedOption:string;
-  filterationNumber!:'varchar';
+  filterationNumber!:'string';
 
   depositForm=new FormGroup({
     pchChrgCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
@@ -111,16 +111,6 @@ filteration(){
 
 
 
-
-
-addCharges(form:NgForm){
-  this.showCharges=!this.showCharges;
-
-}
-
-
-
-
   onLoanSubmit(loanForm) {
     const url = `http://localhost:8080/${this.selectedOption}/charges/add/body`;
     const body = {
@@ -193,7 +183,20 @@ addCharges(form:NgForm){
  toggleEditPopup() {
   this.showEditPopup = !this.showEditPopup;
 }
-
+closePopup() {
+  if(this.selectedOption==='deposit'){
+    this.showEditPopup=false;
+    this.updateBtn=!this.updateBtn;
+    this.hideBtn=!this.hideBtn;
+    this.depositForm.reset();
+  }
+  else{
+    this.showEditPopup=false;
+    this.updateBtn=!this.updateBtn;
+    this.hideBtn=!this.hideBtn;
+    this.loanForm.reset();
+  }
+}
 editCharge(item: any){
   this.showEditPopup = !this.showEditPopup;
   this.updateBtn=!this.updateBtn;

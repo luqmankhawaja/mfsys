@@ -1,0 +1,91 @@
+.background {
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+.card {
+  margin: 3% auto;
+  background-color: #ffffff;
+  padding: 20px;
+  height:250px;
+  align-items: center;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+h2 {
+  text-align: center;
+}
+.file-upload {
+  float: left;
+  margin-left: 20%;
+  border: 2px dashed #ccc;
+  width: 300px;
+  height: 150px;
+  text-align: center;
+  cursor: pointer;
+
+}
+.json-upload{
+  float: right;
+  margin-right:20%;
+  border: 2px dashed #ccc;
+  width: 300px;
+  height: 150px;
+  text-align: center;
+  cursor: pointer;
+}
+.file-upload.dragging {
+  border-color: #007bff;
+}
+.btn-container {
+  display: flex;
+  margin:1% 43%;
+}
+
+
+.btn-wrapper {
+  /* flex: 1; */
+  margin: 0 5px;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 120px;
+}
+.table-wrapper {
+  background-color:#ffffff ;
+  margin:1% auto;
+  max-width: 1000px;
+  max-height: 700px;
+  overflow: auto;
+}
+h3 {
+  text-align: center;
+}
+
+.table-container {
+  padding: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-btn {
+  margin: 5px;
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+.pagination-btn.active {
+  background-color: #007bff;
+  color: #fff;
+}

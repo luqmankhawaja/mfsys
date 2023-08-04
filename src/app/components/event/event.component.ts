@@ -21,8 +21,8 @@ export class EventComponent implements OnInit {
   showEvent=false;
   allEvents:any[]=[];
   allEventsTable=false;
-  searchNumber!:'number';
-  filterationNumber!:'number'
+  searchNumber!:number;
+  filterationNumber!:number;
   filteredData: any[] = [];
   dataFilteration:any[]=[];
   events: any[]=[];
@@ -94,7 +94,7 @@ export class EventComponent implements OnInit {
   }
   filteration(){
     if (this.filterationNumber !== null) {
-      this.dataFilteration = this.allEvents.filter((item: { eventId: { petEventCode: number }; }) => item.eventId.petEventCode === Number(this.searchNumber));
+      this.dataFilteration = this.allEvents.filter((item: { eventId: { petEventCode: number }; }) => item.eventId.petEventCode === Number(this.filterationNumber));
     } else {
       this.dataFilteration = this.allEvents;
     }
@@ -179,6 +179,8 @@ delEvent(selected: any) {
 
   closePopup() {
     this.showEditPopup=false;
+    this.updateBtn=!this.updateBtn;
+    this.hideBtn=!this.hideBtn;
     this.eventForm.reset();
   }
   editEvent(item: any){
@@ -228,6 +230,7 @@ delEvent(selected: any) {
         this.toastr.success("Data updated succesfully");
         eventForm.reset();
         this.showEditPopup = false;
+        this.updateBtn=!this.updateBtn;
 
   },(error: any) => {
     if(error){

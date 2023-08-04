@@ -34,13 +34,13 @@
 
 
       <div class="table-wrapper"  *ngIf="showTable">
-        <input type="varchar"  [(ngModel)]="searchNumber" (input)="filterData()"  placeholder="Enter a number to search">
+        <input type="String"  [(ngModel)]="searchNumber" (input)="filterData()"  placeholder="Enter a number to search">
        <table class="fl-table" >
           <thead>
             <tr>
               <th>Select</th>
-              <th>porOrgaCode</th>
               <th>ptrTranCode</th>
+              <th>porOrgaCode</th>
               <th>petEventCode</th>
               <th>ptrTranDesc</th>
               <th>System Generated</th>
@@ -59,26 +59,13 @@
                   name="selected{{ item }}"
                   (change)="updateSelectedRows(item)"  />
               </td>
-              <td> {{ item.transId.porOrgaCode }} </td>
-
-
               <td> {{ item.transId.ptrTranCode }} </td>
-
-
+              <td> {{ item.transId.porOrgaCode }} </td>
               <td> {{ item.petEventCode }} </td>
-
-
               <td> {{ item.ptrTranDesc }} </td>
-
-
-              <td> {{ item.systemGenerated }}
-
-
-              </td>
-                 <td>
-                <i class="far fa-edit"  [disabled]="!item.selected" (click)="editTrans(item)">
-
-                </i>
+              <td> {{ item.systemGenerated }} </td>
+              <td>
+                <i class="far fa-edit"  [disabled]="!item.selected" (click)="editTrans(item)"></i>
               </td>
               <td><i class="fas fa-redo"  [disabled]="!item.selected" (click)="genScript(item)">
                 </i></td>
@@ -103,11 +90,11 @@
         <div class="form-row">
           <div class="input-data">
             <label for="porOrgaCode">porOrgaCode:</label>
-            <input type="varchar" id="porOrgaCode" name="porOrgaCode" formControlName="porOrgaCode">
+            <input type="String" id="porOrgaCode" name="porOrgaCode" formControlName="porOrgaCode">
           </div>
           <div class="input-data">
             <label for="ptrTranCode">ptrTranCode:</label>
-            <input type="varchar" id="ptrTranCode" [readonly]="updateBtn" formControlName="ptrTranCode">
+            <input type="String" id="ptrTranCode" [readonly]="updateBtn" formControlName="ptrTranCode">
           </div>
         </div>
         <div class="form-row">
@@ -117,7 +104,7 @@
             </div>
             <div class="input-data">
               <label for="ptrTranDesc">ptrTranDesc:</label>
-              <input type="varchar" name="ptrTranDesc" formControlName="ptrTranDesc">
+              <input type="String" name="ptrTranDesc" formControlName="ptrTranDesc">
             </div>
         </div>
         <div class="form-row">
@@ -144,7 +131,7 @@
                                           <!-- Table For All Data -->
 
   <div class="table-container"  *ngIf="allTransTable">
-      <input type="varchar"  [(ngModel)]="filterationNumber" (input)="filteration()"  placeholder="Enter a number to search">
+      <input type="String"  [(ngModel)]="filterationNumber" (input)="filteration()"  placeholder="Enter a number to search">
     <table class="table" >
       <thead>
         <tr>

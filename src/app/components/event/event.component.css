@@ -3,7 +3,6 @@
   padding: 20px;
 }
 
-/* Styles for the card containing radio buttons and buttons */
 .card {
   margin-top: 3%;
   background-color: #ffffff;
@@ -169,12 +168,7 @@ input {
   table-layout: fixed;
 }
 
-/* Responsive styles for radio buttons */
-@media (max-width: 768px) {
-  .radio-inputs {
-    flex-direction: column;
-  }
-}
+
 
 .popup-form {
   position: fixed;
@@ -190,4 +184,5 @@ input {
 .popup-form label {
   font-weight: bold;
 }
+
 

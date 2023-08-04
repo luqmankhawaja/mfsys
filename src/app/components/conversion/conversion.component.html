@@ -1,0 +1,49 @@
+<div class="background">
+ <app-nav-bar></app-nav-bar>
+  <div class="container">
+    <div class="card">
+      <h2>Upload Your File</h2>
+      <div class="file-upload">
+        <label class="box" for="file-upload">
+          <input id="file-upload" type="file" multiple (change)="onFilesSelected($event)" accept=".xlsx">
+          <span class="box-text">Click/Drop an Excel File to upload</span>
+        </label>
+      </div>
+      <div class="json-upload">
+        <label class="box" for="json-upload">
+          <input id="json-upload" type="file" (change)="onJSONFileSelected($event)" accept=".json">
+          <span class="box-text">Click/Drop a JSON File to upload</span>
+        </label>
+      </div>
+    </div>
+
+
+
+    <div class="table-wrapper" *ngIf="excelData && excelData[currentPageIndex]">
+      <div *ngFor="let sheetData of excelData[currentPageIndex]">
+        <h3>{{ files[currentPageIndex].name }}</h3>
+        <table class="tableFixHead">
+          <thead>
+            <tr>
+              <th *ngFor="let header of sheetData[0]">{{ header }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of sheetData.slice(1)">
+              <td *ngFor="let cell of row">{{ cell }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="pagination" *ngIf="files.length > 1">
+      <button class="pagination-btn" *ngFor="let file of files; let i = index" (click)="goToPage(i)" [class.active]="i === currentPageIndex">
+        {{ i + 1 }} - {{ file.name }}
+      </button>
+    </div>
+    <br><br>
+    <button class="save-btn" *ngIf="excelData && excelData[currentPageIndex]" (click)="saveAsJSON()">Save as JSON</button>
+    <button class="save-btn" *ngIf="excelData && excelData[currentPageIndex]" (click)="saveAsExcel()">Save as Excel</button>
+  </div>
+</div>

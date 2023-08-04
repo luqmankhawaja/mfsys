@@ -30,7 +30,7 @@
 
   <div class="table-wrapper" *ngIf="showTable" >
         <input
-        type="varchar"
+        type="string"
         [(ngModel)]="searchNumber"
         (input)="filterData()"
         placeholder="Enter a chrgcode to search"
@@ -103,6 +103,7 @@
 
 
       <div class="container" *ngIf="showTable && selectedOption === 'deposit'" [class.popup-form]="showEditPopup">
+        <button class="close-button" *ngIf="showEditPopup" (click)="closePopup()">X</button>
         <h2 class="text">
           Add Record
         </h2>
@@ -110,37 +111,37 @@
             <div class="form-row">
               <div class="input-data">
                 <label for="pchChrgCode">pchChrgCode:</label>
-                <input type="varchar" name="pchChrgCode" [readonly]="updateBtn" formControlName="pchChrgCode"  maxlength="3" />
+                <input type="string" name="pchChrgCode" [readonly]="updateBtn" formControlName="pchChrgCode"  maxlength="3" />
 
 
               </div>
               <div class="input-data">
                 <label for="porOrgaCode">porOrgaCode:</label>
-                <input type="varchar" name="porOrgaCode" formControlName="porOrgaCode"  maxlength="10" />
+                <input type="string" name="porOrgaCode" formControlName="porOrgaCode"  maxlength="10" />
               </div>
             </div>
             <div class="form-row">
                 <div class="input-data">
                   <label for="pchChrgDesc">pchChrgDesc:</label>
-                  <input  type="varchar" name="pchChrgDesc" formControlName="pchChrgDesc"  maxlength="40" />
+                  <input  type="string" name="pchChrgDesc" formControlName="pchChrgDesc"  maxlength="40" />
                 </div>
                 <div class="input-data">
                   <label for="pchChrgShort">pchChrgShort:</label>
-                  <input type="varchar"  name="pchChrgShort" formControlName="pchChrgShort"   maxlength="20"  />
+                  <input type="string"  name="pchChrgShort" formControlName="pchChrgShort"   maxlength="20"  />
                 </div>
             </div>
             <div class="form-row">
                 <div class="input-data">
                   <label for="pelElmtCode">pelElmtCode:</label>
 
-                  <input  type="varchar" name="pelElmtCode" formControlName="pelElmtCode"   maxlength="10" />
+                  <input  type="string" name="pelElmtCode" formControlName="pelElmtCode"   maxlength="10" />
 
 
                 </div>
                 <div class="input-data">
                   <label for="ptrTranCode">ptrTranCode:</label>
 
-                  <input type="varchar" name="ptrTranCode"  formControlName="ptrTranCode"    maxlength="3"/>
+                  <input type="string" name="ptrTranCode"  formControlName="ptrTranCode"    maxlength="3"/>
                 </div>
             </div>
             <div class="form-row">
@@ -189,41 +190,42 @@
 
 
     <div class="form-container" *ngIf="showTable && selectedOption==='loan'" [class.popup-form]="showEditPopup">
-      <div class="text">
+       <button class="close-button" *ngIf="showEditPopup" (click)="closePopup()">X</button>
+      <h2 class="text">
           Add Record
-      </div>
+      </h2>
       <form [formGroup]="loanForm" (ngSubmit)="onLoanSubmit(loanForm)">
         <div class="form-row">
           <div class="input-data">
             <label for="pchChrgCode">pchChrgCode:</label>
-            <input type="varchar" id="pchChrgCode" [readonly]="updateBtn" name="pchChrgCode" formControlName="pchChrgCode" maxlength="3">
+            <input type="string" id="pchChrgCode" [readonly]="updateBtn" name="pchChrgCode" formControlName="pchChrgCode" maxlength="3">
 
 
           </div>
           <div class="input-data">
             <label for="porOrgaCode">porOrgaCode:</label>
-            <input type="varchar" id="porOrgaCode"  formControlName="porOrgaCode" maxlength="10">
+            <input type="string" id="porOrgaCode"  formControlName="porOrgaCode" maxlength="10">
           </div>
         </div>
         <div class="form-row">
             <div class="input-data">
               <label for="pchChrgDesc">pchChrgDesc:</label>
-              <input type="varchar" id="pchChrgDesc" name="pchChrgDesc" formControlName="pchChrgDesc" maxlength="40">
+              <input type="string" id="pchChrgDesc" name="pchChrgDesc" formControlName="pchChrgDesc" maxlength="40">
             </div>
             <div class="input-data">
               <label for="pchChrgShort">pchChrgShort:</label>
-              <input type="varchar" name="pchChrgShort" formControlName="pchChrgShort" maxlength="20">
+              <input type="string" name="pchChrgShort" formControlName="pchChrgShort" maxlength="20">
             </div>
         </div>
         <div class="form-row">
             <div class="input-data">
               <label for="pelElmtCode">pelElmtCode:</label>
-              <input type="varchar" name="pelElmtCode" formControlName="pelElmtCode" maxlength="10">
+              <input type="string" name="pelElmtCode" formControlName="pelElmtCode" maxlength="10">
 
             </div>
             <div class="input-data">
               <label for="ptrTranCode">ptrTranCode:</label>
-              <input type="varchar" name="ptrTranCode" formControlName="ptrTranCode" maxlength="3">
+              <input type="string" name="ptrTranCode" formControlName="ptrTranCode" maxlength="3">
 
 
             </div>
@@ -267,7 +269,7 @@
 
                         <!--Table to show all charges-->
   <div class="alltable" *ngIf="chrgTable" >
-       <input type="varchar" [(ngModel)]="filterationNumber" (input)="filteration()" placeholder="Enter a chrgcode to search" />
+       <input type="string" [(ngModel)]="filterationNumber" (input)="filteration()" placeholder="Enter a chrgcode to search" />
       <table class="table">
         <thead>
           <tr>

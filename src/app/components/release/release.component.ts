@@ -16,8 +16,9 @@ export class ReleaseComponent implements OnInit {
   showForm=false;
   selectedOption!: string;
   selectedVersion: string;
+  searchNumber:string;
   releaseData:any[]=[];
-  newData:any[]=[];
+  filteredData:any[]=[];
   versions:any;
 
 
@@ -27,6 +28,9 @@ export class ReleaseComponent implements OnInit {
     type: new FormControl('',[Validators.required]),
     selectedVersion:new FormControl('',[Validators.required]),
     userId:new FormControl('',[Validators.required,Validators.maxLength(30)]),
+    bugFixes:new FormControl('',[Validators.required]),
+    functions:new FormControl('',[Validators.required]),
+    description:new FormControl('',[Validators.required]),
     date:new FormControl('',[Validators.required]),
     uploadedFiles: new FormArray([]),
 
@@ -37,8 +41,20 @@ export class ReleaseComponent implements OnInit {
     this.setOptions();
   }
 
+  addBulletPoint(event: Event): void {
+    event.preventDefault();
+    const textareaElement = event.target as HTMLTextAreaElement;
+    const fieldName = textareaElement.getAttribute('formControlName');
+
+    if (fieldName) {
+      const control = this.releaseForm.get(fieldName) as FormControl;
+      const currentValue = control.value;
+      const newValue = currentValue ? currentValue + '\n• ' : '• ';
+      control.setValue(newValue);
+    }
+  }
   setOptions() {
-      this.http.get<any>(`http://192.168.1.67:8080/getVersions`)
+      this.http.get<any>(`http://localhost:8080/getVersions`)
       .subscribe((response) => {
           console.log(response)
           this.versions = response;
@@ -60,14 +76,16 @@ export class ReleaseComponent implements OnInit {
     });
   }
   regVersion(){
+
     console.log(this.selectedVersion)
     const newVersion= this.selectedVersion;
     const requestBody={releaseVersion:newVersion}
-    this.http.post<any>(`http://192.168.1.67:8080/registerRelease/body`,requestBody).subscribe(
+    this.http.post<any>(`http://localhost:8080/registerRelease/body`,requestBody).subscribe(
       (response) => {
 
         console.log(response)
         this.toastr.success('Release Registered successfully');
+
 
       },
       (error) => {
@@ -94,23 +112,11 @@ export class ReleaseComponent implements OnInit {
     }
   }
   filterData(){
-    console.log(this.selectedVersion)
-    this.http.get<any>(`http://192.168.1.67:8080/view/${this.selectedVersion}`)
-    .subscribe((response) => {
-
-        console.log(response);
-        this.showTable=true;
-        this.isFilterData=true;
-        this.newData=[response];
-
-
-    },
-    (error) => {
-      alert("No data Found");
-      this.populateTable = false;
+    if(this.searchNumber.length>0){
+      this.filteredData=this.releaseData.filter((item:{ releaseVersion: string} ) => item.releaseVersion===this.searchNumber)
+    }else
+    this.filteredData=this.releaseData;
     }
-  );
-  }
 
   submitForm() {
     const formData = new FormData();
@@ -119,6 +125,9 @@ export class ReleaseComponent implements OnInit {
       release_version: this.releaseForm.get('selectedVersion').value || '',
       user_name: this.releaseForm.get('userId').value || '',
       type: this.releaseForm.get('type').value || '',
+      bugFixes:this.releaseForm.get('bugFixes').value || '',
+      functions:this.releaseForm.get('functions').value || '',
+      description:this.releaseForm.get('description').value || '',
       date: this.releaseForm.get('date').value || '',
     };
 
@@ -130,7 +139,7 @@ export class ReleaseComponent implements OnInit {
     }
     console.log(formData);
     // Make sure to replace 'YOUR_BACKEND_ENDPOINT' with the actual backend URL
-    this.http.post('http://192.168.1.67:8080/saveVersion', formData).subscribe(
+    this.http.post('http://localhost:8080/saveVersion', formData).subscribe(
       (response) => {
         // Handle success response, if needed
         console.log('Request successful:', response);
@@ -144,14 +153,15 @@ export class ReleaseComponent implements OnInit {
   }
 
   releaseTable(){
-    this.showTable = true;
-    this.isFilterData=false;
-    this.http.get<any>(`http://192.168.1.67:8080/viewAllLatestVersion`)
+    this.showTable = !this.showTable;
+
+    this.http.get<any>(`http://localhost:8080/viewAllLatestVersion`)
       .subscribe(
         (response) => {
 
           console.log(response)
           this.releaseData=response;
+          this.filteredData=response;
 
 
 
@@ -164,7 +174,7 @@ export class ReleaseComponent implements OnInit {
       );
   }
   download(selected: any) {
-    this.http.get(`http://192.168.1.67:8080/download/${selected.releaseVersion}`, {responseType: 'blob'}).subscribe(
+    this.http.get(`http://localhost:8080/download/${selected.releaseVersion}`, {responseType: 'blob'}).subscribe(
         (response: Blob) => {
           console.log('Script Generated');
           this.toastr.success('Script Generated Successfully');

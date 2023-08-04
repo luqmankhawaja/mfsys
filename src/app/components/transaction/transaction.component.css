@@ -51,14 +51,14 @@
   overflow-x: auto;
   overflow-y: auto;
   max-height: 400px;
-  max-width: 900px;
+  max-width: 1000px;
   margin-bottom: 20px;
   margin-top: 2%;
   margin-left:auto;
   margin-right: auto;
 }
 
-.table-wrapper input[type="varchar"] {
+.table-wrapper input[type="string"] {
   padding: 5px 10px;
   border: 1px solid #ccc;
   border-radius: 5px;

@@ -15,6 +15,7 @@ import { TransactionComponent } from './components/transaction/transaction.compo
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthServiceService } from './services/auth-service.service';
 import { ReleaseComponent } from './components/release/release.component';
+import { ConversionComponent } from './components/conversion/conversion.component';
 
 
 
@@ -29,6 +30,7 @@ import { ReleaseComponent } from './components/release/release.component';
     EventComponent,
     TransactionComponent,
     ReleaseComponent,
+    ConversionComponent,
 
 
 

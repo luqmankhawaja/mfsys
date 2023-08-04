@@ -45,6 +45,10 @@ export class AuthServiceService {
     this.isAuthenticated = true;
     this.router.navigate(['/release'])
   }
+  conversion(){
+    this.isAuthenticated = true;
+    this.router.navigate(['/conversion'])
+  }
   getData() {
     // Replace the URL with the actual endpoint to fetch the data
     return this.http.get('http://example.com/data');

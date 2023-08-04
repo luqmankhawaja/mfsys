@@ -38,6 +38,8 @@ background: linear-gradient(#d7cfcf, #9198e5);
 transition: 0.5s ease-in-out;
 background: linear-gradient(#9198e5, #712020);
 }
+
+
 .btn-card{
   display: flex;
   margin:4% auto;
@@ -86,7 +88,14 @@ background: linear-gradient(#9198e5, #712020);
   overflow-x: auto;
   overflow-y: auto;
 }
+.table-wrapper input[type="string"] {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 400px;
 
+}
 .tableFixHead {
   overflow-y: auto;
   height: 200px;

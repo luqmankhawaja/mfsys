@@ -6,6 +6,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { EventComponent } from './components/event/event.component';
 import { ChargesComponent } from './components/charges/charges.component';
+import { ConversionComponent } from './components/conversion/conversion.component';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { AuthGuard } from './services/auth.guard';
 import { AuthServiceService } from './services/auth-service.service';
@@ -22,7 +23,8 @@ const routes: Routes = [
       { path: 'event', component: EventComponent },
       { path: 'transaction', component: TransactionComponent },
       { path: 'charges', component: ChargesComponent },
-      { path:'release', component:ReleaseComponent}
+      { path:'release', component:ReleaseComponent},
+      {path:'conversion',component:ConversionComponent}
     ]
   },
   { path: 'sign-in', component: SignInComponent },

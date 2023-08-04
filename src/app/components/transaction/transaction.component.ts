@@ -20,8 +20,8 @@ export class TransactionComponent implements OnInit {
   updateBtn=false;
   selectedTrans:any;
   formData: any = {};
-  searchNumber!: 'varchar';
-  filterationNumber!:'varchar';
+  searchNumber!: String ;
+  filterationNumber!:String;
   filteredData: any[] = [];
   transactions: any[]=[];
   dataFilteration:any[]=[];
@@ -43,7 +43,7 @@ export class TransactionComponent implements OnInit {
     ptrTranCode:new FormControl('',[Validators.required,Validators.maxLength(3)]),
     petEventCode:new FormControl('',[Validators.required]),
     ptrTranDesc:new FormControl('',[Validators.required,Validators.maxLength(40)]),
-    systemGeneratederated:new FormControl('',[Validators.required,Validators.maxLength(1)]),
+    systemGenerated:new FormControl('',[Validators.required,Validators.maxLength(1)]),
   })
 
 //          Table For Selected Data
@@ -61,13 +61,12 @@ transTable(){
   }
 }
 filterData() {
-
-    if(this.searchNumber!== null){
-      this.filteredData = this.transactions.filter((item:{ transId:{ ptrTranCode: string}; }) => item.transId.ptrTranCode=== this.searchNumber);
-  }
-    else{
-     this.filteredData=this.transactions
+  if (this.searchNumber.length>0) {
+      this.filteredData = this.transactions.filter((item: { transId: { ptrTranCode: String }; })=> item.transId.ptrTranCode === this.searchNumber);
     }
+  else {
+    this.filteredData = this.transactions;
+  }
   }
 
 
@@ -78,7 +77,7 @@ populateTable(){
   this.http.get<any>(`http://localhost:8080/viewAll/transaction`).subscribe((response)=>{
     this.allTransactions=response;
     this.dataFilteration=response;
-
+    console.log(response)
   })
 
 }
@@ -102,7 +101,7 @@ const  payload={
   },
   "petEventCode": transForm.get('petEventCode').value || '',
   "ptrTranDesc": transForm.get('ptrTranDesc').value || '',
-  "systemGeneratederated":transForm.get('systemGenerated').value || ''
+  "systemGenerated":transForm.get('systemGenerated').value || ''
 
 }
 
@@ -124,6 +123,12 @@ const  payload={
   }
 
 }
+closePopup() {
+  this.showEditPopup=false;
+  this.updateBtn=!this.updateBtn;
+  this.hideBtn=!this.hideBtn;
+  this.transForm.reset();
+}
 
 editTrans(item: any){
   this.showEditPopup=!this.showEditPopup;
@@ -131,17 +136,14 @@ editTrans(item: any){
   this.hideBtn=!this.hideBtn;
   this.selectedTrans = item;
   this.transForm.patchValue({
-  porOrgaCode: item.tranId.porOrgaCode,
-  ptrTranCode: item.tranId.ptrTranCode,
+  porOrgaCode: item.transId.porOrgaCode,
+  ptrTranCode: item.transId.ptrTranCode,
   petEventCode: item.petEventCode,
   ptrTranDesc: item.ptrTranDesc,
   systemGenerated: item.systemGenerated
 });
 }
-closePopup() {
-  this.showEditPopup=false;
-  this.transForm.reset();
-}
+
 
 delTrans(selected:any) {
   console.log(selected);
