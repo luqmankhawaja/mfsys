@@ -1,3 +1,4 @@
+import { CalendarModule } from 'primeng/calendar';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -43,6 +44,7 @@ import { ConversionComponent } from './components/conversion/conversion.componen
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

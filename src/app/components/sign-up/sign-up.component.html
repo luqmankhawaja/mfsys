@@ -21,7 +21,7 @@
               <span id="error" *ngIf="confirmPassword && confirmPassword.invalid && confirmPassword.touched">*add password</span><br />
               <span *ngIf="signup_Form.getError('passwordMatchError')">re-enter your password</span>
             </div>
-            <button type="submit" [disabled]="!signup_Form.valid" class="btn">Signup</button>
+            <button type="submit" [disabled]="!signup_Form.valid" class="btn">Signup</button><br><br>
             <a class="d-grid gap-2 mt-4" routerLink="/login">Already registered? Go to Login</a>
           </form>
         </div>

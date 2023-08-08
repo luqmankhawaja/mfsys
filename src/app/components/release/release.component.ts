@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder,FormGroup,FormControl,Validators, FormArray } from '@angular/forms';
+import { FormBuilder,FormGroup,FormControl,Validators, FormArray, FormControlName } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
+import { CalendarModule } from 'primeng/calendar';
+
 @Component({
   selector: 'app-release',
   templateUrl: './release.component.html',
@@ -20,20 +22,40 @@ export class ReleaseComponent implements OnInit {
   releaseData:any[]=[];
   filteredData:any[]=[];
   versions:any;
+  statusOptions = [
+    { label: 'Select Status', value: '' },
+    { label: 'Completed', value: 'completed' },
+    { label: 'In-Progress', value: 'inProgress' },
+    { label: 'To Do', value: 'Todo' },
+  ];
+  releaseType=[
+    {label:'Select Type', value:''},
+    {label:'Script',value:'script'},
+    {label:'Store Procedure',value:'storeProcedure'}
+  ]
 
 
   constructor(private FormBuilder:FormBuilder,private http:HttpClient,private toastr:ToastrService) { }
 
   releaseForm = new FormGroup({
-    type: new FormControl('',[Validators.required]),
-    selectedVersion:new FormControl('',[Validators.required]),
+    releaseType:new FormControl('',[Validators.required]),
+    releaseVersion:new FormControl('',[Validators.required]),
     userId:new FormControl('',[Validators.required,Validators.maxLength(30)]),
     bugFixes:new FormControl('',[Validators.required]),
-    functions:new FormControl('',[Validators.required]),
+    functionalities:new FormControl('',[Validators.required]),
     description:new FormControl('',[Validators.required]),
     date:new FormControl('',[Validators.required]),
-    uploadedFiles: new FormArray([]),
+    uploadedFiles: new FormArray([],[Validators.required]),
 
+
+  });
+
+  registerForm=new FormGroup({
+
+      releaseVersion:new FormControl('',[Validators.required]),
+      startDate:new FormControl('',[Validators.required]),
+      endDate:new FormControl('',[Validators.required]),
+      status:new FormControl('',[Validators.required])
 
   });
 
@@ -49,10 +71,11 @@ export class ReleaseComponent implements OnInit {
     if (fieldName) {
       const control = this.releaseForm.get(fieldName) as FormControl;
       const currentValue = control.value;
-      const newValue = currentValue ? currentValue + '\n• ' : '• ';
+      const newValue = currentValue ? currentValue + ', ' : ', ';
       control.setValue(newValue);
     }
-  }
+}
+
   setOptions() {
       this.http.get<any>(`http://localhost:8080/getVersions`)
       .subscribe((response) => {
@@ -62,7 +85,7 @@ export class ReleaseComponent implements OnInit {
 
         },
         (error) => {
-          // this.toastr.warning('Please enter valid data');
+          this.toastr.warning('Please enter valid data');
 
         }
       );
@@ -71,28 +94,24 @@ export class ReleaseComponent implements OnInit {
   onSave(){
     this.showForm=!this.showForm
     this.releaseForm.patchValue({
-      type:this.selectedOption,
-      selectedVersion:this.selectedVersion
+
+      releaseVersion: this.registerForm.get('releaseVersion').value
     });
   }
   regVersion(){
 
     console.log(this.selectedVersion)
-    const newVersion= this.selectedVersion;
-    const requestBody={releaseVersion:newVersion}
-    this.http.post<any>(`http://localhost:8080/registerRelease/body`,requestBody).subscribe(
+    console.log(this.registerForm)
+    this.http.post<any>('http://localhost:8080/registerRelease/body', this.registerForm.value).subscribe(
       (response) => {
-
-        console.log(response)
-        this.toastr.success('Release Registered successfully');
-
-
+        console.log('Registered successfully');
+        this.toastr.success('uploaded Successfully')
+        this.registerForm.reset();
       },
       (error) => {
-        this.toastr.warning('Please enter valid data');
+        console.error('Error occurred:', error);
+      });
 
-      }
-    );
   }
   onFileUpload(event: Event) {
     const inputFiles = (event.target as HTMLInputElement).files;
@@ -112,44 +131,49 @@ export class ReleaseComponent implements OnInit {
     }
   }
   filterData(){
-    if(this.searchNumber.length>0){
+    if(this.searchNumber.length > 0){
       this.filteredData=this.releaseData.filter((item:{ releaseVersion: string} ) => item.releaseVersion===this.searchNumber)
     }else
     this.filteredData=this.releaseData;
     }
 
   submitForm() {
-    const formData = new FormData();
 
-    const valueObj = {
-      release_version: this.releaseForm.get('selectedVersion').value || '',
-      user_name: this.releaseForm.get('userId').value || '',
-      type: this.releaseForm.get('type').value || '',
-      bugFixes:this.releaseForm.get('bugFixes').value || '',
-      functions:this.releaseForm.get('functions').value || '',
-      description:this.releaseForm.get('description').value || '',
-      date: this.releaseForm.get('date').value || '',
-    };
+      const formData = new FormData();
 
-    formData.append('value', JSON.stringify(valueObj));
+      const valueObj = {
+        type: this.releaseForm.get('releaseType').value || '',
+        releaseVersion: this.releaseForm.get('releaseVersion').value || '',
+        userName: this.releaseForm.get('userId').value || '',
+        bugFixes: this.releaseForm.get('bugFixes').value || '',
+        functionalities: this.releaseForm.get('functionalities').value || '',
+        description: this.releaseForm.get('description').value || '',
+        date: this.releaseForm.get('date').value || '',
+      };
 
-    // Append each selected file to the FormData
-    for (const file of this.releaseForm.get('uploadedFiles').value) {
-      formData.append('body', file, file.name);
-    }
-    console.log(formData);
-    // Make sure to replace 'YOUR_BACKEND_ENDPOINT' with the actual backend URL
-    this.http.post('http://localhost:8080/saveVersion', formData).subscribe(
-      (response) => {
-        // Handle success response, if needed
-        console.log('Request successful:', response);
-        this.toastr.success('uploaded Successfully')
-      },
-      (error) => {
-        // Handle error, if needed
-        console.error('Error occurred:', error);
+      formData.append('value', JSON.stringify(valueObj));
+
+    const files: FileList | null = this.releaseForm.get('uploadedFiles').value;
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const file: File = files[i];
+        formData.append('body', file);
       }
-    );
+    }
+      this.http.post<any>(`http://localhost:8080/saveVersion`, formData).subscribe(
+        (response) => {
+
+          console.log('Request successful');
+          this.toastr.success('Uploaded Successfully');
+          this.releaseForm.reset();
+          this.showForm=!this.showForm
+        },
+        (error) => {
+          console.error('Error occurred:', error);
+        }
+      );
+
+
   }
 
   releaseTable(){

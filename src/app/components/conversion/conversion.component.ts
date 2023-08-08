@@ -8,47 +8,50 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./conversion.component.css']
 })
 export class ConversionComponent {
-  excelData: any[][][] = [];
-  public files: File[] = [];
-  public currentPageIndex: number = 0;
-
-  onFileDropped(event: any) {
-    this.files = event.dataTransfer.files;
-    this.processFiles();
-  }
+  tableHeaders: string[] = [];
+  tableData: any[][][] = [];
+  files: File[] = [];
+  currentPageIndex: number = 0;
 
   onFilesSelected(event: any): void {
     this.files = event.target.files;
+    this.tableData = [];
     this.processFiles();
   }
 
-  onJSONFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
+  processFiles() {
+    this.tableData = [];
+    for (let i = 0; i < this.files.length; i++) {
+      const file = this.files[i];
       const fileReader = new FileReader();
       fileReader.onload = (e: any) => {
-        const jsonData = JSON.parse(e.target.result);
-        const excelData = this.convertJSONToExcelData(jsonData);
-        this.excelData.push([excelData]);
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const jsonData = this.processExcelData(workbook);
+        this.tableData.push(jsonData);
       };
-      fileReader.readAsText(file);
+      fileReader.readAsArrayBuffer(file);
     }
+  }
+
+  processExcelData(workbook: XLSX.WorkBook): any[][] {
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet: XLSX.WorkSheet = workbook.Sheets[firstSheetName];
+    const jsonData = XLSX.utils.sheet_to_json<any[]>(worksheet, { header: 1 });
+    this.tableHeaders = jsonData[0]; // Assuming headers are same for all sheets
+    return jsonData.slice(1);
+  }
+
+  getPageIndices(): number[] {
+    return Array.from({ length: this.files.length }, (_, i) => i);
   }
 
   goToPage(pageIndex: number): void {
     this.currentPageIndex = pageIndex;
   }
 
-  saveAsJSON(): void {
-    const jsonContent = JSON.stringify(this.excelData[this.currentPageIndex][0]);
-    const blob = new Blob([jsonContent], { type: 'application/json' });
-    const fileName = this.files[this.currentPageIndex].name.replace('.xlsx', '.json');
-    saveAs(blob, fileName);
-  }
-
   saveAsExcel(): void {
-
-    const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.excelData[this.currentPageIndex][0]);
+    const worksheet: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([this.tableHeaders, ...this.tableData[this.currentPageIndex]]);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
     const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
 
@@ -57,34 +60,19 @@ export class ConversionComponent {
     saveAs(data, fileName);
   }
 
-
-  convertJSONToExcelData(jsonData: any): any[][] {
-    const excelData: any[][] = [];
-    for (const key in jsonData) {
-      if (jsonData.hasOwnProperty(key)) {
-        const value = jsonData[key];
-        excelData.push([key, value]);
-      }
-    }
-    return excelData;
+  saveAsJSON(): void {
+    const jsonData = this.convertExcelToJSONData(this.tableData[this.currentPageIndex]);
+    const jsonContent = JSON.stringify(jsonData, null, 2);
+    const blob = new Blob([jsonContent], { type: 'application/json' });
+    const fileName = this.files[this.currentPageIndex].name.replace('.xlsx', '.json');
+    saveAs(blob, fileName);
   }
 
-  processFiles() {
-    for (let i = 0; i < this.files.length; i++) {
-      const file = this.files[i];
-      const fileReader = new FileReader();
-      fileReader.onload = (e: any) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const sheetsData: any[][] = [];
-        workbook.SheetNames.forEach((sheetName) => {
-          const worksheet = workbook.Sheets[sheetName];
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-          sheetsData.push(jsonData);
-        });
-        this.excelData.push(sheetsData);
-      };
-      fileReader.readAsArrayBuffer(file);
-    }
+  convertExcelToJSONData(data: any[][]): any {
+    const jsonData: any = {};
+    data.forEach((row) => {
+      jsonData[row[0]] = row[1];
+    });
+    return jsonData;
   }
 }

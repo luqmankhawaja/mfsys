@@ -1,51 +1,81 @@
 <div class="background">
   <app-nav-bar></app-nav-bar>
-    <div class="btn-card">
-      <button class="btn"  (click)="releaseTable()" >
-        <span> Release Version </span>
-      </button>
-      <button class="btn" (click)="showCard = !showCard">
-        <span> Register Version </span>
-      </button>
+  <div class="card">
+    <div class="btn-container">
+      <div class="btn-wrapper">
+          <button class="card-btn"  (click)="releaseTable()" >
+            <span> Release Version </span>
+          </button>
+      </div>
+      <div class="btn-wrapper">
+          <button class="card-btn" (click)="showCard =!showCard">
+            <span> Register Version </span>
+          </button>
+      </div>
+
     </div>
+  </div>
     <div class="form-container" *ngIf="showCard">
         <h2>Register Release</h2>
       <form [formGroup]="registerForm" (ngSubmit)="regVersion(registerForm)">
         <div class="form-row">
-          <label>Release Type:</label>
-          <label for="script">Script</label>
-          <input type="radio" id="script" name="releaseType" value="script" formControlName="type">
-          <label for="storeProcedure">Store Procedure</label>
-          <input type="radio" id="storeProcedure" name="releaseType" value="storeProcedure" formControlName="type">
-
+          <div class="vers-container">
+            <label for="versions">Select Version:</label>
+            <input  type="string" list="versions"  value="selectedVersion" formControlName="releaseVersion" >
+              <datalist id="versions">
+              <option *ngFor="let item of versions" [value]="item.releaseVersion" ></option>
+              </datalist>
+          </div>
+          <div class="vers-container">
+              <label for="status">Status</label>
+              <select id="status" formControlName="status">
+                 <option value="" disabled selected>Select Status</option>
+                  <option value="completed">Completed</option>
+                  <option value="inProgress"> In-Progress</option>
+                  <option value="Todo">To Do</option>
+              </select>
+          </div>
         </div>
         <div class="form-row">
-          <input list="versions" name="versions" [(ngModel)]="selectedVersion" >
-            <datalist id="versions">
-            <option *ngFor="let item of versions" [value]="item.releaseVersion" >{{ item.releaseVersion }}</option>
-            </datalist>
-          <button  type="submit"  (click)="onSave()">Save</button>
+          <div class="date-container">
+           <label for="startDate">Start Date</label>
+            <input  id="date" type="date"formControlName="startDate">
+          </div>
+          <div class="date-container">
+            <label for="endDate">End Date</label>
+            <input  id="date" type="date"formControlName="endDate">
+          </div>
         </div>
+          <button  type="submit"  (click)="onSave()">Register</button>
+
       </form>
     </div>
     <div class="form-container" *ngIf="showForm" >
-
+     <h2> Add Release Version</h2>
       <form [formGroup]="releaseForm" (ngSubmit)="submitForm(releaseForm)">
         <div class="form-row">
-          <label for="type">Release Type </label>
-          <input id="type" type="text" formControlName="type" readonly>
+          <div class="vers-container">
+            <label for="selected-version-value">Release Version :</label>
+            <input id="selected-version-value" type="string"formControlName="releaseVersion" readonly>
+          </div>
+          <div class="vers-container">
+            <label for="type">Release Type </label>
+            <select id="status" formControlName="releaseType">
+              <option value="" disabled selected>Select Type</option>
+              <option value="script">Script</option>
+              <option value="storeProcedure"> Store Procedure</option>
+            </select>
+          </div>
         </div>
         <div class="form-row">
-          <label for="selected-version-value">Selected Version :</label>
-          <input id="selected-version-value" type="string"formControlName="selectedVersion" readonly>
-        </div>
-        <div class="form-row">
-          <label for="userId">User Id :</label>
-          <input id="userId" type="text"formControlName="userId" maxlength="30">
-        </div>
-        <div class="form-row">
-          <label for="date">Date :</label>
-          <input id="date" type="date"formControlName="date" maxlength="30">
+          <div class="date-container">
+            <label for="userId">User Id </label>
+            <input id="userId" type="text"formControlName="userId" maxlength="30">
+          </div>
+          <div class="date-container">
+            <label for="date">Date </label>
+            <input id="date" type="date"formControlName="date">
+          </div>
         </div>
         <div class="form-row">
           <label for="bugFixes">Bug Fixes :</label>
@@ -53,7 +83,7 @@
         </div>
         <div class="form-row">
           <label for="functions">Functionalities :</label>
-          <input id="functions" type="string" formControlName="functions" >
+          <input id="functions" type="string" formControlName="functionalities" (keydown.enter)="addBulletPoint($event)" >
         </div>
         <div class="form-row">
           <label for="description">Description :</label>
@@ -63,34 +93,41 @@
           <label for="file-input">Upload File:</label>
           <input type="file" [formControl]="fileCtrl" multiple id="fileInput" name="fileInput" accept="application/txt, application/sql" (change)="onFileUpload($event)">
         </div>
-          <button type="submit" > </button>
+          <button type="submit" >Submit</button>
 
       </form>
     </div>
-    <div class="table-wrapper" *ngIf="showTable">
+  <div class="table-wrapper" *ngIf="showTable">
+    <h2>Release Data</h2>
       <input type="String"  [(ngModel)]="searchNumber" (input)="filterData()"  placeholder="Enter a Version to search">
     <table class="tableFixHead"  >
       <thead>
          <tr >
-            <th>versions</th>
             <th>User ID</th>
-            <th>Date</th>
+            <th>versions</th>
             <th>Release Type </th>
+            <th>Bug Fixes </th>
+            <th>Functionalities </th>
+            <th>Description</th>
             <th>File</th>
+            <th>Date</th>
             <th>Download</th>
           </tr>
       </thead>
       <tbody>
           <tr *ngFor="let item of filteredData; let i = index">
-             <td> {{item.releaseVersion }}  </td>
-             <td> {{ item.userName }} </td>
-             <td> {{item.date}} </td>
-             <td> {{ item.type }} </td>
+            <td> {{ item.userName }} </td>
+            <td> {{item.releaseVersion }}  </td>
+            <td> {{ item.type }} </td>
+            <td>{{item.bugFixes}}</td>
+            <td>{{item.functionalities}}</td>
+            <td>{{item.description}}</td>
              <td>
               <div *ngFor="let child of item.childDto">
                 <p>{{ child.fileName }}</p>
               </div>
             </td>
+            <td> {{item.date}} </td>
              <td>
               <i
                 class="fa fa-download"
@@ -100,8 +137,8 @@
             </td>
           </tr>
       </tbody>
-  </table>
-
+    </table>
+  </div>
 </div>
 
 

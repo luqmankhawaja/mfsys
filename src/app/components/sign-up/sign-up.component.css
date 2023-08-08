@@ -18,8 +18,7 @@
     font-family: 'Times New Roman';
     background: #020d3d;
     width: 30%;
-    top: 50px;
-    margin: 0 auto;
+    margin: 8% auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
