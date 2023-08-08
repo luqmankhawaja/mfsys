@@ -3,7 +3,7 @@
   padding: 20px;
 }
 
-/* Styles for the card containing radio buttons and buttons */
+
 .card {
   margin-top: 3%;
   background-color: #ffffff;
@@ -100,8 +100,8 @@ h2{
 .form-row {
   display: flex;
   justify-content: center;
-  gap: 20px; /* Adjust this value to control the space between fields */
-  margin-bottom: 10px; /* Add margin between rows of input fields */
+  gap: 20px;
+  margin-bottom: 10px;
 }
 
 .input-data {
@@ -122,10 +122,10 @@ input {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
-  box-sizing: border-box; /* Ensure input width includes padding and border */
+  box-sizing: border-box;
 }
 
-/* Optional: Add underline style for input fields */
+
 .underline {
   width: 100%;
   height: 1px;

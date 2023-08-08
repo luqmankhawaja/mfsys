@@ -45,7 +45,7 @@ this.loginn= this.formbuilder.group(
       this.router.navigate(['/home']);
       this.toastr.success('login successfully');
 
-      console.log(this.authService.getIsAuthenticated()); // Log the updated value inside the callback function
+      console.log(this.authService.getIsAuthenticated()); 
     } else {
       this.toastr.error('Invalid username or password');
 

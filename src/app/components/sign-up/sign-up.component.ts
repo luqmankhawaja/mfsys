@@ -31,14 +31,6 @@ export class SignUpComponent implements OnInit {
   },{
       validators:passwordMatchValidator
   });
-
-  //  passwordMatchValidator(){
-  //    return (form: AbstractControl)=>{
-  //     return form.get('Password')?.value === form.get('confirmPassword')?.value ? null : {notmatched: true}
-  //    }
-
-
-
   signup() {
     this.http.post<any>('http://localhost:3000/signup', this.signup_Form.value)
       .subscribe(

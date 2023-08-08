@@ -17,7 +17,7 @@ export class NavBarComponent implements OnInit {
   }
   navbar(){
     this.navOpen=!this.navOpen;
-    // this.authService.isAuthenticated = true;
+    
   }
 
 }

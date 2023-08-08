@@ -192,7 +192,7 @@ export class ReleaseComponent implements OnInit {
 
         },
         (error) => {
-          // this.toastr.warning('Please enter valid data');
+          this.toastr.warning('Please enter valid data');
 
         }
       );

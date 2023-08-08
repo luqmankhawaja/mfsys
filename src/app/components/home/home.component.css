@@ -5,12 +5,12 @@
   padding: 10px;
   font-family: 'Poppins', sans-serif;
   background-image: url('/assets/db.png');
+  
   opacity: 1;
 }
 
 .floating-heading {
   font-size: 8em;
-
   text-align: center;
   font-family: cursive;
   color: rgb(4, 38, 61);

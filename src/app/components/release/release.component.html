@@ -12,12 +12,11 @@
             <span> Register Version </span>
           </button>
       </div>
-
     </div>
   </div>
-    <div class="form-container" *ngIf="showCard">
+  <div class="form-container" *ngIf="showCard">
         <h2>Register Release</h2>
-      <form [formGroup]="registerForm" (ngSubmit)="regVersion(registerForm)">
+    <form [formGroup]="registerForm" (ngSubmit)="regVersion(registerForm)">
         <div class="form-row">
           <div class="vers-container">
             <label for="versions">Select Version:</label>
@@ -48,9 +47,9 @@
         </div>
           <button  type="submit"  (click)="onSave()">Register</button>
 
-      </form>
-    </div>
-    <div class="form-container" *ngIf="showForm" >
+    </form>
+  </div>
+  <div class="form-container" *ngIf="showForm" >
      <h2> Add Release Version</h2>
       <form [formGroup]="releaseForm" (ngSubmit)="submitForm(releaseForm)">
         <div class="form-row">
@@ -96,7 +95,7 @@
           <button type="submit" >Submit</button>
 
       </form>
-    </div>
+  </div>
   <div class="table-wrapper" *ngIf="showTable">
     <h2>Release Data</h2>
       <input type="String"  [(ngModel)]="searchNumber" (input)="filterData()"  placeholder="Enter a Version to search">
